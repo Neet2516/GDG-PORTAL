@@ -20,13 +20,15 @@ export const useSessionStorage = (key, initialValue = null) => {
   const setValue = useCallback((value) => {
     try {
       if (typeof window === 'undefined') return;
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
-      setStoredValue(valueToStore);
-      window.sessionStorage.setItem(key, JSON.stringify(valueToStore));
+      setStoredValue((prev) => {
+        const valueToStore = value instanceof Function ? value(prev) : value;
+        window.sessionStorage.setItem(key, JSON.stringify(valueToStore));
+        return valueToStore;
+      });
     } catch (error) {
       console.error(`Error setting sessionStorage key "${key}":`, error);
     }
-  }, [key, storedValue]);
+  }, [key]);
 
   const removeValue = useCallback(() => {
     try {

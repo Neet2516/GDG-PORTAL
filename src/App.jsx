@@ -4,57 +4,55 @@
  */
 
 import { useRef } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
-import { Navbar, Footer } from './components';
+import { Navbar, Footer, RegistrationLayout } from './components';
 import {
   HeroSection,
   EventDetails,
-  RegistrationForm,
   OTPVerification,
   RegistrationSuccess,
   NotFound,
+  RegistrationStep1,
+  RegistrationStep3,
 } from './pages';
 
 export const App = () => {
-  const registerRef = useRef(null);
-
-  const scrollToRegister = () => {
-    registerRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const navigate = useNavigate();
 
   const handleRegisterClick = () => {
-    if (window.location.pathname === '/') {
-      scrollToRegister();
-    } else {
-      window.location.href = '/#register-section';
-    }
+    navigate('/register');
   };
 
   return (
     <div className="editorial-shell">
-      <Navbar onRegisterClick={handleRegisterClick} />
-      <main className="relative z-10 min-h-screen overflow-x-hidden">
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <div className="pt-16">
-                <HeroSection onCtaClick={scrollToRegister} />
+      {/* Main Routes with original layout */}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <Navbar onRegisterClick={handleRegisterClick} />
+              <main className="relative z-10 min-h-screen overflow-x-hidden pt-16">
+                <HeroSection onCtaClick={handleRegisterClick} />
                 <EventDetails />
-                <div ref={registerRef}>
-                  <RegistrationForm onSuccess={scrollToRegister} />
-                </div>
-              </div>
-            }
-          />
-          <Route path="/verify-otp" element={<OTPVerification />} />
-          <Route path="/registration-success" element={<RegistrationSuccess />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
-      <Footer />
+              </main>
+              <Footer />
+            </>
+          }
+        />
+        
+        {/* Registration Flow Layout */}
+        <Route path="/register" element={<RegistrationLayout />}>
+          <Route index element={<RegistrationStep1 />} />
+          <Route path="verify" element={<OTPVerification />} />
+          <Route path="payment" element={<RegistrationStep3 />} />
+          <Route path="success" element={<RegistrationSuccess />} />
+        </Route>
+
+        <Route path="*" element={<><Navbar onRegisterClick={handleRegisterClick}/><NotFound /><Footer/></>} />
+      </Routes>
       <Toaster
         position="top-right"
         toastOptions={{

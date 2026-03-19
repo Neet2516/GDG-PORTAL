@@ -8,7 +8,7 @@
 // ========================================
 export const API_CONFIG = {
   // UPDATE THIS WITH YOUR BACKEND URL
-  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000',
+  BASE_URL: import.meta.env.VITE_API_BASE_URL ,
   TIMEOUT: 15000,
   RETRIES: 3,
 };

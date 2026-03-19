@@ -11,3 +11,4 @@ export { Navbar } from './Navbar.jsx';
 export { Footer } from './Footer.jsx';
 export { FlowProgress } from './FlowProgress.jsx';
 export { CodeChip } from './CodeChip.jsx';
+export { RegistrationLayout } from './RegistrationLayout.jsx';

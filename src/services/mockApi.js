@@ -18,11 +18,20 @@ class MockApiService {
    * Send OTP to email
    * Mock endpoint that simulates backend OTP generation
    */
-  async sendOTP(email) {
+  async sendOTP(emailOrName, emailArg, studentNumberArg) {
     await delay(getRandomDelay());
 
+    const email =
+      typeof emailOrName === 'object'
+        ? emailOrName?.email
+        : (emailArg || emailOrName);
+    const studentNumber =
+      typeof emailOrName === 'object'
+        ? emailOrName?.studentNumber
+        : studentNumberArg;
+
     // Simulate validation
-    if (!email.includes('@akgec.ac.in')) {
+    if (!email || !String(email).toLowerCase().includes('@akgec.ac.in')) {
       return {
         success: false,
         message: 'Please use your college email address',
@@ -36,12 +45,13 @@ class MockApiService {
     const sessionId = `session_${timestamp}`;
 
     // Store session in memory
-    this.sessions.set(email, {
+    this.sessions.set(String(email).toLowerCase(), {
       otp,
       sessionId,
       timestamp,
       attempts: 0,
       maxAttempts: 5,
+      studentNumber,
     });
 
     return {
@@ -62,7 +72,7 @@ class MockApiService {
   async verifyOTP(email, otp) {
     await delay(getRandomDelay());
 
-    const session = this.sessions.get(email);
+    const session = this.sessions.get(String(email).toLowerCase());
 
     if (!session) {
       return {
@@ -102,6 +112,28 @@ class MockApiService {
       message: 'Email verified successfully',
       data: {
         verificationToken,
+      },
+      statusCode: 200,
+    };
+  }
+
+  async createOrder() {
+    await delay(getRandomDelay());
+    const id = `order_${Date.now()}`;
+    return {
+      success: true,
+      message: 'Order created',
+      order: {
+        id,
+        amount: 50000,
+        currency: 'INR',
+      },
+      data: {
+        order: {
+          id,
+          amount: 50000,
+          currency: 'INR',
+        },
       },
       statusCode: 200,
     };
@@ -158,6 +190,51 @@ class MockApiService {
         registration,
       },
       statusCode: 200,
+    };
+  }
+
+  async registerStudent(formData) {
+    await delay(getRandomDelay());
+
+    const requiredFields = ['name', 'email', 'studentNumber', 'phone', 'branch', 'gender', 'residence', 'transactionId'];
+    for (const field of requiredFields) {
+      if (!formData[field]) {
+        return {
+          success: false,
+          message: `Missing required field: ${field}`,
+          statusCode: 400,
+        };
+      }
+    }
+
+    const existingReg = Array.from(this.registrations.values()).find(
+      r => r.email === formData.email || r.studentNumber === formData.studentNumber || r.phone === formData.phone
+    );
+
+    if (existingReg) {
+      return {
+        success: false,
+        message: 'Already registered',
+        statusCode: 409,
+      };
+    }
+
+    const registrationId = generateRegistrationId();
+    const registration = {
+      registrationId,
+      ...formData,
+      registeredAt: new Date().toISOString(),
+      status: 'REGISTERED',
+    };
+
+    this.registrations.set(registrationId, registration);
+
+    return {
+      success: true,
+      message: 'Registration successful',
+      registrationId,
+      data: registration,
+      statusCode: 201,
     };
   }
 

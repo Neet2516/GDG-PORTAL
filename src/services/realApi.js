@@ -1,213 +1,166 @@
 /**
- * Real Backend API Service
- * Communicates with actual backend following the strict flow:
- * 1. Send OTP → 2. Verify OTP → 3. Payment → 4. Register
+ * Real backend API service.
+ * Uses only public config from Vite env and never stores backend secrets.
  */
 
 import axios from 'axios';
 
-// Configure API base URL - UPDATE THIS WITH YOUR BACKEND URL
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.yourdomain.com';
+const rawBaseUrl = (import.meta.env.VITE_API_BASE_URL || '').trim();
+const API_BASE_URL =
+  rawBaseUrl && rawBaseUrl !== 'undefined' && rawBaseUrl !== 'null'
+    ? rawBaseUrl.replace(/\/+$/, '')
+    : 'http://localhost:5000';
+const API_PREFIX = (import.meta.env.VITE_API_PREFIX || '/api/v1').startsWith('/')
+  ? import.meta.env.VITE_API_PREFIX || '/api/v1'
+  : `/${import.meta.env.VITE_API_PREFIX}`;
+const API_TIMEOUT = Number(import.meta.env.VITE_API_TIMEOUT || 60000);
 
 const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: `${API_BASE_URL}${API_PREFIX}`,
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 15000,
+  timeout: API_TIMEOUT,
 });
 
-/**
- * Add request interceptor for auth tokens if needed
- */
-apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('authToken');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
+const BRANCH_MAP = {
+  'CSE-AIML': 'CSE(AIML)',
+  'CSE-DS': 'CSE(DS)',
+  'CS-HINDI': 'CSE(H)',
+  'CS-IT': 'CSIT',
+  CIVIL: 'Civil',
+};
+
+const GENDER_MAP = {
+  MALE: 'Male',
+  FEMALE: 'Female',
+};
+
+const RESIDENCE_MAP = {
+  hosteller: 'Hosteller',
+  dayscholar: 'Day Scholar',
+};
+
+const errorResponse = (error, fallback) => ({
+  success: false,
+  message:
+    error?.code === 'ECONNABORTED'
+      ? 'Request timed out. Backend may be cold-starting; please retry.'
+      : (error?.response?.data?.message || error?.message || fallback),
+  statusCode: error?.response?.status,
+  data: error?.response?.data,
 });
 
-/**
- * Add response interceptor for error handling
- */
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    const message = error.response?.data?.message || error.message || 'An error occurred';
-    return Promise.reject(new Error(message));
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const postWithRetry = async (url, body, retries = 1) => {
+  try {
+    return await apiClient.post(url, body);
+  } catch (error) {
+    if (retries > 0 && error?.code === 'ECONNABORTED') {
+      await sleep(1200);
+      return postWithRetry(url, body, retries - 1);
+    }
+    throw error;
   }
-);
+};
+
+const normalizeRegistrationPayload = (formData) => {
+  const gender = GENDER_MAP[formData.gender] || formData.gender;
+  if (!gender || !['Male', 'Female'].includes(gender)) {
+    throw new Error('Gender must be Male or Female');
+  }
+
+  return {
+    ...formData,
+    branch: BRANCH_MAP[formData.branch] || formData.branch,
+    gender,
+    residence: RESIDENCE_MAP[formData.residence] || formData.residence,
+    email: formData.email?.trim()?.toLowerCase?.() || formData.email,
+    transactionId: formData.transactionId || formData.razorpay_payment_id,
+  };
+};
 
 class RealApiService {
-  /**
-   * STEP 1: Send OTP
-   * POST /send-otp
-   * 
-   * @param {string} name - User's full name
-   * @param {string} email - User's email
-   * @param {string} studentNumber - Student ID number
-   * @returns {Promise} OTP sent confirmation
-   */
-  async sendOTP(name, email, studentNumber) {
+  async health() {
     try {
-      const response = await apiClient.post('/send-otp', {
-        name,
-        email,
-        studentNumber,
-      });
-      return {
-        success: true,
-        message: response.data.message || 'OTP sent successfully',
-        data: response.data,
-      };
+      const { data } = await apiClient.get('/health');
+      return { success: true, data, message: data?.message || 'Server is healthy' };
     } catch (error) {
-      return {
-        success: false,
-        message: error.message,
-        statusCode: error.response?.status,
-      };
+      return errorResponse(error, 'Health check failed');
     }
   }
 
-  /**
-   * STEP 2: Verify OTP
-   * POST /verify-otp
-   * 
-   * @param {string} email - User's email (MUST match send-otp)
-   * @param {string} otp - 6-digit OTP code
-   * @returns {Promise} Verification status
-   */
+
+  async sendOTP(nameOrPayload, emailArg, studentNumberArg, captchaTokenArg) {
+    try {
+      const payload =
+        typeof nameOrPayload === 'object'
+          ? nameOrPayload
+          : {
+              name: nameOrPayload,
+              email: emailArg,
+              studentNumber: studentNumberArg,
+            };
+
+      const { data } = await postWithRetry('/send-otp', {
+        name: payload.name,
+        email: payload.email?.trim()?.toLowerCase?.(),
+        studentNumber: payload.studentNumber,
+      });
+      return {
+        success: true,
+        message: data?.message || 'OTP sent',
+        data,
+      };
+    } catch (error) {
+      return errorResponse(error, 'Failed to send OTP');
+    }
+  }
+
   async verifyOTP(email, otp) {
     try {
-      const response = await apiClient.post('/verify-otp', {
-        email,
+      const { data } = await postWithRetry('/verify-otp', {
+        email: email?.trim()?.toLowerCase?.(),
         otp,
       });
       return {
         success: true,
-        message: 'OTP verified successfully',
-        data: response.data,
-        verificationToken: response.data.verificationToken || response.data.token,
+        message: data?.message || 'OTP verified',
+        data,
+        verificationToken: data?.verificationToken || data?.token || 'otp_verified',
       };
     } catch (error) {
-      return {
-        success: false,
-        message: error.message,
-        statusCode: error.response?.status,
-      };
+      return errorResponse(error, 'Failed to verify OTP');
     }
   }
 
-  /**
-   * STEP 3 & 4: Register Student
-   * POST /register
-   * 
-   * IMPORTANT: OTP must be verified before calling this!
-   * 
-   * @param {Object} formData - Complete registration form data
-   * @param {string} formData.name - Full name
-   * @param {string} formData.email - Email (MUST match OTP email)
-   * @param {string} formData.studentNumber - Student number
-   * @param {string} formData.phone - Phone number (must be unique)
-   * @param {string} formData.branch - Academic branch
-   * @param {string} formData.gender - Gender
-   * @param {string} formData.residence - Residence type
-   * @param {string} formData.transactionId - Unique payment transaction ID
-   * @param {string} formData.captchaToken - Google reCAPTCHA token
-   * 
-   * @returns {Promise} Registration confirmation
-   */
+  async createOrder(payload = {}) {
+    try {
+      const { data } = await apiClient.post('/create-order', payload);
+      return {
+        success: true,
+        message: data?.message || 'Order created',
+        data,
+        order: data?.order || data?.data?.order || data,
+      };
+    } catch (error) {
+      return errorResponse(error, 'Failed to create payment order');
+    }
+  }
+
   async registerStudent(formData) {
     try {
-      // Validate required fields
-      const requiredFields = [
-        'name',
-        'email',
-        'studentNumber',
-        'phone',
-        'branch',
-        'gender',
-        'residence',
-        'transactionId',
-        'captchaToken',
-      ];
-
-      for (const field of requiredFields) {
-        if (!formData[field]) {
-          throw new Error(`Missing required field: ${field}`);
-        }
-      }
-
-      const response = await apiClient.post('/register', formData);
+      const payload = normalizeRegistrationPayload(formData);
+      const { data } = await apiClient.post('/register', payload);
       return {
         success: true,
-        message: 'Registration successful',
-        registrationId: response.data.registrationId,
-        data: response.data,
+        message: data?.message || 'Registration successful',
+        registrationId: data?.registrationId || data?.data?._id,
+        data: data?.data || data,
       };
     } catch (error) {
-      return {
-        success: false,
-        message: error.message,
-        statusCode: error.response?.status,
-      };
-    }
-  }
-
-  /**
-   * Check if email is already registered
-   * Useful for validation before sending OTP
-   */
-  async checkEmailExists(email) {
-    try {
-      const response = await apiClient.get(`/check-email/${email}`);
-      return {
-        exists: response.data.exists || false,
-        message: response.data.message,
-      };
-    } catch (error) {
-      return {
-        exists: false,
-        message: error.message,
-      };
-    }
-  }
-
-  /**
-   * Check if student number is already registered
-   */
-  async checkStudentNumberExists(studentNumber) {
-    try {
-      const response = await apiClient.get(`/check-student/${studentNumber}`);
-      return {
-        exists: response.data.exists || false,
-        message: response.data.message,
-      };
-    } catch (error) {
-      return {
-        exists: false,
-        message: error.message,
-      };
-    }
-  }
-
-  /**
-   * Get registration details
-   * For displaying confirmation after successful registration
-   */
-  async getRegistration(registrationId) {
-    try {
-      const response = await apiClient.get(`/registrations/${registrationId}`);
-      return {
-        success: true,
-        data: response.data,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        message: error.message,
-      };
+      return errorResponse(error, 'Failed to complete registration');
     }
   }
 }

@@ -40,16 +40,34 @@ export const useOTP = () => {
     return () => clearInterval(timerRef.current);
   }, [timeRemaining]);
 
-  const sendOTP = useCallback(async (email) => {
+  const sendOTP = useCallback(async (payloadOrEmail) => {
     setIsLoading(true);
     setError(null);
-    currentEmailRef.current = email;
 
     try {
-      await apiService.sendOTP(email);
+      const payload =
+        typeof payloadOrEmail === 'string'
+          ? { email: payloadOrEmail }
+          : (payloadOrEmail || {});
+
+      currentEmailRef.current = payload.email;
+
+      const response = await apiService.sendOTP(
+        payload.name,
+        payload.email,
+        payload.studentNumber,
+        // payload.captchaToken
+      );
+
+      if (!response?.success) {
+        const errorMessage = response?.message || 'Failed to send OTP';
+        setError(errorMessage);
+        return { success: false, error: errorMessage };
+      }
+
       setCanResend(false);
       setTimeRemaining(120); // 2 minutes
-      return { success: true };
+      return { success: true, data: response.data };
     } catch (err) {
       const errorMessage = err.message || 'Failed to send OTP';
       setError(errorMessage);
@@ -59,20 +77,35 @@ export const useOTP = () => {
     }
   }, []);
 
-  const verifyOTP = useCallback(async (otpValue) => {
+  const verifyOTP = useCallback(async (otpValue, emailOverride = '') => {
     if (!otpValue || otpValue.length !== 6) {
       setError('Please enter a valid 6-digit OTP');
       return { success: false };
     }
 
+    const emailToVerify = (emailOverride || currentEmailRef.current || '').trim().toLowerCase();
+    if (!emailToVerify) {
+      const errorMessage = 'Email not found for OTP verification';
+      setError(errorMessage);
+      return { success: false, error: errorMessage };
+    }
+
+    currentEmailRef.current = emailToVerify;
+
     setIsLoading(true);
     setError(null);
 
     try {
-      const data = await apiService.verifyOTP(currentEmailRef.current, otpValue);
+      const response = await apiService.verifyOTP(emailToVerify, otpValue);
+      if (!response?.success) {
+        const errorMessage = response?.message || 'Failed to verify OTP';
+        setError(errorMessage);
+        return { success: false, error: errorMessage };
+      }
+
       setIsVerified(true);
-      setVerificationToken(data.verificationToken);
-      return { success: true, data };
+      setVerificationToken(response.verificationToken || 'otp_verified');
+      return { success: true, data: response };
     } catch (err) {
       const errorMessage = err.message || 'Failed to verify OTP';
       setError(errorMessage);

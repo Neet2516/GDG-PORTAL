@@ -27,7 +27,7 @@ export const Navbar = ({ onRegisterClick }) => {
       transition={{ duration: 0.5 }}
     >
       <div className="mx-auto max-w-7xl">
-        <div className={`glass-panel flex items-center justify-between rounded-[1.25rem] px-4 py-3 sm:px-6 ${
+        <div className={`glass-panel flex items-center justify-between gap-3 rounded-[1.25rem] px-3 py-3 sm:px-6 ${
           isScrolled ? 'shadow-[0_20px_50px_-36px_rgba(26,28,30,0.22)]' : ''
         }`}>
           <motion.div
@@ -43,10 +43,10 @@ export const Navbar = ({ onRegisterClick }) => {
               {'</>'}
             </motion.div>
             <div className="flex flex-col">
-              <span className="font-manrope text-base font-extrabold leading-tight text-on-surface sm:text-lg">
+              <span className="font-manrope text-sm font-extrabold leading-tight text-on-surface sm:text-lg">
                 GDG Meridian
               </span>
-              <span className="text-xs font-medium uppercase tracking-[0.22em] text-on-surface-variant">
+              <span className="hidden text-xs font-medium uppercase tracking-[0.22em] text-on-surface-variant sm:block">
                 Developer registration
               </span>
             </div>
@@ -70,8 +70,9 @@ export const Navbar = ({ onRegisterClick }) => {
             <CodeChip>flow:v1</CodeChip>
           </div>
 
-          <Button onClick={onRegisterClick} size="sm" className="px-4 sm:px-5">
-            Start registration
+          <Button onClick={onRegisterClick} size="sm" className="px-3 sm:px-5">
+            <span className="sm:hidden">Register</span>
+            <span className="hidden sm:inline">Start registration</span>
           </Button>
         </div>
       </div>

@@ -78,10 +78,10 @@ export const RegistrationForm = () => {
   };
 
   return (
-    <section id="register-section" className="px-4 py-20 md:py-28">
-      <div className="mx-auto max-w-7xl rounded-[2rem] bg-surface-container-low px-6 py-8 md:px-10 md:py-10">
+    <section id="register-section" className="px-3 py-16 sm:px-4 sm:py-20 md:py-28">
+      <div className="mx-auto max-w-7xl rounded-[1.75rem] bg-surface-container-low px-4 py-4 sm:px-6 sm:py-8 md:rounded-[2rem] md:px-10 md:py-10">
         <div className="grid gap-8 lg:grid-cols-[0.78fr_1.22fr]">
-          <Card className="h-fit bg-surface">
+          <Card className="h-fit bg-surface lg:sticky lg:top-28">
             <FlowProgress steps={flowSteps} currentStep={currentStep} label="Registration" />
 
             <div className="mt-8 space-y-5">
@@ -121,10 +121,10 @@ export const RegistrationForm = () => {
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary">
                   Guided editorial journey
                 </p>
-                <h2 className="max-w-2xl text-balance text-3xl font-extrabold md:text-4xl">
+                <h2 className="max-w-2xl text-balance text-2xl font-extrabold sm:text-3xl md:text-4xl">
                   Register with a multi-step flow instead of a single crowded sheet.
                 </h2>
-                <p className="max-w-2xl text-base leading-7 text-on-surface-variant">
+                <p className="max-w-2xl text-sm leading-7 text-on-surface-variant sm:text-base">
                   The submission logic, validation, and backend integration remain intact. Only the UI sequence has changed.
                 </p>
               </div>
@@ -139,7 +139,7 @@ export const RegistrationForm = () => {
                     transition={{ duration: 0.25 }}
                     className="space-y-6"
                   >
-                    <div className="grid gap-6 md:grid-cols-2">
+                    <div className="grid gap-5 md:grid-cols-2">
                       <Input
                         label="Full Name"
                         name="name"
@@ -165,7 +165,7 @@ export const RegistrationForm = () => {
                         required
                       />
                     </div>
-                    <div className="grid gap-6 md:grid-cols-2">
+                    <div className="grid gap-5 md:grid-cols-2">
                       <Input
                         label="Phone Number"
                         name="phone"
@@ -202,7 +202,7 @@ export const RegistrationForm = () => {
                     transition={{ duration: 0.25 }}
                     className="space-y-6"
                   >
-                    <div className="grid gap-6 md:grid-cols-2">
+                    <div className="grid gap-5 md:grid-cols-2">
                       <Select
                         label="Branch"
                         name="branch"
@@ -224,7 +224,7 @@ export const RegistrationForm = () => {
                         </p>
                       </div>
                     </div>
-                    <div className="grid gap-6 md:grid-cols-2">
+                    <div className="grid gap-5 md:grid-cols-2">
                       <RadioGroup
                         label="Gender"
                         name="gender"
@@ -264,7 +264,7 @@ export const RegistrationForm = () => {
                       <p className="text-xs font-semibold uppercase tracking-[0.24em] text-on-surface-variant">
                         Confirmation summary
                       </p>
-                      <div className="mt-5 grid gap-5 md:grid-cols-2">
+                      <div className="mt-5 grid gap-4 sm:grid-cols-2">
                         {[
                           ['Name', formData.name],
                           ['Email', formData.email],
@@ -296,23 +296,23 @@ export const RegistrationForm = () => {
                 )}
               </AnimatePresence>
 
-              <div className="flex flex-col gap-3 border-0 pt-2 sm:flex-row sm:justify-between">
-                <div className="flex gap-3">
+              <div className="flex flex-col gap-3 border-0 pt-2 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex gap-3 sm:flex-none">
                   {currentStep > 0 && (
-                    <Button type="button" variant="secondary" onClick={handleBack}>
+                    <Button type="button" variant="secondary" onClick={handleBack} className="w-full sm:w-auto">
                       Back
                     </Button>
                   )}
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex gap-3 sm:flex-none">
                   {currentStep < flowSteps.length - 1 ? (
-                    <Button type="button" onClick={handleNext}>
+                    <Button type="button" onClick={handleNext} className="w-full sm:w-auto">
                       <span>Continue</span>
                       <span aria-hidden="true">-&gt;</span>
                     </Button>
                   ) : (
-                    <Button type="submit" disabled={!isValid} isLoading={isSubmittingRef.current}>
+                    <Button type="submit" disabled={!isValid} isLoading={isSubmittingRef.current} className="w-full sm:w-auto">
                       <span>Continue to verification</span>
                       <span aria-hidden="true">-&gt;</span>
                     </Button>

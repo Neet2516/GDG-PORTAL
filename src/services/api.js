@@ -2,25 +2,14 @@
  * Main API Service Layer
  * Abstracts API calls with proper error handling and response normalization
  * 
- * Supports both Mock API (development) and Real API (production)
- * Switch between them using:
- * - Environment variable: REACT_APP_USE_REAL_API=true
- * - Or manually import realApi or mockApi below
+ * Uses real backend API only.
  */
 
-// Import both API implementations
-import mockApi from './mockApi';
 import realApi from './realApi';
 
-// Determine which API to use
-// Change this to use realApi when backend is ready
-const USE_REAL_API = import.meta.env.VITE_USE_REAL_API === 'true';
-const selectedApiClient = USE_REAL_API ? realApi : mockApi;
-
 class ApiService {
-  constructor(apiClient = selectedApiClient) {
+  constructor(apiClient = realApi) {
     this.api = apiClient;
-    console.log(`[API Service] Using ${USE_REAL_API ? 'REAL' : 'MOCK'} API`);
   }
 
   /**
@@ -40,9 +29,9 @@ class ApiService {
    * Send OTP to email
    * Flow Step 1: Indicate user's intent to register
    */
-  async sendOTP(name, email, studentNumber) {
+  async sendOTP(name, email, studentNumber, captchaToken) {
     try {
-      const response = await this.api.sendOTP(name, email, studentNumber);
+      const response = await this.api.sendOTP(name, email, studentNumber, captchaToken);
       return response;
     } catch (error) {
       console.error('Error sending OTP:', error);
@@ -76,6 +65,18 @@ class ApiService {
       return response;
     } catch (error) {
       console.error('Error registering user:', error);
+      throw error;
+    }
+  }
+
+  async createOrder(payload = {}) {
+    try {
+      if (this.api.createOrder) {
+        return await this.api.createOrder(payload);
+      }
+      return { success: false, message: 'Order creation is not implemented' };
+    } catch (error) {
+      console.error('Error creating order:', error);
       throw error;
     }
   }
