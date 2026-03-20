@@ -14,6 +14,7 @@ const API_PREFIX = (import.meta.env.VITE_API_PREFIX || '/api/v1').startsWith('/'
   ? import.meta.env.VITE_API_PREFIX || '/api/v1'
   : `/${import.meta.env.VITE_API_PREFIX}`;
 const API_TIMEOUT = Number(import.meta.env.VITE_API_TIMEOUT || 60000);
+const ORDER_ENDPOINT = (import.meta.env.VITE_CREATE_ORDER_PATH || '/create-order').trim();
 
 const apiClient = axios.create({
   baseURL: `${API_BASE_URL}${API_PREFIX}`,
@@ -65,6 +66,32 @@ const postWithRetry = async (url, body, retries = 1) => {
   }
 };
 
+const postToEndpointCandidates = async (paths, body) => {
+  let lastError = null;
+
+  for (const path of paths) {
+    try {
+      if (/^https?:\/\//i.test(path)) {
+        return await axios.post(path, body, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          timeout: API_TIMEOUT,
+        });
+      }
+
+      return await apiClient.post(path, body);
+    } catch (error) {
+      lastError = error;
+      if (error?.response?.status !== 404) {
+        throw error;
+      }
+    }
+  }
+
+  throw lastError;
+};
+
 const normalizeRegistrationPayload = (formData) => {
   const gender = GENDER_MAP[formData.gender] || formData.gender;
   if (!gender || !['Male', 'Female'].includes(gender)) {
@@ -101,12 +128,14 @@ class RealApiService {
               name: nameOrPayload,
               email: emailArg,
               studentNumber: studentNumberArg,
+              captchaToken: captchaTokenArg,
             };
 
       const { data } = await postWithRetry('/send-otp', {
         name: payload.name,
         email: payload.email?.trim()?.toLowerCase?.(),
         studentNumber: payload.studentNumber,
+        captchaToken: payload.captchaToken || captchaTokenArg,
       });
       return {
         success: true,
@@ -137,7 +166,12 @@ class RealApiService {
 
   async createOrder(payload = {}) {
     try {
-      const { data } = await apiClient.post('/create-order', payload);
+      const endpointCandidates = [
+        ORDER_ENDPOINT.startsWith('/') ? ORDER_ENDPOINT : `/${ORDER_ENDPOINT}`,
+        `${API_BASE_URL}/create-order`,
+      ];
+
+      const { data } = await postToEndpointCandidates(endpointCandidates, payload);
       return {
         success: true,
         message: data?.message || 'Order created',
@@ -145,6 +179,14 @@ class RealApiService {
         order: data?.order || data?.data?.order || data,
       };
     } catch (error) {
+      if (error?.response?.status === 404) {
+        return {
+          success: false,
+          message: `Payment order endpoint was not found on the deployed backend. Tried: ${ORDER_ENDPOINT} and /create-order`,
+          statusCode: 404,
+          data: error?.response?.data,
+        };
+      }
       return errorResponse(error, 'Failed to create payment order');
     }
   }

@@ -17,9 +17,12 @@ export const API_CONFIG = {
 // RECAPTCHA CONFIGURATION
 // ========================================
 export const RECAPTCHA_CONFIG = {
-  // Get your site key from: https://www.google.com/recaptcha/admin
-  SITE_KEY: import.meta.env.VITE_RECAPTCHA_SITE_KEY || 'YOUR_RECAPTCHA_SITE_KEY',
+  SITE_KEY: import.meta.env.VITE_RECAPTCHA_SITE_KEY || '6Ld3qY0sAAAAAI2yUHnFaKZgibc54SYZz8w8EJ4U',
   ENABLED: import.meta.env.VITE_RECAPTCHA_ENABLED !== 'false',
+};
+
+export const RAZORPAY_CONFIG = {
+  KEY_ID: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_SSLVA76UgcHjD0',
 };
 
 // ========================================

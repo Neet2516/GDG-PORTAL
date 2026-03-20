@@ -7,7 +7,7 @@ import { Input, Select, RadioGroup, Button } from '../components';
 import { useFormState } from '../hooks/useFormState';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { useRecaptcha } from '../hooks/useRecaptcha';
-import { USER_BRANCHES, RESIDENCE_TYPES, GENDER_OPTIONS, FORM_DEFAULTS, RECAPTCHA_CONFIG } from '../constants';
+import { USER_BRANCHES, RESIDENCE_TYPES, GENDER_OPTIONS, FORM_DEFAULTS, RECAPTCHA_CONFIG, RAZORPAY_CONFIG } from '../constants';
 import { apiService } from '../services/api';
 
 const loadRazorpayScript = () =>
@@ -92,7 +92,10 @@ export const RegistrationStep3 = () => {
         throw new Error('Unable to load Razorpay checkout');
       }
 
-      const orderResult = await apiService.createOrder();
+      const orderResult = await apiService.createOrder({
+        email: sessionData.email,
+        studentNumber: sessionData.studentNumber,
+      });
       if (!orderResult?.success) {
         throw new Error(orderResult?.message || 'Unable to create payment order');
       }
@@ -102,9 +105,9 @@ export const RegistrationStep3 = () => {
         throw new Error('Invalid order response from backend');
       }
 
-      const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
+      const razorpayKey = RAZORPAY_CONFIG.KEY_ID;
       if (!razorpayKey) {
-        throw new Error('VITE_RAZORPAY_KEY_ID is missing in environment');
+        throw new Error('Razorpay key is missing in environment');
       }
 
       const paymentResponse = await openRazorpayCheckout({

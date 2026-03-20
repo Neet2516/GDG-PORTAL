@@ -5,6 +5,8 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { apiService } from '../services/api';
+import { RECAPTCHA_CONFIG } from '../constants';
+import { useRecaptcha } from './useRecaptcha';
 
 export const useOTP = () => {
   const [otp, setOtp] = useState('');
@@ -18,6 +20,7 @@ export const useOTP = () => {
   const [canResend, setCanResend] = useState(true);
   const timerRef = useRef(null);
   const currentEmailRef = useRef(null);
+  const { executeRecaptcha } = useRecaptcha(RECAPTCHA_CONFIG.SITE_KEY);
 
   // Timer effect
   useEffect(() => {
@@ -52,11 +55,16 @@ export const useOTP = () => {
 
       currentEmailRef.current = payload.email;
 
+      const captchaToken =
+        RECAPTCHA_CONFIG.ENABLED && RECAPTCHA_CONFIG.SITE_KEY
+          ? await executeRecaptcha('send_otp')
+          : null;
+
       const response = await apiService.sendOTP(
         payload.name,
         payload.email,
         payload.studentNumber,
-        // payload.captchaToken
+        payload.captchaToken || captchaToken
       );
 
       if (!response?.success) {
@@ -75,7 +83,7 @@ export const useOTP = () => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [executeRecaptcha]);
 
   const verifyOTP = useCallback(async (otpValue, emailOverride = '') => {
     if (!otpValue || otpValue.length !== 6) {

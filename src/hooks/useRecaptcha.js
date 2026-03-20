@@ -7,37 +7,61 @@ import { useCallback, useRef } from 'react';
 
 export const useRecaptcha = (siteKey) => {
   const scriptLoadedRef = useRef(false);
-  const recaptchaRef = useRef(null);
+  const scriptPromiseRef = useRef(null);
 
   /**
    * Load reCAPTCHA script dynamically
    */
   const loadRecaptchaScript = useCallback(() => {
-    return new Promise((resolve) => {
-      if (scriptLoadedRef.current && window.grecaptcha) {
-        resolve();
+    if (!siteKey) {
+      return Promise.resolve(null);
+    }
+
+    if (scriptLoadedRef.current && window.grecaptcha) {
+      return Promise.resolve(window.grecaptcha);
+    }
+
+    if (scriptPromiseRef.current) {
+      return scriptPromiseRef.current;
+    }
+
+    scriptPromiseRef.current = new Promise((resolve) => {
+      const existingScript = document.querySelector(`script[data-recaptcha-key="${siteKey}"]`);
+
+      const onReady = () => {
+        if (!window.grecaptcha?.ready) {
+          console.error('reCAPTCHA API not available after script load');
+          resolve(null);
+          return;
+        }
+
+        window.grecaptcha.ready(() => {
+          scriptLoadedRef.current = true;
+          resolve(window.grecaptcha);
+        });
+      };
+
+      if (existingScript) {
+        onReady();
         return;
       }
 
       const script = document.createElement('script');
-      script.src = 'https://www.google.com/recaptcha/api.js';
+      script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
       script.async = true;
       script.defer = true;
-
-      script.onload = () => {
-        scriptLoadedRef.current = true;
-        recaptchaRef.current = window.grecaptcha;
-        resolve();
-      };
-
+      script.dataset.recaptchaKey = siteKey;
+      script.onload = onReady;
       script.onerror = () => {
         console.error('Failed to load reCAPTCHA script');
-        resolve(); // Continue even if reCAPTCHA fails
+        resolve(null);
       };
 
       document.head.appendChild(script);
     });
-  }, []);
+
+    return scriptPromiseRef.current;
+  }, [siteKey]);
 
   /**
    * Execute reCAPTCHA and get token
@@ -47,15 +71,14 @@ export const useRecaptcha = (siteKey) => {
   const executeRecaptcha = useCallback(
     async (action = 'submit') => {
       try {
-        // Load script if not already loaded
-        await loadRecaptchaScript();
+        const grecaptcha = await loadRecaptchaScript();
 
-        if (!recaptchaRef.current || !siteKey) {
+        if (!grecaptcha || !siteKey) {
           console.warn('reCAPTCHA not available');
           return null;
         }
 
-        const token = await recaptchaRef.current.execute(siteKey, {
+        const token = await grecaptcha.execute(siteKey, {
           action,
         });
 
@@ -72,9 +95,8 @@ export const useRecaptcha = (siteKey) => {
    * Reset reCAPTCHA
    */
   const resetRecaptcha = useCallback(() => {
-    if (recaptchaRef.current && siteKey) {
-      recaptchaRef.current.reset();
-    }
+    scriptLoadedRef.current = false;
+    scriptPromiseRef.current = null;
   }, [siteKey]);
 
   return {
