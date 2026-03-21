@@ -65,7 +65,6 @@ export const RegistrationStep1 = () => {
     isSubmittingRef.current = true;
 
     try {
-      // Step 1 only requires name, email, studentNumber
       const result = await sendOTP({
         name: formData.name,
         email: formData.email,
