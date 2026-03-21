@@ -25,11 +25,16 @@ const apiClient = axios.create({
 });
 
 const BRANCH_MAP = {
+  'CSE AI&ML': 'CSE(AIML)',
   'CSE-AIML': 'CSE(AIML)',
+  'CSE DS': 'CSE(DS)',
   'CSE-DS': 'CSE(DS)',
+  'CS(Hindi)': 'CSE(H)',
   'CS-HINDI': 'CSE(H)',
+  'CS/IT': 'CSIT',
   'CS-IT': 'CSIT',
   CIVIL: 'Civil',
+  Civil: 'Civil',
 };
 
 const GENDER_MAP = {

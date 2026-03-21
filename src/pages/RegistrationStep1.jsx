@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
@@ -8,11 +8,13 @@ import { useFormState } from '../hooks/useFormState';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { FORM_DEFAULTS } from '../constants';
 import { useOTP } from '../hooks/useOTP';
+import { deriveBranchFromStudentNumber, deriveEmailFromNameAndStudentNumber } from '../utils/registrationDerivation';
 
 export const RegistrationStep1 = () => {
   const navigate = useNavigate();
   const {
     formData,
+    setFormData,
     errors,
     touched,
     handleInputChange,
@@ -23,8 +25,32 @@ export const RegistrationStep1 = () => {
   const [, setSessionData] = useSessionStorage('registration_flow', null);
   const isSubmittingRef = useRef(false);
   const { sendOTP } = useOTP();
-  const requiredFields = ['name', 'email', 'studentNumber'];
+  const requiredFields = ['name', 'email', 'studentNumber', 'branch'];
   const isStepValid = requiredFields.every((field) => formData[field] && !errors[field]);
+
+  const generatedEmail = useMemo(
+    () => deriveEmailFromNameAndStudentNumber(formData.name, formData.studentNumber),
+    [formData.name, formData.studentNumber]
+  );
+
+  const detectedBranch = useMemo(
+    () => deriveBranchFromStudentNumber(formData.studentNumber),
+    [formData.studentNumber]
+  );
+
+  useEffect(() => {
+    setFormData((prev) => {
+      if (prev.email === generatedEmail && prev.branch === detectedBranch) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        email: generatedEmail,
+        branch: detectedBranch,
+      };
+    });
+  }, [detectedBranch, generatedEmail, setFormData]);
 
   const validateStep = () => {
     requiredFields.forEach((field) => handleFieldBlur(field));
@@ -45,12 +71,12 @@ export const RegistrationStep1 = () => {
         email: formData.email,
         studentNumber: formData.studentNumber,
       });
-      console.log(result);
       if (result.success) {
         setSessionData({
           name: formData.name,
           email: formData.email,
           studentNumber: formData.studentNumber,
+          branch: formData.branch,
           otpSentAt: Date.now(),
           timestamp: Date.now(),
         });
@@ -104,20 +130,6 @@ export const RegistrationStep1 = () => {
             className="bg-[#f3f3f6] border-0 outline-none"
           />
           <Input
-            label="Email Address"
-            name="email"
-            type="email"
-            value={formData.email || ''}
-            onChange={handleInputChange}
-            onBlur={() => handleFieldBlur('email')}
-            error={getFieldError('email')}
-            isTouched={touched.email}
-            placeholder="[EMAIL_ADDRESS]"
-            helperText="We'll send a verification code to this address."
-            required
-            className="bg-[#f3f3f6] border-0 outline-none"
-          />
-          <Input
             label="Student Number"
             name="studentNumber"
             value={formData.studentNumber || ''}
@@ -128,6 +140,33 @@ export const RegistrationStep1 = () => {
             placeholder="25xxxxxx"
             required
             className="bg-[#f3f3f6] border-0 outline-none"
+          />
+          <Input
+            label="Email Address"
+            name="email"
+            type="email"
+            value={formData.email || ''}
+            onBlur={() => handleFieldBlur('email')}
+            error={getFieldError('email')}
+            isTouched={touched.email}
+            placeholder="Generated from your first name and student number"
+            helperText={generatedEmail ? "Generated automatically as firstname+studentnumber@akgec.ac.in." : "Enter your name and student number to generate your college email."}
+            required
+            className="bg-[#f3f3f6] border-0 outline-none"
+            readOnly
+          />
+          <Input
+            label="Branch"
+            name="branch"
+            value={formData.branch || ''}
+            onBlur={() => handleFieldBlur('branch')}
+            error={getFieldError('branch')}
+            isTouched={touched.branch}
+            placeholder="Detected from your student number"
+            helperText={detectedBranch ? 'Detected automatically from your branch code.' : 'Branch will be detected automatically from the student number.'}
+            required
+            className="bg-[#f3f3f6] border-0 outline-none"
+            readOnly
           />
 
           <div className="pt-2">

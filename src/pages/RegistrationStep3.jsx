@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 
-import { Input, Select, RadioGroup, Button } from '../components';
+import { Input, RadioGroup, Button } from '../components';
 import { useFormState } from '../hooks/useFormState';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { useRecaptcha } from '../hooks/useRecaptcha';
-import { USER_BRANCHES, RESIDENCE_TYPES, GENDER_OPTIONS, FORM_DEFAULTS, RECAPTCHA_CONFIG, RAZORPAY_CONFIG } from '../constants';
+import { RESIDENCE_TYPES, GENDER_OPTIONS, FORM_DEFAULTS, RECAPTCHA_CONFIG, RAZORPAY_CONFIG } from '../constants';
 import { apiService } from '../services/api';
 
 const loadRazorpayScript = () =>
@@ -217,17 +217,17 @@ export const RegistrationStep3 = () => {
             className="bg-[#f3f3f6] border-0"
           />
 
-          <Select
+          <Input
             label="Branch"
             name="branch"
             value={formData.branch || ''}
-            onChange={handleInputChange}
             onBlur={() => handleFieldBlur('branch')}
             error={getFieldError('branch')}
             isTouched={touched.branch}
-            options={USER_BRANCHES.map((b) => ({ label: b, value: b }))}
+            helperText="Detected automatically from the student number entered in step 1."
             required
             className="bg-[#f3f3f6] border-0"
+            readOnly
           />
 
           <RadioGroup
