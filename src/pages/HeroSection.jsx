@@ -5,7 +5,7 @@
 import { motion } from 'framer-motion';
 import { Button, Card, CodeChip } from '../components';
 import { EVENT_CONFIG } from '../constants';
-
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 const eventMeta = [
   { label: 'Date', value: 'April 15, 2025' },
   { label: 'Time', value: EVENT_CONFIG.eventTime },
@@ -24,7 +24,6 @@ export const HeroSection = ({ onCtaClick }) => {
           className="space-y-8"
         >
           <div className="space-y-4">
-            <CodeChip>devfest-meridian / registration</CodeChip>
             <h1 className="max-w-4xl text-balance text-5xl font-extrabold leading-[0.95] text-on-surface md:text-7xl">
               A curated registration flow for developers joining the next GDG summit.
             </h1>
@@ -67,7 +66,7 @@ export const HeroSection = ({ onCtaClick }) => {
         >
           <Card className="relative overflow-hidden bg-surface-container-low p-5 md:p-6">
             <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
-            <div className="relative space-y-6">
+            {/* <div className="relative space-y-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.24em] text-on-surface-variant">
@@ -108,7 +107,12 @@ export const HeroSection = ({ onCtaClick }) => {
                   <p><span className="font-semibold text-on-surface">03.</span> Confirm and verify email</p>
                 </div>
               </div>
-            </div>
+            </div> */}
+             <DotLottieReact
+      src="https://lottie.host/ec33de7b-abc0-407c-ad87-2dabd98d97b7/T2pBWOtr7o.lottie"
+      loop
+      autoplay
+    />
           </Card>
         </motion.div>
       </div>

@@ -32,9 +32,6 @@ export const RegistrationLayout = () => {
                 <Link to="/" className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
                   Home
                 </Link>
-                <Link to="/" className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
-                  Timeline
-                </Link>
                 <Link
                   to="/register"
                   className="text-sm font-medium text-[#0058bd] relative after:content-[''] after:absolute after:-bottom-1.5 after:left-0 after:w-full after:h-0.5 after:bg-[#0058bd] after:rounded-full"
@@ -65,10 +62,10 @@ export const RegistrationLayout = () => {
         <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex flex-col gap-1 items-center md:items-start text-center md:text-left">
             <span className="font-bold font-manrope text-base">GDG Portal</span>
-            <span className="text-xs text-gray-500">© 2024 Google Developer Groups</span>
+            <span className="text-xs text-gray-500">© 2026 Google Developer Groups</span>
           </div>
           
-          <div className="flexItems-center gap-6 text-xs font-medium text-gray-500">
+          <div className="flex items-center justify-center gap-6 text-xs font-medium text-gray-500">
             <a href="#" className="hover:text-gray-900 transition-colors">Resources</a>
             <a href="#" className="hover:text-gray-900 transition-colors">Guidelines</a>
             <a href="#" className="hover:text-gray-900 transition-colors">Privacy</a>

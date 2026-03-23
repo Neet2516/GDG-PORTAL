@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from './Button';
-import { CodeChip } from './CodeChip';
 
 export const Navbar = ({ onRegisterClick }) => {
   const navigate = useNavigate();
@@ -44,7 +43,7 @@ export const Navbar = ({ onRegisterClick }) => {
             </motion.div>
             <div className="flex flex-col">
               <span className="font-manrope text-sm font-extrabold leading-tight text-on-surface sm:text-lg">
-                GDG Meridian
+                GDG EVENT
               </span>
               <span className="hidden text-xs font-medium uppercase tracking-[0.22em] text-on-surface-variant sm:block">
                 Developer registration
@@ -67,7 +66,6 @@ export const Navbar = ({ onRegisterClick }) => {
             >
               Event
             </motion.a>
-            <CodeChip>flow:v1</CodeChip>
           </div>
 
           <Button onClick={onRegisterClick} size="sm" className="px-3 sm:px-5">
