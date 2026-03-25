@@ -2,15 +2,25 @@
  * Main navigation bar
  */
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Button } from './Button';
+import { FiMenu, FiX } from 'react-icons/fi';
+import gdgLogo from '../assets/images/gdg-logo.png';
 
-export const Navbar = ({ onRegisterClick }) => {
+const navItems = [
+  { label: 'Lore', href: '#lore' },
+  { label: 'Missions', href: '#missions' },
+  { label: 'Briefing', href: '#scoring' },
+  { label: 'Loot', href: '#loot' },
+  { label: 'Register', href: '#register', accent: true },
+];
+
+export const Navbar = ({ onRegisterClick, onNavigateTo }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -18,62 +28,122 @@ export const Navbar = ({ onRegisterClick }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
+
+  const resolveHref = (hash) => (location.pathname === '/' ? hash : `/${hash}`);
+
+  const handleBrandClick = () => {
+    if (location.pathname === '/') {
+      onNavigateTo?.('#lore');
+      return;
+    }
+
+    navigate('/');
+  };
+
   return (
     <motion.nav
-      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${isScrolled ? 'px-3 pt-3' : 'px-3 pt-4'}`}
+      className={`fixed left-0 right-0 top-0 z-50 px-4 pt-4 ${isScrolled ? 'pt-3' : ''}`}
       initial={{ y: -80 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="mx-auto max-w-7xl">
-        <div className={`glass-panel flex items-center justify-between gap-3 rounded-[1.25rem] px-3 py-3 sm:px-6 ${
-          isScrolled ? 'shadow-[0_20px_50px_-36px_rgba(26,28,30,0.22)]' : ''
-        }`}>
-          <motion.div
-            className="group flex cursor-pointer items-center gap-3"
-            onClick={() => navigate('/')}
-            whileHover={{ scale: 1.01 }}
-            transition={{ duration: 0.2 }}
-          >
-            <motion.div
-              className="primary-gradient flex h-11 w-11 items-center justify-center rounded-xl text-sm font-extrabold text-on-primary shadow-[0_18px_40px_-24px_rgba(0,88,189,0.65)]"
-              whileHover={{ rotate: 4 }}
-            >
-              {'</>'}
-            </motion.div>
-            <div className="flex flex-col">
-              <span className="font-manrope text-sm font-extrabold leading-tight text-on-surface sm:text-lg">
-                GDG EVENT
-              </span>
-              <span className="hidden text-xs font-medium uppercase tracking-[0.22em] text-on-surface-variant sm:block">
-                Developer registration
-              </span>
-            </div>
-          </motion.div>
+      <div className="mx-auto flex w-full max-w-[1200px] items-center justify-between gap-4 rounded-full border border-cyan-400/15 bg-[rgba(5,9,23,0.72)] px-5 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_0_32px_rgba(17,233,255,0.08)] backdrop-blur-[22px]">
+        <motion.button
+          type="button"
+          className="flex items-center gap-3 border-0 bg-transparent p-0 text-left text-white"
+          onClick={handleBrandClick}
+          whileHover={{ x: 2 }}
+          transition={{ duration: 0.2 }}
+        >
+          <img className="h-9 w-9 flex-none object-contain" src={gdgLogo} alt="" aria-hidden="true" />
+          <span className="grid gap-0.5">
+            <span className="text-[0.82rem] font-extrabold uppercase tracking-[0.16em] text-white">
+              Google Developer Groups
+            </span>
+            <span className="text-[0.7rem] uppercase tracking-[0.1em] text-white/60">
+              on campus Ajay Kumar Garg Engineering College
+            </span>
+          </span>
+        </motion.button>
 
-          <div className="hidden items-center gap-8 md:flex">
+        <div className="hidden flex-wrap items-center gap-1 lg:flex">
+          {navItems.map((item) => (
             <motion.a
-              href={location.pathname === '/' ? '#register-section' : '/#register-section'}
-              className="text-sm font-medium text-on-surface-variant transition-colors hover:text-on-surface"
+              key={item.label}
+              href={resolveHref(item.href)}
+              className={`rounded-full border px-4 py-3 text-[0.78rem] font-extrabold uppercase tracking-[0.16em] transition-colors ${
+                item.accent
+                  ? 'border-cyan-300/40 bg-cyan-300/10 text-white'
+                  : 'border-transparent text-white/78 hover:border-cyan-300/30 hover:bg-cyan-300/8 hover:text-white'
+              }`}
+              onClick={(event) => {
+                if (location.pathname === '/') {
+                  event.preventDefault();
+                  onNavigateTo?.(item.href);
+                }
+              }}
               whileHover={{ y: -2 }}
+              transition={{ duration: 0.2 }}
             >
-              Register
+              {item.label}
             </motion.a>
-            <motion.a
-              href={location.pathname === '/' ? '#event-details' : '/#event-details'}
-              className="text-sm font-medium text-on-surface-variant transition-colors hover:text-on-surface"
-              whileHover={{ y: -2 }}
-            >
-              Event
-            </motion.a>
-          </div>
-
-          <Button onClick={onRegisterClick} size="sm" className="px-3 sm:px-5">
-            <span className="sm:hidden">Register</span>
-            <span className="hidden sm:inline">Start registration</span>
-          </Button>
+          ))}
         </div>
+
+        <button
+          type="button"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/14 bg-white/4 text-white lg:hidden"
+          onClick={() => setIsMenuOpen((current) => !current)}
+          aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          aria-expanded={isMenuOpen}
+        >
+          {isMenuOpen ? <FiX size={22} /> : <FiMenu size={22} />}
+        </button>
       </div>
+
+      {isMenuOpen && (
+        <motion.div
+          className="mx-auto mt-3 block w-full max-w-[1200px] rounded-[1.5rem] border border-cyan-400/15 bg-[rgba(5,9,23,0.72)] p-4 backdrop-blur-[22px] lg:hidden"
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -12 }}
+        >
+          {navItems.map((item) => (
+            <a
+              key={item.label}
+              href={resolveHref(item.href)}
+              className={`block rounded-xl px-4 py-3 text-[0.82rem] font-extrabold uppercase tracking-[0.16em] ${
+                item.accent
+                  ? 'bg-cyan-300/10 text-white'
+                  : 'text-white/82 hover:bg-cyan-300/8 hover:text-white'
+              }`}
+              onClick={(event) => {
+                setIsMenuOpen(false);
+                if (location.pathname === '/') {
+                  event.preventDefault();
+                  onNavigateTo?.(item.href);
+                }
+              }}
+            >
+              {item.label}
+            </a>
+          ))}
+
+          <button
+            type="button"
+            className="mt-3 block rounded-xl border border-cyan-300/40 bg-cyan-300/10 px-4 py-3 text-[0.8rem] font-extrabold uppercase tracking-[0.18em] text-white"
+            onClick={() => {
+              setIsMenuOpen(false);
+              onRegisterClick();
+            }}
+          >
+            Open Registration
+          </button>
+        </motion.div>
+      )}
     </motion.nav>
   );
 };

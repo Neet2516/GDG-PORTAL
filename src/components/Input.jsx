@@ -26,9 +26,13 @@ export const Input = ({
   return (
     <div className="w-full space-y-2.5">
       {label && (
-        <label className={`block px-1 text-sm font-semibold ${hasError ? 'text-error' : 'text-on-surface-variant'}`}>
+        <label
+          className={`font-manrope text-[0.76rem] font-bold uppercase tracking-[0.24em] ${
+            hasError ? 'text-[#ff3f86]' : 'text-[#9ceff2]'
+          }`}
+        >
           {label}
-          {required && <span className="ml-1 font-bold text-error">*</span>}
+          {required && <span className="ml-1 font-bold text-[#ff3f86]">*</span>}
         </label>
       )}
 
@@ -43,15 +47,15 @@ export const Input = ({
         whileFocus={{ y: -1 }}
         transition={{ duration: 0.2 }}
         className={`
-          w-full rounded-xl border-0 px-4 py-3.5 font-inter text-base font-medium
-          text-on-surface placeholder:text-on-surface-variant/45 transition-all duration-300
+          w-full rounded-xl border px-4 py-3.5 font-manrope text-base font-medium
+          bg-[rgba(7,20,22,0.96)] text-white placeholder:text-white/28 transition-all duration-300
           focus:outline-none
           ${
             hasError
-              ? 'bg-surface-container-lowest shadow-[inset_0_-2px_0_0_rgba(186,26,26,0.35)] focus:shadow-[0_0_0_4px_rgba(186,26,26,0.08),inset_0_-2px_0_0_rgba(186,26,26,0.45)]'
-              : 'bg-surface-container-lowest shadow-[0_0_0_1px_rgba(194,198,213,0.18)] focus:shadow-[0_0_0_4px_rgba(0,88,189,0.12)]'
+              ? 'border-[#ff3f86]/55 shadow-[inset_0_0_0_1px_rgba(255,63,134,0.18)] focus:border-[#ff3f86] focus:shadow-[0_0_0_4px_rgba(255,63,134,0.1)]'
+              : 'border-[#18e9ff]/14 shadow-[inset_0_0_0_1px_rgba(24,233,255,0.08)] focus:border-[#18e9ff] focus:shadow-[0_0_0_4px_rgba(24,233,255,0.1)]'
           }
-          ${disabled ? 'cursor-not-allowed bg-surface-container-low opacity-60' : ''}
+          ${disabled ? 'cursor-not-allowed opacity-60' : ''}
           ${className}
         `}
         {...props}
@@ -65,7 +69,7 @@ export const Input = ({
             exit={{ opacity: 0, height: 0, y: -10 }}
             transition={{ duration: 0.2 }}
           >
-            <p className="flex items-center gap-1 text-sm font-medium text-error">
+            <p className="flex items-center gap-1 text-sm font-medium text-[#ff3f86]">
               <span className="text-base">!</span>
               {error}
             </p>
@@ -78,7 +82,7 @@ export const Input = ({
             exit={{ opacity: 0, height: 0 }}
             className="text-sm text-on-surface-variant/80"
           >
-            {helperText}
+            <span className="text-white/56">{helperText}</span>
           </motion.p>
         )}
       </AnimatePresence>

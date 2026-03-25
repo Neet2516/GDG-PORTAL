@@ -2,118 +2,151 @@
  * Landing page hero
  */
 
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Button, Card, CodeChip } from '../components';
-import { EVENT_CONFIG } from '../constants';
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-const eventMeta = [
-  { label: 'Date', value: 'April 15, 2025' },
-  { label: 'Time', value: EVENT_CONFIG.eventTime },
-  { label: 'Venue', value: EVENT_CONFIG.eventLocation },
+import { FiCalendar, FiMapPin, FiShield, FiZap } from 'react-icons/fi';
+
+import { Button } from '../components';
+import backgroundImage from '../assets/images/landingpage-background.jpg';
+
+const buildTargetDate = (year) => new Date(`${year}-04-06T09:00:00+05:30`);
+
+const getCountdownParts = () => {
+  const now = new Date();
+  const currentYearTarget = buildTargetDate(now.getFullYear());
+  const target = now < currentYearTarget ? currentYearTarget : buildTargetDate(now.getFullYear() + 1);
+  const remaining = Math.max(target.getTime() - now.getTime(), 0);
+
+  return {
+    days: Math.floor(remaining / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((remaining / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((remaining / (1000 * 60)) % 60),
+  };
+};
+
+const metaItems = [
+  { icon: FiCalendar, label: '6TH - 7TH APRIL' },
+  { icon: FiMapPin, label: 'AKGEC CAMPUS' },
+  { icon: FiShield, label: 'SECURE BUILD ZONE' },
 ];
 
-export const HeroSection = ({ onCtaClick }) => {
+export const HeroSection = ({ onCtaClick, onScrollToNext }) => {
+  const [countdown, setCountdown] = useState(getCountdownParts);
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setCountdown(getCountdownParts());
+    }, 1000);
+
+    return () => window.clearInterval(intervalId);
+  }, []);
+
   return (
-    <section className="relative overflow-hidden px-4 pb-16 pt-36 md:pb-24 md:pt-40">
-      <div className="grid-pattern absolute inset-0 opacity-40" />
-      <div className="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+    <section
+      id="lore"
+      className="relative z-10 min-h-[100svh] overflow-hidden px-4 pb-6 pt-4"
+    >
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-[1.02] saturate-110 brightness-[0.72]"
+        style={{ backgroundImage: `url(${backgroundImage})` }}
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,4,11,0.25)_0%,rgba(4,4,11,0.12)_22%,rgba(4,4,11,0.68)_100%),radial-gradient(circle_at_50%_45%,rgba(255,74,149,0.28),transparent_20%),radial-gradient(circle_at_50%_20%,rgba(18,233,255,0.08),transparent_18%)]"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-[0.2rem] border border-white/8 shadow-[inset_0_0_0_1px_rgba(255,79,159,0.12),inset_0_0_80px_rgba(18,233,255,0.04)]"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[length:90px_90px] opacity-20 [mask-image:linear-gradient(180deg,transparent,#000_18%,#000_82%,transparent)]"
+        aria-hidden="true"
+      />
+
+      <div className="relative z-10 mx-auto grid min-h-[calc(100svh-2rem)] w-full max-w-[940px] place-items-center pt-[4.5rem]">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          className="grid w-full justify-items-center text-center"
+          initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="space-y-8"
+          transition={{ duration: 0.8 }}
         >
-          <div className="space-y-4">
-            <h1 className="max-w-4xl text-balance text-5xl font-extrabold leading-[0.95] text-on-surface md:text-7xl">
-              A curated registration flow for developers joining the next GDG summit.
-            </h1>
-            <p className="max-w-2xl text-lg leading-8 text-on-surface-variant md:text-xl">
-              Calm surfaces, precise metadata, and a guided onboarding sequence for a high-signal event experience.
-            </p>
+          <p className="font-forresten text-[clamp(1.9rem,3vw,2.6rem)] leading-none tracking-[0.12em] text-[#ff7eca] [text-shadow:0_0_10px_rgba(255,79,159,0.2),0_0_24px_rgba(255,79,159,0.18)]">
+            VICE CITY
+          </p>
+
+          <h1 className="mt-5 flex flex-wrap items-baseline justify-center gap-x-4 gap-y-2 text-[clamp(4rem,8vw,8.5rem)] leading-[0.86] uppercase text-white [text-shadow:4px_4px_0_rgba(24,15,48,0.95),0_0_24px_rgba(255,255,255,0.08)]">
+            <span className="font-pricedown">TECH HEIST</span>
+            <span className="font-pricedown text-[#15e8f2] [text-shadow:4px_4px_0_rgba(9,28,33,0.95),0_0_22px_rgba(21,232,242,0.3)]">
+              2.0
+            </span>
+          </h1>
+
+          <div className="mt-5 inline-flex flex-col items-center gap-0.5 rounded-[0.9rem] border border-white/16 bg-[rgba(18,16,30,0.4)] px-6 py-3 shadow-[inset_0_0_24px_rgba(255,255,255,0.03),0_0_28px_rgba(0,0,0,0.2)]">
+            <span className="font-forresten text-[clamp(1rem,2vw,1.5rem)] uppercase tracking-[0.38em] text-[#1deeff]">
+              HACK THE SYSTEM
+            </span>
+            <span className="font-forresten text-[clamp(1rem,2vw,1.5rem)] uppercase tracking-[0.38em] text-[#1deeff]">
+              OWN THE GAME
+            </span>
           </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Button size="lg" onClick={onCtaClick}>
-              <span>Secure your spot</span>
-              <span aria-hidden="true">-&gt;</span>
+          <div className="mt-6 flex flex-wrap items-stretch justify-center gap-4">
+            <Button variant="neon" size="xl" className="min-w-[min(100%,18.5rem)] justify-center rounded-[1rem] border border-white/18 bg-[linear-gradient(180deg,rgba(25,33,97,0.98),rgba(18,25,86,0.98))] tracking-[0.08em]">
+              <FiZap size={18} />
+              <span>REGISTER NOW</span>
             </Button>
-            <Button
-              variant="secondary"
-              size="lg"
-              onClick={() => document.getElementById('event-details')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              Read the brief
-            </Button>
+
+            <div className="flex min-w-[min(100%,14rem)] flex-col justify-center gap-1 rounded-[1rem] border border-white/8 bg-white/8 px-5 py-4 text-left backdrop-blur-[14px]">
+              <span className="text-[0.7rem] uppercase tracking-[0.24em] text-white/58">EVENT DATES</span>
+              <strong className="text-[clamp(1.25rem,2vw,1.55rem)] font-semibold tracking-[0.03em] text-[#f8f8fb]">
+                6TH - 7TH APRIL
+              </strong>
+            </div>
           </div>
 
-          <div className="flex flex-wrap gap-6">
-            {eventMeta.map((item) => (
-              <div key={item.label} className="space-y-1">
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-on-surface-variant">
-                  {item.label}
-                </p>
-                <p className="text-base font-semibold text-on-surface">{item.value}</p>
+          <div className="mt-5 flex flex-wrap justify-center gap-3">
+            {metaItems.map((item) => (
+              <div
+                key={item.label}
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-[rgba(7,9,18,0.45)] px-4 py-3 text-[0.76rem] font-bold uppercase tracking-[0.14em] text-white/78"
+              >
+                <item.icon size={16} />
+                <span>{item.label}</span>
               </div>
             ))}
           </div>
-        </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, x: 24 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.15 }}
-          className="lg:justify-self-end"
-        >
-          <Card className="relative overflow-hidden bg-surface-container-low p-5 md:p-6">
-            <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
-            {/* <div className="relative space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-on-surface-variant">
-                    Event snapshot
-                  </p>
-                  <h2 className="mt-2 text-2xl font-extrabold">Developer-first by design</h2>
-                </div>
-                <CodeChip>status: open</CodeChip>
-              </div>
+          <div className="mt-12 rounded-[1rem] border border-white/8 bg-[rgba(6,6,12,0.9)] px-7 py-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_24px_80px_-48px_rgba(0,0,0,0.9)]">
+            <span className="block text-[0.78rem] font-bold uppercase tracking-[0.26em] text-[#1deeff]">
+              SYSTEM UPTIME // COUNTDOWN
+            </span>
+            <div className="mt-3 flex justify-center gap-4">
+              <span className="text-[clamp(2rem,4vw,3rem)] font-medium tracking-[0.02em] text-white">
+                {String(countdown.days).padStart(2, '0')}
+                <small className="ml-1 text-[0.82em] font-bold text-[#ff4f9f]">D</small>
+              </span>
+              <span className="text-[clamp(2rem,4vw,3rem)] font-medium tracking-[0.02em] text-white">
+                {String(countdown.hours).padStart(2, '0')}
+                <small className="ml-1 text-[0.82em] font-bold text-[#ff4f9f]">H</small>
+              </span>
+              <span className="text-[clamp(2rem,4vw,3rem)] font-medium tracking-[0.02em] text-white">
+                {String(countdown.minutes).padStart(2, '0')}
+                <small className="ml-1 text-[0.82em] font-bold text-[#ff4f9f]">M</small>
+              </span>
+            </div>
+          </div>
 
-              <div className="space-y-4">
-                {[
-                  'Editorial multi-step registration',
-                  'Email verification flow with OTP checkpoint',
-                  'High-clarity attendee metadata and summary state',
-                ].map((item) => (
-                  <div key={item} className="rounded-2xl bg-surface-container-lowest p-4">
-                    <p className="text-sm leading-6 text-on-surface">{item}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="rounded-[1.25rem] bg-surface-container-lowest p-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-on-surface-variant">
-                  Registration protocol
-                </p>
-                <div className="mt-4 flex gap-1">
-                  {[1, 2, 3].map((step) => (
-                    <div
-                      key={step}
-                      className={`h-1.5 flex-1 rounded-full ${step === 3 ? 'bg-surface-container-highest' : 'bg-primary'}`}
-                    />
-                  ))}
-                </div>
-                <div className="mt-4 grid gap-3 text-sm text-on-surface-variant">
-                  <p><span className="font-semibold text-on-surface">01.</span> Basic identity capture</p>
-                  <p><span className="font-semibold text-on-surface">02.</span> Event alignment details</p>
-                  <p><span className="font-semibold text-on-surface">03.</span> Confirm and verify email</p>
-                </div>
-              </div>
-            </div> */}
-             <DotLottieReact
-      src="https://lottie.host/ec33de7b-abc0-407c-ad87-2dabd98d97b7/T2pBWOtr7o.lottie"
-      loop
-      autoplay
-    />
-          </Card>
+          <button
+            type="button"
+            className="mt-8 inline-flex flex-col items-center gap-3 border-0 bg-transparent text-[0.7rem] uppercase tracking-[0.28em] text-white/60"
+            onClick={() => onScrollToNext?.()}
+          >
+            <span>SCROLL TO ACCESS</span>
+            <span className="inline-flex h-[2.65rem] w-[1.5rem] justify-center rounded-full border-2 border-white/72 pt-1.5">
+              <span className="h-[0.66rem] w-[0.34rem] animate-[landing-scroll_1.6s_infinite] rounded-full bg-white" />
+            </span>
+          </button>
         </motion.div>
       </div>
     </section>

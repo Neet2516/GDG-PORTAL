@@ -3,9 +3,10 @@
  * App routing and layout
  */
 
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import Lenis from 'lenis';
 
 import { Navbar, Footer, RegistrationLayout } from './components';
 import {
@@ -20,30 +21,69 @@ import {
 
 export const App = () => {
   const navigate = useNavigate();
+  const lenisRef = useRef(null);
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      lerp: 0.08,
+      duration: 1.2,
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.6,
+    });
+
+    lenisRef.current = lenis;
+
+    let frameId;
+    const raf = (time) => {
+      lenis.raf(time);
+      frameId = window.requestAnimationFrame(raf);
+    };
+
+    frameId = window.requestAnimationFrame(raf);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      lenis.destroy();
+      lenisRef.current = null;
+    };
+  }, []);
 
   const handleRegisterClick = () => {
     navigate('/register');
   };
 
+  const handleScrollTo = (target) => {
+    if (!target) {
+      return;
+    }
+
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(target, { offset: -88 });
+      return;
+    }
+
+    const element = typeof target === 'string' ? document.querySelector(target) : target;
+    element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
-    <div className="editorial-shell">
-      {/* Main Routes with original layout */}
+    <div className="min-h-screen bg-[#02040b] text-white">
       <Routes>
         <Route
           path="/"
           element={
-            <>
-              <Navbar onRegisterClick={handleRegisterClick} />
-              <main className="relative z-10 min-h-screen overflow-x-hidden pt-16">
-                <HeroSection onCtaClick={handleRegisterClick} />
+            <div className="relative min-h-screen overflow-x-hidden bg-[#02040b]">
+              <Navbar onRegisterClick={handleRegisterClick} onNavigateTo={handleScrollTo} />
+              <main className="relative z-10 overflow-x-hidden">
+                <HeroSection onCtaClick={handleRegisterClick} onScrollToNext={() => handleScrollTo('#missions')} />
                 <EventDetails />
+                <Footer />
               </main>
-              <Footer />
-            </>
+            </div>
           }
         />
-        
-        {/* Registration Flow Layout */}
+
         <Route path="/register" element={<RegistrationLayout />}>
           <Route index element={<RegistrationStep1 />} />
           <Route path="verify" element={<OTPVerification />} />
@@ -51,7 +91,16 @@ export const App = () => {
           <Route path="success" element={<RegistrationSuccess />} />
         </Route>
 
-        <Route path="*" element={<><Navbar onRegisterClick={handleRegisterClick}/><NotFound /><Footer/></>} />
+        <Route
+          path="*"
+          element={
+            <>
+              <Navbar onRegisterClick={handleRegisterClick} onNavigateTo={handleScrollTo} />
+              <NotFound />
+              <Footer />
+            </>
+          }
+        />
       </Routes>
       <Toaster
         position="top-right"

@@ -25,9 +25,13 @@ export const Select = ({
   return (
     <div className="w-full space-y-2.5">
       {label && (
-        <label className={`block px-1 text-sm font-semibold ${hasError ? 'text-error' : 'text-on-surface-variant'}`}>
+        <label
+          className={`font-manrope text-[0.76rem] font-bold uppercase tracking-[0.24em] ${
+            hasError ? 'text-[#ff3f86]' : 'text-[#9ceff2]'
+          }`}
+        >
           {label}
-          {required && <span className="ml-1 font-bold text-error">*</span>}
+          {required && <span className="ml-1 font-bold text-[#ff3f86]">*</span>}
         </label>
       )}
 
@@ -39,19 +43,19 @@ export const Select = ({
           onBlur={onBlur}
           disabled={disabled}
           className={`
-            w-full appearance-none rounded-xl border-0 px-4 py-3.5
-            bg-surface-container-lowest font-inter text-base font-medium text-on-surface
+            w-full appearance-none rounded-xl border px-4 py-3.5
+            bg-[rgba(7,20,22,0.96)] font-manrope text-base font-medium text-white
             transition-all duration-300 focus:outline-none
             ${
               hasError
-                ? 'shadow-[inset_0_-2px_0_0_rgba(186,26,26,0.35)] focus:shadow-[0_0_0_4px_rgba(186,26,26,0.08),inset_0_-2px_0_0_rgba(186,26,26,0.45)]'
-                : 'shadow-[0_0_0_1px_rgba(194,198,213,0.18)] focus:shadow-[0_0_0_4px_rgba(0,88,189,0.12)]'
+                ? 'border-[#ff3f86]/55 shadow-[inset_0_0_0_1px_rgba(255,63,134,0.18)] focus:shadow-[0_0_0_4px_rgba(255,63,134,0.1)]'
+                : 'border-[#18e9ff]/14 shadow-[inset_0_0_0_1px_rgba(24,233,255,0.08)] focus:shadow-[0_0_0_4px_rgba(24,233,255,0.1)]'
             }
-            ${disabled ? 'cursor-not-allowed bg-surface-container-low opacity-60' : 'cursor-pointer'}
+            ${disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}
             ${className}
           `}
           style={{
-            backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='${hasError ? '%23ba1a1a' : '%230058bd'}' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
+            backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='${hasError ? '%23ff3f86' : '%2318e9ff'}' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'right 1rem center',
             backgroundSize: '1rem 1rem',
@@ -78,7 +82,7 @@ export const Select = ({
             exit={{ opacity: 0, height: 0, y: -10 }}
             transition={{ duration: 0.2 }}
           >
-            <p className="flex items-center gap-1 text-sm font-medium text-error">
+            <p className="flex items-center gap-1 text-sm font-medium text-[#ff3f86]">
               <span className="text-base">!</span>
               {error}
             </p>

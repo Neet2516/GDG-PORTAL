@@ -14,10 +14,13 @@ export const Card = ({
   ...props
 }) => {
   const variantStyles = {
-    default: 'bg-surface-container-lowest ambient-shadow',
-    elevated: 'bg-surface-container-lowest ambient-shadow',
-    outlined: 'bg-surface-container-lowest ambient-shadow',
-    glass: 'glass-panel bg-surface/70',
+    default:
+      'border border-[#1a8d98]/35 bg-[linear-gradient(180deg,rgba(6,22,24,0.96),rgba(5,13,16,0.98))] shadow-[0_0_0_1px_rgba(24,233,255,0.06),0_24px_70px_-42px_rgba(0,0,0,0.9)]',
+    elevated:
+      'border border-[#1a8d98]/35 bg-[linear-gradient(180deg,rgba(6,22,24,0.96),rgba(5,13,16,0.98))] shadow-[0_0_0_1px_rgba(24,233,255,0.06),0_24px_70px_-42px_rgba(0,0,0,0.9)]',
+    outlined:
+      'border border-[#18e9ff]/25 bg-[linear-gradient(180deg,rgba(6,22,24,0.96),rgba(5,13,16,0.98))] shadow-[0_0_0_1px_rgba(24,233,255,0.06),0_24px_70px_-42px_rgba(0,0,0,0.9)]',
+    glass: 'border border-[#18e9ff]/18 bg-[rgba(5,16,18,0.72)] backdrop-blur-xl',
   };
 
   return (

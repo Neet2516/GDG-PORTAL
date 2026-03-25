@@ -10,18 +10,18 @@ export const FlowProgress = ({
     <div className={`space-y-4 ${className}`}>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="font-manrope text-[0.7rem] font-bold uppercase tracking-[0.3em] text-primary">
+          <p className="font-manrope text-[0.7rem] font-bold uppercase tracking-[0.32em] text-[#18e9ff]">
             {label}
           </p>
-          <h2 className="mt-2 text-xl font-extrabold text-on-surface sm:text-2xl md:text-3xl">
+          <h2 className="mt-2 text-xl font-extrabold text-white sm:text-2xl md:text-3xl">
             {steps[currentStep]?.title}
           </h2>
         </div>
         <div className="sm:text-right">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-on-surface-variant">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/45">
             Step {currentStep + 1} of {steps.length}
           </p>
-          <p className="mt-1 text-xs font-semibold text-primary">{percentage}% complete</p>
+          <p className="mt-1 text-xs font-semibold text-[#18e9ff]">{percentage}% complete</p>
         </div>
       </div>
       <div className="flex gap-1">
@@ -29,7 +29,7 @@ export const FlowProgress = ({
           <div
             key={step.id}
             className={`h-1.5 flex-1 rounded-full transition-colors duration-300 ${
-              index <= currentStep ? 'bg-primary' : 'bg-surface-container-highest'
+              index <= currentStep ? 'bg-[#18e9ff]' : 'bg-white/10'
             }`}
           />
         ))}
@@ -39,12 +39,12 @@ export const FlowProgress = ({
           <div key={step.id} className="min-w-0 space-y-1">
             <p
               className={`text-[0.7rem] font-semibold uppercase tracking-[0.22em] ${
-                index === currentStep ? 'text-primary' : 'text-on-surface-variant/70'
+                index === currentStep ? 'text-[#18e9ff]' : 'text-white/45'
               }`}
             >
               {step.kicker}
             </p>
-            <p className="text-sm leading-6 text-on-surface-variant">{step.caption}</p>
+            <p className="text-sm leading-6 text-white/58">{step.caption}</p>
           </div>
         ))}
       </div>

@@ -1,52 +1,468 @@
-/**
- * Event details section
- */
+import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  FiAward,
+  FiBookOpen,
+  FiGift,
+  FiCpu,
+  FiLock,
+  FiMinus,
+  FiPlus,
+  FiRadio,
+  FiShield,
+  FiTarget,
+  FiUnlock,
+  FiZap,
+} from 'react-icons/fi';
+import backgroundImage from '../assets/images/landingpage-background.jpg';
 
-import { motion } from 'framer-motion';
-import { Card, CodeChip } from '../components';
-
-const features = [
-  ['Expert speakers', 'Learn from practitioners shipping production systems and platform products.'],
-  ['Hands-on workshops', 'Move past theory with practical sessions oriented around modern developer workflows.'],
-  ['Community rooms', 'Meet peers, organizers, and mentors across tracks without the usual conference noise.'],
-  ['Launch-stage energy', 'A portal and on-site experience designed with the same care as the talks.'],
+const missionSteps = [
+  {
+    number: '01',
+    title: 'ACCESS CODE BREAK',
+    subtitle: 'Aptitude & Pattern Puzzle',
+    tag: 'UNLOCKED',
+    icon: FiUnlock,
+    accent: 'cyan',
+    muted: false,
+  },
+  {
+    number: '02',
+    title: 'LOGIC FIREWALL',
+    subtitle: 'Code Output & Logic Analysis',
+    tag: null,
+    icon: FiLock,
+    accent: 'pink',
+    muted: true,
+  },
+  {
+    number: '03',
+    title: 'CODE DECRYPTION',
+    subtitle: 'Debugging Challenge',
+    tag: null,
+    icon: FiLock,
+    accent: 'pink',
+    muted: true,
+  },
+  {
+    number: '04',
+    title: 'SYSTEM PATCH',
+    subtitle: 'Binary + Encryption + Programming',
+    tag: null,
+    icon: FiLock,
+    accent: 'pink',
+    muted: true,
+  },
+  {
+    number: '05',
+    title: 'FINAL SECURITY TEST',
+    subtitle: 'Multiple Choice Questions',
+    tag: 'TOP 3 TEAMS ONLY',
+    icon: FiShield,
+    accent: 'violet',
+    muted: false,
+  },
 ];
 
-export const EventDetails = () => {
-  return (
-    <section id="event-details" className="px-4 py-20 md:py-28">
-      <div className="mx-auto max-w-7xl rounded-[2rem] bg-surface-container-low px-6 py-10 md:px-10 md:py-14">
-        <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-          <div className="space-y-4">
-            <CodeChip>editorial brief</CodeChip>
-            <h2 className="max-w-2xl text-balance text-3xl font-extrabold md:text-5xl">
-              Built to feel less like a form and more like admission to a carefully run developer gathering.
-            </h2>
-          </div>
-          <p className="max-w-md text-base leading-7 text-on-surface-variant md:text-right">
-            The experience relies on tonal layering, spacious rhythm, and metadata-first presentation instead of borders and boxes.
-          </p>
-        </div>
+const scoringRows = [
+  { label: 'Without clue', points: '+5 PTS', tone: 'success' },
+  { label: 'With 1 clue', points: '+4 PTS', tone: 'success' },
+  { label: 'With 2 clues', points: '+3 PTS', tone: 'success' },
+  { label: 'Not solved', points: '+1 PT', tone: 'danger' },
+];
 
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {features.map(([title, description], index) => (
-            <motion.div
-              key={title}
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={{ duration: 0.45, delay: index * 0.08 }}
-            >
-              <Card clickable className="h-full bg-surface-container-lowest">
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary">
-                  Track 0{index + 1}
+const rewards = [
+  {
+    title: 'RUNNER UPS',
+    description: 'Exclusive Stickers',
+    icon: FiAward,
+    accent: 'silver',
+  },
+  {
+    title: 'TOP 3 WINNERS',
+    description: 'Direct PI Entry',
+    detail: '+ Cup / Bottle',
+    icon: FiTarget,
+    accent: 'gold',
+    featured: true,
+  },
+  {
+    title: 'PARTICIPANTS',
+    description: 'Key Chains',
+    icon: FiGift,
+    accent: 'amber',
+  },
+];
+
+const faqItems = [
+  {
+    question: 'DO I NEED ADVANCED HACKING SKILLS?',
+    answer:
+      'Basic to intermediate coding logic is enough. The event focuses on problem-solving, aptitude, and clean technical thinking rather than raw security hacking.',
+  },
+  {
+    question: 'CAN I FORM MY OWN 6-MEMBER TEAM?',
+    answer:
+      'Yes. Teams can be self-formed as long as they respect the participation rules and registration requirements shared by the organizers.',
+  },
+  {
+    question: 'WHAT HAPPENS IF WE FAIL TO DECRYPT A LEVEL?',
+    answer:
+      'You can still progress with partial scoring on some rounds. The scoring matrix rewards attempts, clue usage, and time management.',
+  },
+  {
+    question: 'ARE THE FINAL SECURITY TEST QUESTIONS THEORETICAL?',
+    answer:
+      'The final round mixes concept checks, pattern recognition, and practical reasoning. The intent is to test team coordination under pressure.',
+  },
+];
+
+const dayCards = [
+  {
+    day: 'DAY 01',
+    date: '6TH APRIL',
+    title: 'technical learning session',
+    time: '2:00 PM - 5:00 PM',
+    icon: FiBookOpen,
+    tone: 'cyan',
+    code: '[ SYS.OK ]',
+  },
+  {
+    day: 'DAY 02',
+    date: '7TH APRIL',
+    title: 'gamified tech challenge',
+    time: '2:00 PM ONWARDS',
+    icon: FiCpu,
+    tone: 'pink',
+    code: '[ EXECUTING ]',
+  },
+];
+
+const sectionMotion = {
+  initial: { opacity: 0, y: 22 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, amount: 0.2 },
+  transition: { duration: 0.55 },
+};
+
+export const EventDetails = () => {
+  const [openFaq, setOpenFaq] = useState(0);
+
+  return (
+    <section className="relative bg-[#070814] px-4 py-20 text-white sm:px-6 lg:px-8">
+      <div className="mx-auto flex w-full max-w-[1180px] flex-col gap-16">
+        <motion.section id="missions" className="space-y-8" {...sectionMotion}>
+          <div className="rounded-[1.6rem] border border-[#6b11ff]/60 bg-[linear-gradient(180deg,rgba(16,8,30,0.98),rgba(8,8,20,0.98))] p-6 shadow-[0_0_0_1px_rgba(123,33,255,0.16),0_0_48px_rgba(123,33,255,0.18)] sm:p-8">
+            <div className="grid gap-8 lg:grid-cols-[1.25fr_0.72fr] lg:items-center">
+              <div className="space-y-5">
+                <p className="font-mono text-[0.68rem] uppercase tracking-[0.34em] text-[#9f4dff]">
+                  &gt;&gt; decrypting file: lore.txt
                 </p>
-                <h3 className="mt-4 text-xl font-extrabold">{title}</h3>
-                <p className="mt-3 text-sm leading-7 text-on-surface-variant">{description}</p>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="mt-1 flex h-12 w-12 items-center justify-center rounded-full text-[#8f26ff] shadow-[0_0_0_1px_rgba(143,38,255,0.32),0_0_24px_rgba(143,38,255,0.22)]">
+                    <FiRadio size={36} />
+                  </div>
+                  <h2 className="font-pricedown text-3xl text-white sm:text-4xl">THE HEIST PROTOCOL</h2>
+                </div>
+
+                <p className="max-w-3xl text-sm leading-7 text-white/60 sm:text-base">
+                  The city&apos;s central mainframe has been locked down by a rogue security AI. We need the sharpest coders,
+                  hackers, and logicians to bypass the firewalls and penetrate the inner core. The tech heist of the decade is
+                  about to begin. Assemble your crew, decrypt the algorithms, and secure the loot before the system inevitably
+                  reboots. <span className="font-semibold text-[#ff356d]">Are you in?</span>
+                </p>
+              </div>
+
+              <div className="flex justify-center lg:justify-end">
+                <div className="flex h-60 w-60 items-center justify-center rounded-full border border-[#6b11ff]/60 bg-[radial-gradient(circle_at_center,rgba(255,79,159,0.22),rgba(10,10,24,0.86))] shadow-[0_0_0_1px_rgba(123,33,255,0.15),0_0_36px_rgba(123,33,255,0.22)]">
+                  <div
+                    className="h-48 w-48 rounded-full border border-[#8f26ff]/30 bg-cover bg-center bg-no-repeat shadow-[inset_0_0_60px_rgba(0,0,0,0.35)]"
+                    style={{ backgroundImage: `url(${backgroundImage})` }}
+                    aria-hidden="true"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2">
+            {dayCards.map((card) => {
+              const Icon = card.icon;
+              const isCyan = card.tone === 'cyan';
+
+              return (
+                <article
+                  key={card.day}
+                  className={`rounded-[1.35rem] border p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.04)] ${
+                    isCyan
+                      ? 'border-[#0ed8ff]/70 bg-[linear-gradient(180deg,rgba(9,18,32,0.95),rgba(8,10,22,0.98))] shadow-[0_0_0_1px_rgba(14,216,255,0.12),0_0_34px_rgba(14,216,255,0.16)]'
+                      : 'border-[#ff2f76]/70 bg-[linear-gradient(180deg,rgba(31,11,24,0.95),rgba(10,8,18,0.98))] shadow-[0_0_0_1px_rgba(255,47,118,0.12),0_0_34px_rgba(255,47,118,0.18)]'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="space-y-2">
+                      <p className={`font-pricedown text-3xl ${isCyan ? 'text-[#12e9ff]' : 'text-[#ff2f76]'}`}>{card.day}</p>
+                      <p className="text-sm uppercase tracking-[0.22em] text-white/45">{card.date}</p>
+                    </div>
+
+                    <div
+                      className={`flex h-12 w-12 items-center justify-center rounded-[0.9rem] border ${
+                        isCyan
+                          ? 'border-[#12e9ff]/30 bg-[rgba(16,86,92,0.28)] text-[#12e9ff]'
+                          : 'border-[#ff2f76]/30 bg-[rgba(111,19,58,0.28)] text-[#ff2f76]'
+                      }`}
+                    >
+                      <Icon size={22} />
+                    </div>
+                  </div>
+
+                  <h3 className="mt-6 font-pricedown text-2xl text-white sm:text-[2rem]">{card.title}</h3>
+
+                  <div className="mt-6 inline-flex items-center gap-2 rounded-[0.65rem] border border-black/50 bg-black/60 px-4 py-3 text-sm font-semibold tracking-[0.18em] text-white">
+                    <span className={isCyan ? 'text-[#12e9ff]' : 'text-[#ff2f76]'}>◔</span>
+                    <span>{card.time}</span>
+                  </div>
+
+                  <p className={`mt-4 text-right font-mono text-[0.68rem] uppercase tracking-[0.32em] ${isCyan ? 'text-[#12e9ff]/35' : 'text-[#ff2f76]/35'}`}>
+                    {card.code}
+                  </p>
+                </article>
+              );
+            })}
+          </div>
+        </motion.section>
+
+        <motion.section id="directory" className="space-y-10" {...sectionMotion}>
+          <div className="space-y-4 text-center">
+            <h2 className="font-pricedown text-3xl text-white sm:text-4xl">MISSION DIRECTORY</h2>
+            <p className="mx-auto max-w-2xl text-sm leading-7 text-white/60 sm:text-base">
+              Progress through the security mainframe. One wrong move and you&rsquo;re locked out.
+            </p>
+          </div>
+
+          <div className="grid gap-8 lg:grid-cols-[auto_1fr] lg:items-start">
+            <div className="hidden h-full w-12 items-stretch justify-center lg:flex">
+              <div className="relative flex h-full flex-col items-center">
+                <div className="absolute left-1/2 top-0 h-[82%] w-0.5 -translate-x-1/2 bg-[linear-gradient(180deg,rgba(24,233,255,0.95),rgba(24,233,255,0.1))] blur-[1px]" />
+                <div className="relative flex h-full flex-col justify-between py-2">
+                  {missionSteps.map((step, index) => (
+                    <div
+                      key={step.number}
+                      className={`h-4 w-4 rounded-full border-2 ${
+                        index === 0 ? 'border-[#18e9ff] bg-[#18e9ff] shadow-[0_0_0_8px_rgba(24,233,255,0.18)]' : 'border-white/30 bg-[#070814]'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-5">
+              {missionSteps.map((step) => {
+                const muted = step.muted;
+                const Icon = step.icon;
+
+                return (
+                  <article
+                    key={step.number}
+                    className={`grid gap-4 rounded-[1.4rem] border px-5 py-5 sm:px-6 sm:py-6 md:grid-cols-[5.5rem_1fr_auto] md:items-center ${
+                      step.accent === 'cyan'
+                        ? 'border-[#18e9ff]/45 bg-[rgba(7,12,24,0.88)] shadow-[0_0_0_1px_rgba(24,233,255,0.12),0_0_34px_rgba(24,233,255,0.14)]'
+                        : step.accent === 'violet'
+                          ? 'border-[#6b11ff]/50 bg-[rgba(20,7,38,0.9)] shadow-[0_0_0_1px_rgba(123,33,255,0.15),0_0_34px_rgba(123,33,255,0.2)]'
+                          : muted
+                            ? 'border-white/5 bg-[rgba(9,10,20,0.7)] opacity-80'
+                            : 'border-[#ff2e7d]/40 bg-[rgba(25,8,18,0.9)]'
+                    }`}
+                  >
+                    <div className={`flex items-center justify-center rounded-[1rem] border bg-black/20 py-5 text-3xl font-semibold ${step.accent === 'cyan' ? 'border-[#18e9ff]/30 text-[#18e9ff]' : step.accent === 'violet' ? 'border-[#6b11ff]/30 text-[#9f4dff]' : 'border-white/5 text-white/30'}`}>
+                      {step.number}
+                    </div>
+
+                    <div className="space-y-2">
+                      <h3 className="font-pricedown text-xl text-white sm:text-2xl">{step.title}</h3>
+                      <p className="text-sm text-white/55 sm:text-base">{step.subtitle}</p>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-4 md:justify-end">
+                      {step.tag ? (
+                        <span
+                          className={`rounded-md border px-3 py-1 text-[0.7rem] font-bold uppercase tracking-[0.2em] ${
+                            step.accent === 'violet'
+                              ? 'border-[#8f3bff]/50 bg-[#7b21ff] text-white'
+                              : 'border-[#18e9ff]/30 bg-[#0b2a30] text-[#18e9ff]'
+                          }`}
+                        >
+                          {step.tag}
+                        </span>
+                      ) : (
+                        <div
+                          className={`flex h-12 w-12 items-center justify-center rounded-full border ${
+                            step.accent === 'cyan'
+                              ? 'border-[#18e9ff]/35 bg-[#07242a] text-[#18e9ff]'
+                              : 'border-[#ff2e7d]/35 bg-[#2a0b1a] text-[#ff2e7d]'
+                          }`}
+                        >
+                          <Icon size={20} />
+                        </div>
+                      )}
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </motion.section>
+
+        <motion.section id="scoring" className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]" {...sectionMotion}>
+          <div className="rounded-[1.5rem] border border-white/8 bg-black/70 shadow-[0_20px_80px_-40px_rgba(0,0,0,0.9)]">
+            <div className="h-4 rounded-t-[1.5rem] bg-white/20" />
+            <div className="space-y-5 px-6 py-8 sm:px-8">
+              <p className="font-mono text-[0.85rem] uppercase tracking-[0.18em] text-[#39f22f]">&gt; initializing scoring matrix...</p>
+              <div className="h-px bg-[linear-gradient(90deg,rgba(57,242,47,0.9),rgba(57,242,47,0.05))]" />
+
+              <div className="space-y-4 font-manrope text-white">
+                <div className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.2em]">
+                  <FiZap size={16} className="text-white" />
+                  <span>Time limit: 15 mins / level</span>
+                </div>
+                <div className="space-y-1 text-[0.82rem] text-[#39f22f]">
+                  <p>&gt; Clue 1 generated at: 07:00</p>
+                  <p>&gt; Clue 2 generated at: 12:00</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.22em] text-white">
+                  <FiTarget size={16} />
+                  <span>Scoring protocol</span>
+                </div>
+
+                <div className="divide-y divide-[#39f22f]/30">
+                  {scoringRows.map((row) => (
+                    <div
+                      key={row.label}
+                      className={`flex items-center justify-between py-3 font-mono text-sm ${
+                        row.tone === 'danger' ? 'text-[#ff3b3b]' : 'text-[#39f22f]'
+                      }`}
+                    >
+                      <span>{row.label}</span>
+                      <span>{row.points}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-[1.5rem] border border-[#ff2d73]/60 bg-[radial-gradient(circle_at_top,rgba(255,73,138,0.28),rgba(16,5,17,0.96))] p-6 shadow-[0_0_0_1px_rgba(255,45,115,0.2),0_0_48px_rgba(255,45,115,0.2)] sm:p-8">
+            <p className="font-pricedown text-2xl text-white">FINAL ROUND BATTLE</p>
+
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-[1rem] border border-white/10 bg-[rgba(255,81,140,0.2)] p-6 text-center">
+                <strong className="block font-pricedown text-4xl text-[#ff8ab5]">TOP 3</strong>
+                <span className="mt-2 block text-sm font-semibold uppercase tracking-[0.2em] text-white/85">
+                  Teams advance
+                </span>
+              </div>
+
+              <div className="rounded-[1rem] border border-white/8 bg-[rgba(14,10,25,0.8)] p-6 text-center">
+                <span className="block text-base text-white/80">18 Participants</span>
+                <span className="mt-4 inline-flex rounded-md border border-[#18e9ff]/35 bg-[rgba(10,34,40,0.88)] px-4 py-2 text-sm font-semibold text-[#18e9ff]">
+                  Live Leaderboard
+                </span>
+                <small className="mt-2 block text-xs text-white/50">(Kahoot Style)</small>
+              </div>
+            </div>
+          </div>
+        </motion.section>
+
+        <motion.section id="loot" className="space-y-10" {...sectionMotion}>
+          <div className="space-y-4 text-center">
+            <h2 className="font-pricedown text-3xl text-white sm:text-4xl">THE LOOT</h2>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            {rewards.map((reward) => (
+              <article
+                key={reward.title}
+                className={`rounded-[1.4rem] border bg-[rgba(8,10,20,0.9)] p-6 text-center shadow-[0_20px_60px_-40px_rgba(0,0,0,0.9)] ${
+                  reward.featured
+                    ? 'border-[#ffbf1d]/70 bg-[radial-gradient(circle_at_center,rgba(255,193,29,0.32),rgba(18,12,8,0.96))] shadow-[0_0_0_1px_rgba(255,191,29,0.2),0_0_34px_rgba(255,191,29,0.22)]'
+                    : reward.accent === 'silver'
+                      ? 'border-white/50'
+                      : 'border-[#ff9b00]/70'
+                }`}
+              >
+                <div
+                  className={`mx-auto flex h-20 w-20 items-center justify-center rounded-full border text-3xl ${
+                    reward.featured
+                      ? 'border-[#ffbf1d]/80 bg-[rgba(255,191,29,0.14)] text-[#ffe085]'
+                      : reward.accent === 'silver'
+                        ? 'border-white/60 bg-white/5 text-white/85'
+                        : 'border-[#ff9b00]/60 bg-[rgba(255,155,0,0.1)] text-[#ffb347]'
+                  }`}
+                >
+                  <reward.icon />
+                </div>
+                <h3 className="mt-5 font-pricedown text-2xl text-white">{reward.title}</h3>
+                <p className="mt-3 text-base text-white/75">{reward.description}</p>
+                {reward.detail ? <span className="mt-3 block text-sm text-white/60">{reward.detail}</span> : null}
+              </article>
+            ))}
+          </div>
+        </motion.section>
+
+        <motion.section id="queries" className="space-y-10" {...sectionMotion}>
+          <div className="space-y-4 text-center">
+            <h2 className="font-pricedown text-3xl text-white sm:text-4xl">INTEL &amp; QUERIES</h2>
+            <p className="font-mono text-sm uppercase tracking-[0.2em] text-white/50">[ FAQ.DAT ] - Frequently Asked Questions</p>
+          </div>
+
+          <div className="mx-auto max-w-4xl space-y-4">
+            {faqItems.map((item, index) => {
+              const isOpen = openFaq === index;
+
+              return (
+                <article
+                  key={item.question}
+                  className={`overflow-hidden rounded-[1rem] border transition-all duration-300 ${
+                    isOpen
+                      ? 'border-[#18e9ff]/45 bg-[rgba(8,12,26,0.95)] shadow-[0_0_0_1px_rgba(24,233,255,0.12),0_0_30px_rgba(24,233,255,0.08)]'
+                      : 'border-white/5 bg-[rgba(10,11,20,0.8)]'
+                  }`}
+                >
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between gap-4 px-5 py-5 text-left"
+                    onClick={() => setOpenFaq((current) => (current === index ? -1 : index))}
+                  >
+                    <span className="text-sm font-semibold uppercase tracking-[0.14em] text-white sm:text-base">
+                      {item.question}
+                    </span>
+                    {isOpen ? <FiMinus size={22} className="text-[#18e9ff]" /> : <FiPlus size={22} className="text-white/55" />}
+                  </button>
+
+                  <AnimatePresence initial={false}>
+                    {isOpen ? (
+                      <motion.div
+                        key="content"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.28 }}
+                        className="px-5 pb-5"
+                      >
+                        <p className="max-w-3xl text-sm leading-7 text-white/65 sm:text-base">{item.answer}</p>
+                      </motion.div>
+                    ) : null}
+                  </AnimatePresence>
+                </article>
+              );
+            })}
+          </div>
+        </motion.section>
       </div>
     </section>
   );

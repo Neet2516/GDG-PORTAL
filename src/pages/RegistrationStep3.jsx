@@ -123,7 +123,7 @@ export const RegistrationStep3 = () => {
           contact: formData.phone || '',
         },
         theme: {
-          color: '#0058bd',
+          color: '#ff3f86',
         },
       });
 
@@ -180,86 +180,89 @@ export const RegistrationStep3 = () => {
   };
 
   return (
-    <div className="max-w-[720px] mx-auto w-full pt-6">
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-extrabold text-[#1a1c1e] font-manrope mb-3">Complete Registration</h1>
-        <p className="text-base text-[#424753] max-w-md mx-auto leading-relaxed">
-          Add your final details and finish the secure payment checkout.
-        </p>
-      </div>
+    <div className="mx-auto max-w-6xl space-y-8">
+      <div className="rounded-[1.5rem] border border-[#18e9ff]/20 bg-[rgba(5,16,18,0.96)] p-6 shadow-[0_24px_70px_-42px_rgba(0,0,0,0.9)] sm:p-8">
+        <div className="space-y-3">
+          <p className="font-manrope text-[0.72rem] font-bold uppercase tracking-[0.3em] text-[#18e9ff]">Registration</p>
+          <h1 className="font-pricedown text-3xl text-white sm:text-4xl">COMPLETE REGISTRATION</h1>
+          <p className="max-w-2xl text-sm leading-7 text-white/60">Add your final details and finish the secure payment checkout.</p>
+        </div>
 
-      <div className="mb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-2 px-2">
-        <h2 className="text-xs font-bold tracking-widest text-[#0058bd] uppercase">Step 3 of 4: Details & Payment</h2>
-        <p className="text-xs font-semibold text-[#1a1c1e]">75% Complete</p>
-      </div>
-      <div className="flex gap-1 w-full bg-[#e8e8ea] h-[3px] overflow-hidden mb-12">
-        <div className="w-[75%] bg-[#0058bd] h-full" />
+        <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div className="space-y-1">
+            <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-white/50">Step 3 of 4: Details &amp; Payment</h2>
+            <p className="text-sm text-[#9ceff2]">75% Complete</p>
+          </div>
+          <div className="h-2 w-full overflow-hidden rounded-full bg-white/8 sm:max-w-xs">
+            <div className="h-full w-[75%] rounded-full bg-[#18e9ff]" />
+          </div>
+        </div>
       </div>
 
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="bg-white rounded-3xl p-8 shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-[#f1f1f4]"
+        className="rounded-[1.5rem] border border-[#18e9ff]/18 bg-[linear-gradient(180deg,rgba(6,22,24,0.96),rgba(5,13,16,0.98))] p-6 shadow-[0_24px_70px_-42px_rgba(0,0,0,0.9)] sm:p-8"
       >
-        <form onSubmit={handleSubmit} className="space-y-8">
-          <Input
-            label="Phone Number"
-            name="phone"
-            type="tel"
-            value={formData.phone || ''}
-            onChange={handleInputChange}
-            onBlur={() => handleFieldBlur('phone')}
-            error={getFieldError('phone')}
-            isTouched={touched.phone}
-            placeholder="9876543210"
-            required
-            className="bg-[#f3f3f6] border-0"
-          />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid gap-5 md:grid-cols-2">
+            <Input
+              label="Phone Number"
+              name="phone"
+              type="tel"
+              value={formData.phone || ''}
+              onChange={handleInputChange}
+              onBlur={() => handleFieldBlur('phone')}
+              error={getFieldError('phone')}
+              isTouched={touched.phone}
+              placeholder="9876543210"
+              required
+            />
 
-          <Input
-            label="Branch"
-            name="branch"
-            value={formData.branch || ''}
-            onBlur={() => handleFieldBlur('branch')}
-            error={getFieldError('branch')}
-            isTouched={touched.branch}
-            helperText="Detected automatically from the student number entered in step 1."
-            required
-            className="bg-[#f3f3f6] border-0"
-            readOnly
-          />
+            <Input
+              label="Branch"
+              name="branch"
+              value={formData.branch || ''}
+              onBlur={() => handleFieldBlur('branch')}
+              error={getFieldError('branch')}
+              isTouched={touched.branch}
+              helperText="Detected automatically from the student number entered in step 1."
+              required
+              readOnly
+            />
 
-          <RadioGroup
-            label="Gender"
-            name="gender"
-            value={formData.gender || ''}
-            onChange={handleInputChange}
-            error={getFieldError('gender')}
-            isTouched={touched.gender}
-            options={GENDER_OPTIONS.slice(0, 2).map((option) => ({ label: option, value: option }))}
-            required
-            direction="horizontal"
-          />
+            <RadioGroup
+              label="Gender"
+              name="gender"
+              value={formData.gender || ''}
+              onChange={handleInputChange}
+              error={getFieldError('gender')}
+              isTouched={touched.gender}
+              options={GENDER_OPTIONS.slice(0, 2).map((option) => ({ label: option, value: option })) ?? []}
+              required
+              direction="horizontal"
+            />
 
-          <RadioGroup
-            label="Residence"
-            name="residence"
-            value={formData.residence || ''}
-            onChange={handleInputChange}
-            error={getFieldError('residence')}
-            isTouched={touched.residence}
-            options={RESIDENCE_TYPES}
-            required
-            direction="horizontal"
-          />
+            <RadioGroup
+              label="Residence"
+              name="residence"
+              value={formData.residence || ''}
+              onChange={handleInputChange}
+              error={getFieldError('residence')}
+              isTouched={touched.residence}
+              options={RESIDENCE_TYPES}
+              required
+              direction="horizontal"
+            />
+          </div>
 
-          <div className="pt-2 flex flex-col md:flex-row gap-3">
-            <Button type="button" variant="secondary" onClick={() => navigate('/register/verify')} className="md:w-32">
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Button type="button" variant="secondary" onClick={() => navigate('/register/verify')} className="w-full md:w-32">
               Back
             </Button>
-            <Button type="submit" disabled={!isStepValid || isSubmitting} isLoading={isSubmitting} className="flex-1 text-base rounded-xl">
-              Pay & Register
+            <Button type="submit" disabled={!isStepValid || isSubmitting} isLoading={isSubmitting} className="w-full flex-1 rounded-xl text-base">
+              Pay &amp; Register
             </Button>
           </div>
         </form>

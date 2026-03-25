@@ -93,18 +93,20 @@ export const RegistrationStep1 = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto w-full pt-8">
-      {/* Title section above the card */}
-      <div className="mb-6 flex flex-col md:flex-row md:justify-between md:items-end justify-center items-center px-2">
-        <div>
-          <h2 className="text-xs font-bold tracking-widest text-[#0058bd] uppercase mb-2">Registration</h2>
-          <h1 className="text-4xl font-extrabold text-[#1a1c1e] font-manrope">Basic Information</h1>
-        </div>
-        <div className="text-right flex flex-col md:items-end items-center">
-          <p className="text-sm font-semibold text-[#1a1c1e] mb-2">Step 1 of 4</p>
-          <p className="text-xs font-bold text-[#0058bd]">Basic Info</p>
-          <div className="flex gap-1 mt-2 w-48 bg-[#e8e8ea] h-1.5 rounded-full overflow-hidden">
-             <div className="w-1/4 bg-[#0058bd] h-full" />
+    <div className="mx-auto max-w-6xl space-y-8">
+      <div className="flex flex-col gap-4 rounded-[1.5rem] border border-[#18e9ff]/35 bg-[radial-gradient(circle_at_left,rgba(18,35,46,0.98),rgba(4,10,16,0.98))] p-6 shadow-[0_0_0_1px_rgba(24,233,255,0.08),0_24px_70px_-44px_rgba(0,0,0,0.92)] sm:p-8">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="font-manrope text-[0.72rem] font-bold uppercase tracking-[0.3em] text-[#18e9ff]">Registration</p>
+            <h1 className="mt-2 font-pricedown text-3xl text-white sm:text-4xl">ACCESS TERMINAL</h1>
+          </div>
+
+          <div className="space-y-2 sm:text-right">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/45">Step 1 of 4</p>
+            <p className="text-sm font-semibold text-[#9ceff2]">Basic Info</p>
+            <div className="h-2 w-56 overflow-hidden rounded-full bg-white/8">
+              <div className="h-full w-1/4 rounded-full bg-[#18e9ff]" />
+            </div>
           </div>
         </div>
       </div>
@@ -113,9 +115,9 @@ export const RegistrationStep1 = () => {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="bg-white rounded-3xl p-8 shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-[#f1f1f4]"
+        className="rounded-[1.5rem] border border-[#18e9ff]/18 bg-[linear-gradient(180deg,rgba(6,22,24,0.96),rgba(5,13,16,0.98))] p-6 shadow-[0_24px_70px_-42px_rgba(0,0,0,0.9)] sm:p-8"
       >
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="grid gap-5 md:grid-cols-2">
           <Input
             label="Full Name"
             name="name"
@@ -124,9 +126,8 @@ export const RegistrationStep1 = () => {
             onBlur={() => handleFieldBlur('name')}
             error={getFieldError('name')}
             isTouched={touched.name}
-            placeholder="Sidney Swinny"
+            placeholder="Aryan"
             required
-            className="bg-[#f3f3f6] border-0 outline-none"
           />
           <Input
             label="Student Number"
@@ -138,7 +139,6 @@ export const RegistrationStep1 = () => {
             isTouched={touched.studentNumber}
             placeholder="25xxxxxx"
             required
-            className="bg-[#f3f3f6] border-0 outline-none"
           />
           <Input
             label="Email Address"
@@ -148,10 +148,13 @@ export const RegistrationStep1 = () => {
             onBlur={() => handleFieldBlur('email')}
             error={getFieldError('email')}
             isTouched={touched.email}
-            placeholder="Generated from your first name and student number"
-            helperText={generatedEmail ? "Generated automatically as firstname+studentnumber@akgec.ac.in." : "Enter your name and student number to generate your college email."}
+            placeholder="hacker@example.com"
+            helperText={
+              generatedEmail
+                ? 'Generated automatically as firstname+studentnumber@akgec.ac.in.'
+                : 'Enter your name and student number to generate your college email.'
+            }
             required
-            className="bg-[#f3f3f6] border-0 outline-none"
             readOnly
           />
           <Input
@@ -162,52 +165,60 @@ export const RegistrationStep1 = () => {
             error={getFieldError('branch')}
             isTouched={touched.branch}
             placeholder="Detected from your student number"
-            helperText={detectedBranch ? 'Detected automatically from your branch code.' : 'Branch will be detected automatically from the student number.'}
+            helperText={
+              detectedBranch
+                ? 'Detected automatically from your branch code.'
+                : 'Branch will be detected automatically from the student number.'
+            }
             required
-            className="bg-[#f3f3f6] border-0 outline-none"
             readOnly
           />
 
-          <div className="pt-2">
+          <div className="md:col-span-2">
             <Button
               type="submit"
               disabled={!isStepValid}
               isLoading={isSubmittingRef.current}
-              className="w-full text-base py-4 rounded-xl flex items-center justify-center gap-2"
+              className="w-full justify-between rounded-xl px-6 py-4 text-base"
             >
               <span>Send OTP</span>
-              <span>→</span>
+              <span aria-hidden="true">→</span>
             </Button>
           </div>
         </form>
       </motion.div>
 
-      {/* Info Cards */}
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-[#f3f3f6] rounded-2xl p-6 flex items-start gap-4">
-          <div className="bg-[#d8e2ff] w-10 h-10 rounded-lg flex items-center justify-center shrink-0">
-             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#0058bd" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M9 12l2 2 4-4" stroke="#0058bd" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-             </svg>
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="flex items-start gap-4 rounded-[1.2rem] border border-[#18e9ff]/18 bg-[rgba(8,20,22,0.92)] p-5">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#18e9ff]/25 bg-[rgba(24,233,255,0.08)] text-[#18e9ff]">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </div>
           <div>
-            <h3 className="font-semibold text-sm text-[#1a1c1e] mb-1">Secure Verification</h3>
-            <p className="text-xs text-[#424753] leading-relaxed">Your data is encrypted and used only for GDG event management.</p>
+            <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-white">Secure Verification</h3>
+            <p className="mt-2 text-sm leading-6 text-white/60">Your data is encrypted and used only for GDG event management.</p>
           </div>
         </div>
 
-        <div className="bg-[#f3f3f6] rounded-2xl p-6 flex items-start gap-4">
-          <div className="bg-[#d8e2ff] w-10 h-10 rounded-lg flex items-center justify-center shrink-0">
-             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="#0058bd" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M16 2v4M8 2v4M3 10h18" stroke="#0058bd" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M9 16l2 2 4-4" stroke="#0058bd" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-             </svg>
+        <div className="flex items-start gap-4 rounded-[1.2rem] border border-[#18e9ff]/18 bg-[rgba(8,20,22,0.92)] p-5">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#18e9ff]/25 bg-[rgba(24,233,255,0.08)] text-[#18e9ff]">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" strokeWidth="2" />
+              <path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              <path d="M9 16l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            </svg>
           </div>
           <div>
-            <h3 className="font-semibold text-sm text-[#1a1c1e] mb-1">Meridian Chapters</h3>
-            <p className="text-xs text-[#424753] leading-relaxed">Join a community of 500+ developers in the Meridian region.</p>
+            <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-white">Meridian Chapters</h3>
+            <p className="mt-2 text-sm leading-6 text-white/60">Join a community of 500+ developers in the Meridian region.</p>
           </div>
         </div>
       </div>

@@ -1,8 +1,3 @@
-/**
- * OTP Verification Page
- * Email verification with OTP
- */
-
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -81,7 +76,7 @@ export const OTPVerification = () => {
     };
 
     initializeOTP();
-  }, [email, sendOTP, navigate, registrationData, setRegistrationData]);
+  }, [email, sendOTP, navigate, registrationData, setRegistrationData, isInitializing]);
 
   useEffect(() => {
     if (redirectedRef.current) return;
@@ -135,59 +130,52 @@ export const OTPVerification = () => {
 
   if (isInitializing) {
     return (
-      <section className="px-3 pb-16 pt-32 sm:px-4 sm:pt-36">
-        <div className="mx-auto max-w-3xl">
-          <Card className="animate-pulse bg-surface-container-low">
-            <div className="h-8 w-48 rounded-xl bg-surface-container-high" />
-            <div className="mt-4 h-16 rounded-2xl bg-surface-container-high" />
-          </Card>
-        </div>
+      <section className="mx-auto grid min-h-[60vh] max-w-6xl place-items-center px-4">
+        <Card className="w-full max-w-3xl animate-pulse">
+          <div className="h-8 w-52 rounded-full bg-white/10" />
+          <div className="mt-6 h-32 rounded-2xl bg-white/5" />
+        </Card>
       </section>
     );
   }
 
   return (
-    <section className="px-3 pb-16 pt-28 sm:px-4 sm:pt-32 md:pt-36">
-      <div className="mx-auto grid max-w-5xl gap-6 sm:gap-8 lg:grid-cols-[0.72fr_1.28fr]">
-        <Card className="h-fit bg-surface">
+    <section className="mx-auto max-w-6xl px-4 py-8">
+      <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <Card className="space-y-6">
           <FlowProgress steps={flowSteps} currentStep={1} label="Verification" />
-          <div className="mt-6 space-y-4 sm:mt-8">
-            <div className="rounded-[1.25rem] bg-surface-container-low p-4 sm:p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-on-surface-variant">
-                Delivery channel
-              </p>
-              <p className="mt-3 break-all text-sm leading-7 text-on-surface sm:break-normal">
-                A one-time code was issued to <span className="font-semibold">{email}</span>.
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-[#18e9ff]/15 bg-[rgba(8,20,22,0.82)] p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/50">Delivery channel</p>
+              <p className="mt-3 text-sm leading-7 text-white/70">
+                A one-time code was issued to <span className="text-white">{email}</span>.
               </p>
             </div>
-            <div className="rounded-[1.25rem] bg-surface-container-lowest p-4 shadow-[0_0_0_1px_rgba(194,198,213,0.18)] sm:p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-on-surface-variant">
-                Dev note
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                <CodeChip>otp:length=6</CodeChip>
-                <CodeChip>session:active</CodeChip>
-                <CodeChip>source:backend</CodeChip>
-              </div>
+            <div className="flex flex-wrap gap-2">
+              <CodeChip>otp:length=6</CodeChip>
+              <CodeChip>session:active</CodeChip>
+              <CodeChip>source:backend</CodeChip>
             </div>
           </div>
         </Card>
 
         <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
-          <Card className="relative overflow-hidden bg-surface-container-lowest">
-            <div className="absolute right-0 top-0 h-32 w-32 rounded-full bg-primary/10 blur-3xl sm:h-40 sm:w-40" />
-            <div className="relative space-y-6 sm:space-y-8">
+          <Card className="relative overflow-hidden">
+            <div className="pointer-events-none absolute right-8 top-8 h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl" />
+            <div className="space-y-6">
               <div className="space-y-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary">
+                <p className="font-manrope text-[0.72rem] font-bold uppercase tracking-[0.28em] text-[#18e9ff]">
                   Email checkpoint
                 </p>
-                <h1 className="text-2xl font-extrabold sm:text-3xl md:text-4xl">Verify your identity before completion.</h1>
-                <p className="max-w-xl text-sm leading-7 text-on-surface-variant sm:text-base">
+                <h1 className="max-w-xl font-pricedown text-3xl text-white sm:text-4xl">
+                  Verify your identity before completion.
+                </h1>
+                <p className="max-w-2xl text-sm leading-7 text-white/60">
                   This screen is intentionally focused. Enter the 6-digit OTP to continue to the confirmation state.
                 </p>
               </div>
 
-              <form onSubmit={handleSubmitOTP} className="space-y-5 sm:space-y-6">
+              <form onSubmit={handleSubmitOTP} className="space-y-5">
                 <Input
                   label="Enter 6-digit OTP"
                   name="otp"
@@ -200,7 +188,6 @@ export const OTPVerification = () => {
                   isTouched={!!otpError}
                   placeholder="000000"
                   required
-                  className="text-center text-xl tracking-[0.28em] sm:text-2xl sm:tracking-[0.4em]"
                 />
 
                 <AnimatePresence>
@@ -209,14 +196,12 @@ export const OTPVerification = () => {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className="rounded-[1.25rem] bg-surface-container-low p-4"
+                      className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3 text-sm text-white/65"
                     >
-                      <p className="text-sm text-on-surface-variant">
-                        OTP expires in{' '}
-                        <span className="font-semibold text-primary">
-                          {Math.floor(timeRemaining / 60)}:{String(timeRemaining % 60).padStart(2, '0')}
-                        </span>
-                      </p>
+                      OTP expires in{' '}
+                      <span className="font-semibold text-[#18e9ff]">
+                        {Math.floor(timeRemaining / 60)}:{String(timeRemaining % 60).padStart(2, '0')}
+                      </span>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -237,10 +222,8 @@ export const OTPVerification = () => {
                 </div>
               </form>
 
-              <div className="flex flex-col gap-3 rounded-[1.25rem] bg-surface-container-low p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
-                <p className="text-sm leading-6 text-on-surface-variant">
-                  Didn&apos;t receive the code? Return and restart the registration flow.
-                </p>
+              <div className="flex flex-col gap-3 rounded-2xl border border-white/8 bg-black/20 p-4 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm text-white/60">Didn&apos;t receive the code? Return and restart the registration flow.</p>
                 <Button variant="ghost" onClick={() => navigate('/')} className="w-full justify-center sm:w-auto">
                   Go back
                 </Button>

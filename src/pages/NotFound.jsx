@@ -15,7 +15,7 @@ export const NotFound = () => {
         </p>
         <Link
           to="/"
-          className="primary-gradient mt-8 inline-flex rounded-xl px-6 py-3 font-manrope font-semibold text-on-primary shadow-[0_24px_50px_-24px_rgba(0,88,189,0.55)]"
+          className="mt-8 inline-flex rounded-xl bg-[linear-gradient(135deg,#0058bd_0%,#2771df_100%)] px-6 py-3 font-manrope font-semibold text-white shadow-[0_24px_50px_-24px_rgba(0,88,189,0.55)]"
         >
           Return home
         </Link>
