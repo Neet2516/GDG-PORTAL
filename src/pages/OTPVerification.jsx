@@ -141,25 +141,9 @@ export const OTPVerification = () => {
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-8">
-      <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-        <Card className="space-y-6">
-          <FlowProgress steps={flowSteps} currentStep={1} label="Verification" />
-          <div className="space-y-4">
-            <div className="rounded-2xl border border-[#18e9ff]/15 bg-[rgba(8,20,22,0.82)] p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/50">Delivery channel</p>
-              <p className="mt-3 text-sm leading-7 text-white/70">
-                A one-time code was issued to <span className="text-white">{email}</span>.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <CodeChip>otp:length=6</CodeChip>
-              <CodeChip>session:active</CodeChip>
-              <CodeChip>source:backend</CodeChip>
-            </div>
-          </div>
-        </Card>
+      <div className="flex items-center justify-center flex-1">
 
-        <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
+        <motion.div className="w-3/4" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
           <Card className="relative overflow-hidden">
             <div className="pointer-events-none absolute right-8 top-8 h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl" />
             <div className="space-y-6">
@@ -167,7 +151,7 @@ export const OTPVerification = () => {
                 <p className="font-manrope text-[0.72rem] font-bold uppercase tracking-[0.28em] text-[#18e9ff]">
                   Email checkpoint
                 </p>
-                <h1 className="max-w-xl font-pricedown text-3xl text-white sm:text-4xl">
+                <h1 className="max-w-full font-pricedown text-3xl text-white sm:text-4xl">
                   Verify your identity before completion.
                 </h1>
                 <p className="max-w-2xl text-sm leading-7 text-white/60">

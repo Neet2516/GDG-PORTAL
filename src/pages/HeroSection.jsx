@@ -71,9 +71,9 @@ export const HeroSection = ({ onCtaClick, onScrollToNext }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <p className="font-forresten text-[clamp(1.9rem,3vw,2.6rem)] leading-none tracking-[0.12em] text-[#ff7eca] [text-shadow:0_0_10px_rgba(255,79,159,0.2),0_0_24px_rgba(255,79,159,0.18)]">
+          {/* <p className="font-forresten text-[clamp(1.9rem,3vw,2.6rem)] leading-none tracking-[0.12em] text-[#ff7eca] [text-shadow:0_0_10px_rgba(255,79,159,0.2),0_0_24px_rgba(255,79,159,0.18)]">
             VICE CITY
-          </p>
+          </p> */}
 
           <h1 className="mt-5 flex flex-wrap items-baseline justify-center gap-x-4 gap-y-2 text-[clamp(4rem,8vw,8.5rem)] leading-[0.86] uppercase text-white [text-shadow:4px_4px_0_rgba(24,15,48,0.95),0_0_24px_rgba(255,255,255,0.08)]">
             <span className="font-pricedown">TECH HEIST</span>
@@ -92,7 +92,12 @@ export const HeroSection = ({ onCtaClick, onScrollToNext }) => {
           </div>
 
           <div className="mt-6 flex flex-wrap items-stretch justify-center gap-4">
-            <Button variant="neon" size="xl" className="min-w-[min(100%,18.5rem)] justify-center rounded-[1rem] border border-white/18 bg-[linear-gradient(180deg,rgba(25,33,97,0.98),rgba(18,25,86,0.98))] tracking-[0.08em]">
+            <Button
+              variant="neon"
+              size="xl"
+              onClick={onCtaClick}
+              className="min-w-[min(100%,18.5rem)] justify-center rounded-[1rem] border border-white/18 bg-[linear-gradient(180deg,rgba(25,33,97,0.98),rgba(18,25,86,0.98))] tracking-[0.08em]"
+            >
               <FiZap size={18} />
               <span>REGISTER NOW</span>
             </Button>

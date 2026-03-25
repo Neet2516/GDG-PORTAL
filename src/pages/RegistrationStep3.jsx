@@ -180,7 +180,7 @@ export const RegistrationStep3 = () => {
   };
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8">
+    <div className="mx-auto max-w-2xl space-y-8">
       <div className="rounded-[1.5rem] border border-[#18e9ff]/20 bg-[rgba(5,16,18,0.96)] p-6 shadow-[0_24px_70px_-42px_rgba(0,0,0,0.9)] sm:p-8">
         <div className="space-y-3">
           <p className="font-manrope text-[0.72rem] font-bold uppercase tracking-[0.3em] text-[#18e9ff]">Registration</p>
@@ -206,7 +206,7 @@ export const RegistrationStep3 = () => {
         className="rounded-[1.5rem] border border-[#18e9ff]/18 bg-[linear-gradient(180deg,rgba(6,22,24,0.96),rgba(5,13,16,0.98))] p-6 shadow-[0_24px_70px_-42px_rgba(0,0,0,0.9)] sm:p-8"
       >
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="flex flex-col justify-center items-center ">
             <Input
               label="Phone Number"
               name="phone"

@@ -13,7 +13,7 @@ const navItems = [
   { label: 'Missions', href: '#missions' },
   { label: 'Briefing', href: '#scoring' },
   { label: 'Loot', href: '#loot' },
-  { label: 'Register', href: '#register', accent: true },
+  { label: 'Register', href: '/register', accent: true },
 ];
 
 export const Navbar = ({ onRegisterClick, onNavigateTo }) => {
@@ -80,6 +80,12 @@ export const Navbar = ({ onRegisterClick, onNavigateTo }) => {
                   : 'border-transparent text-white/78 hover:border-cyan-300/30 hover:bg-cyan-300/8 hover:text-white'
               }`}
               onClick={(event) => {
+                if (item.accent) {
+                  event.preventDefault();
+                  onRegisterClick();
+                  return;
+                }
+
                 if (location.pathname === '/') {
                   event.preventDefault();
                   onNavigateTo?.(item.href);
@@ -122,6 +128,12 @@ export const Navbar = ({ onRegisterClick, onNavigateTo }) => {
               }`}
               onClick={(event) => {
                 setIsMenuOpen(false);
+                if (item.accent) {
+                  event.preventDefault();
+                  onRegisterClick();
+                  return;
+                }
+
                 if (location.pathname === '/') {
                   event.preventDefault();
                   onNavigateTo?.(item.href);

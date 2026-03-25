@@ -117,7 +117,7 @@ export const RegistrationStep1 = () => {
         transition={{ duration: 0.4 }}
         className="rounded-[1.5rem] border border-[#18e9ff]/18 bg-[linear-gradient(180deg,rgba(6,22,24,0.96),rgba(5,13,16,0.98))] p-6 shadow-[0_24px_70px_-42px_rgba(0,0,0,0.9)] sm:p-8"
       >
-        <form onSubmit={handleSubmit} className="grid gap-5 md:grid-cols-2">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <Input
             label="Full Name"
             name="name"
@@ -126,7 +126,7 @@ export const RegistrationStep1 = () => {
             onBlur={() => handleFieldBlur('name')}
             error={getFieldError('name')}
             isTouched={touched.name}
-            placeholder="Aryan"
+            placeholder="Emma Watson"
             required
           />
           <Input
@@ -148,7 +148,7 @@ export const RegistrationStep1 = () => {
             onBlur={() => handleFieldBlur('email')}
             error={getFieldError('email')}
             isTouched={touched.email}
-            placeholder="hacker@example.com"
+            placeholder="emma25xxxxx@akgec.ac.in"
             helperText={
               generatedEmail
                 ? 'Generated automatically as firstname+studentnumber@akgec.ac.in.'
@@ -187,41 +187,6 @@ export const RegistrationStep1 = () => {
           </div>
         </form>
       </motion.div>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="flex items-start gap-4 rounded-[1.2rem] border border-[#18e9ff]/18 bg-[rgba(8,20,22,0.92)] p-5">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#18e9ff]/25 bg-[rgba(24,233,255,0.08)] text-[#18e9ff]">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-white">Secure Verification</h3>
-            <p className="mt-2 text-sm leading-6 text-white/60">Your data is encrypted and used only for GDG event management.</p>
-          </div>
-        </div>
-
-        <div className="flex items-start gap-4 rounded-[1.2rem] border border-[#18e9ff]/18 bg-[rgba(8,20,22,0.92)] p-5">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#18e9ff]/25 bg-[rgba(24,233,255,0.08)] text-[#18e9ff]">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" strokeWidth="2" />
-              <path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              <path d="M9 16l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          </div>
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-white">Meridian Chapters</h3>
-            <p className="mt-2 text-sm leading-6 text-white/60">Join a community of 500+ developers in the Meridian region.</p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
