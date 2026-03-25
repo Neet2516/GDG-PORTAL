@@ -64,21 +64,18 @@ export const HeroSection = ({ onCtaClick, onScrollToNext }) => {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 mx-auto grid min-h-[calc(100svh-2rem)] w-full max-w-[940px] place-items-center pt-[4.5rem]">
+      <div className="relative z-10 mx-auto grid min-h-[calc(100svh-2rem)] w-full max-w-[940px] items-start justify-items-center pt-[4.5rem]">
         <motion.div
           className="grid w-full justify-items-center text-center"
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 35}}
+          animate={{ opacity: 1, y: 22 }}
           transition={{ duration: 0.8 }}
         >
-          {/* <p className="font-forresten text-[clamp(1.9rem,3vw,2.6rem)] leading-none tracking-[0.12em] text-[#ff7eca] [text-shadow:0_0_10px_rgba(255,79,159,0.2),0_0_24px_rgba(255,79,159,0.18)]">
-            VICE CITY
-          </p> */}
 
           <h1 className="mt-5 flex flex-wrap items-baseline justify-center gap-x-4 gap-y-2 text-[clamp(4rem,8vw,8.5rem)] leading-[0.86] uppercase text-white [text-shadow:4px_4px_0_rgba(24,15,48,0.95),0_0_24px_rgba(255,255,255,0.08)]">
-            <span className="font-pricedown">TECH HEIST</span>
+            <span className="font-pricedown">CODE THEFT</span>
             <span className="font-pricedown text-[#15e8f2] [text-shadow:4px_4px_0_rgba(9,28,33,0.95),0_0_22px_rgba(21,232,242,0.3)]">
-              2.0
+              AUTO
             </span>
           </h1>
 

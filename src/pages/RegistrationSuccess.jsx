@@ -24,7 +24,7 @@ export const RegistrationSuccess = () => {
   ];
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+    <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 sm:py-10">
       <div className="rounded-[1.25rem] border border-[#ff4040] bg-[#451d1d] px-4 py-6 shadow-[0_0_0_2px_rgba(255,64,64,0.45),0_24px_80px_-36px_rgba(255,0,0,0.4)] sm:px-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="text-[#ff4040]">
@@ -45,9 +45,9 @@ export const RegistrationSuccess = () => {
         initial={{ opacity: 0, y: 18, scale: 0.985 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.45 }}
-        className="mt-24 rounded-[2rem] border border-[#5bff4f]/65 bg-[radial-gradient(circle_at_center,rgba(54, 134, 45, 0.8),rgba(18,60,11,0.96))] p-5 shadow-[0_0_0_1px_rgba(94,255,76,0.18),0_0_60px_rgba(65,255,45,0.22)] sm:p-8"
+        className="mt-14 rounded-[2rem] border border-[#5bff4f]/65 bg-[radial-gradient(circle_at_center,rgba(54, 134, 45, 0.8),rgba(18,60,11,0.96))] p-4 shadow-[0_0_0_1px_rgba(94,255,76,0.18),0_0_60px_rgba(65,255,45,0.22)] sm:mt-24 sm:p-8"
       >
-        <div className="rounded-[1.5rem] border border-[#71ff6a]/90 bg-[radial-gradient(circle_at_top,rgba(72, 103, 68, 0.96),rgba(18,108,10,0.96))] px-6 py-10 text-center shadow-[inset_0_0_60px_rgba(255,255,255,0.06)] sm:px-10 sm:py-14">
+        <div className="rounded-[1.5rem] border border-[#71ff6a]/90 bg-[radial-gradient(circle_at_top,rgba(72, 103, 68, 0.96),rgba(18,108,10,0.96))] px-4 py-8 text-center shadow-[inset_0_0_60px_rgba(255,255,255,0.06)] sm:px-10 sm:py-14">
           <FiStar className="mx-auto h-16 w-16 text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.6)] sm:h-20 sm:w-20" aria-hidden="true" />
           <p className="mt-8 text-sm font-semibold uppercase tracking-[0.28em] text-[#d6ffcf]">Mission Complete</p>
           <h1 className="mt-5 font-pricedown text-4xl text-[#14e100] drop-shadow-[0_2px_0_rgba(0,0,0,0.35)] sm:text-5xl">
@@ -57,11 +57,11 @@ export const RegistrationSuccess = () => {
             Registration successfull
           </p>
 
-          <div className="mx-auto mt-10 grid max-w-4xl gap-4 rounded-[1.25rem] border border-white/10 bg-black/15 p-5 text-left sm:grid-cols-2 sm:p-6">
+          <div className="mx-auto mt-8 grid max-w-4xl grid-cols-1 gap-4 rounded-[1.25rem] border border-white/10 bg-black/15 p-4 text-left sm:mt-10 sm:grid-cols-2 sm:p-6">
             {details.map((detail) => (
-              <div key={detail.label} className="rounded-[1rem] border border-white/8 bg-black/10 p-4">
+              <div key={detail.label} className="min-w-0 rounded-[1rem] border border-white/8 bg-black/10 p-4">
                 <span className="block text-xs font-semibold uppercase tracking-[0.2em] text-white/60">{detail.label}</span>
-                <strong className="mt-2 block text-base text-white sm:text-lg">{detail.value}</strong>
+                <strong className="mt-2 block break-words text-base text-white sm:text-lg">{detail.value}</strong>
               </div>
             ))}
           </div>

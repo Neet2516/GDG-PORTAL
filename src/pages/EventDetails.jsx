@@ -94,6 +94,39 @@ const rewards = [
   },
 ];
 
+const rewardCardStyles = {
+  silver: {
+    border: 'border-white/45',
+    glow: 'shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_18px_50px_-28px_rgba(255,255,255,0.35)]',
+    panel: 'bg-[linear-gradient(180deg,rgba(11,12,24,0.94),rgba(7,8,18,0.98))]',
+    icon: 'border-white/55 bg-[rgba(255,255,255,0.03)] text-white/90',
+    title: 'text-white',
+    titleGlow: 'drop-shadow-[0_0_12px_rgba(255,255,255,0.2)]',
+    body: 'text-white/74',
+    detail: 'text-white/55',
+  },
+  gold: {
+    border: 'border-[#f2b400]/80',
+    glow: 'shadow-[0_0_0_1px_rgba(242,180,0,0.2),0_24px_70px_-24px_rgba(242,180,0,0.55)]',
+    panel: 'bg-[radial-gradient(circle_at_top,rgba(255,210,89,0.26),rgba(45,31,10,0.9)_42%,rgba(8,9,18,0.98)_100%)]',
+    icon: 'border-[#ffcc4d]/75 bg-[rgba(255,198,46,0.14)] text-[#ffe08b]',
+    title: 'text-[#ffc629]',
+    titleGlow: 'drop-shadow-[0_0_16px_rgba(255,198,41,0.45)]',
+    body: 'text-[#f4d79b]',
+    detail: 'text-[#f8e7bc]/75',
+  },
+  amber: {
+    border: 'border-[#ff9900]/75',
+    glow: 'shadow-[0_0_0_1px_rgba(255,153,0,0.16),0_20px_54px_-28px_rgba(255,153,0,0.42)]',
+    panel: 'bg-[linear-gradient(180deg,rgba(13,11,24,0.94),rgba(7,8,18,0.98))]',
+    icon: 'border-[#ffad33]/65 bg-[rgba(255,153,0,0.08)] text-[#ffb84f]',
+    title: 'text-[#ffd38a]',
+    titleGlow: 'drop-shadow-[0_0_14px_rgba(255,171,54,0.32)]',
+    body: 'text-white/74',
+    detail: 'text-white/55',
+  },
+};
+
 const faqItems = [
   {
     question: 'DO I NEED ADVANCED HACKING SKILLS?',
@@ -315,7 +348,7 @@ export const EventDetails = () => {
           </div>
         </motion.section>
 
-        <motion.section id="scoring" className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]" {...sectionMotion}>
+        <motion.section id="scoring" className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] space-y-20" {...sectionMotion}>
           <div className="rounded-[1.5rem] border border-white/8 bg-black/70 shadow-[0_20px_80px_-40px_rgba(0,0,0,0.9)]">
             <div className="h-4 rounded-t-[1.5rem] bg-white/20" />
             <div className="space-y-5 px-6 py-8 sm:px-8">
@@ -378,43 +411,60 @@ export const EventDetails = () => {
           </div>
         </motion.section>
 
-        <motion.section id="loot" className="space-y-10" {...sectionMotion}>
+        <motion.section id="loot" className="space-y-20" {...sectionMotion}>
           <div className="space-y-4 text-center">
+            <p className="font-mono text-[0.7rem] uppercase tracking-[0.38em] text-white/38">[ REWARD_TABLE ]</p>
             <h2 className="font-pricedown text-3xl text-white sm:text-4xl">THE LOOT</h2>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-3">
-            {rewards.map((reward) => (
-              <article
-                key={reward.title}
-                className={`rounded-[1.4rem] border bg-[rgba(8,10,20,0.9)] p-6 text-center shadow-[0_20px_60px_-40px_rgba(0,0,0,0.9)] ${
-                  reward.featured
-                    ? 'border-[#ffbf1d]/70 bg-[radial-gradient(circle_at_center,rgba(255,193,29,0.32),rgba(18,12,8,0.96))] shadow-[0_0_0_1px_rgba(255,191,29,0.2),0_0_34px_rgba(255,191,29,0.22)]'
-                    : reward.accent === 'silver'
-                      ? 'border-white/50'
-                      : 'border-[#ff9b00]/70'
-                }`}
-              >
-                <div
-                  className={`mx-auto flex h-20 w-20 items-center justify-center rounded-full border text-3xl ${
-                    reward.featured
-                      ? 'border-[#ffbf1d]/80 bg-[rgba(255,191,29,0.14)] text-[#ffe085]'
-                      : reward.accent === 'silver'
-                        ? 'border-white/60 bg-white/5 text-white/85'
-                        : 'border-[#ff9b00]/60 bg-[rgba(255,155,0,0.1)] text-[#ffb347]'
-                  }`}
+          <div className="relative isolate">
+            <div className="pointer-events-none absolute inset-x-0 top-10 -z-10 mx-auto h-[26rem] max-w-5xl rounded-full bg-[radial-gradient(circle_at_center,rgba(255,191,29,0.18),rgba(255,191,29,0.06)_35%,transparent_72%)] blur-3xl" />
+
+            <div className="grid gap-6 lg:grid-cols-3 lg:items-start">
+              {rewards.map((reward) => (
+                <article
+                  key={reward.title}
+                  className={`group relative overflow-hidden rounded-[1.65rem] border p-6 text-center ${rewardCardStyles[reward.accent].border} ${rewardCardStyles[reward.accent].panel} ${rewardCardStyles[reward.accent].glow} ${
+                    reward.featured ? 'min-h-[28rem] lg:min-h-[31rem]' : 'min-h-[22rem] lg:mt-8 lg:min-h-[25rem]'
+                  } transition-transform duration-300 hover:-translate-y-1`}
                 >
-                  <reward.icon />
-                </div>
-                <h3 className="mt-5 font-pricedown text-2xl text-white">{reward.title}</h3>
-                <p className="mt-3 text-base text-white/75">{reward.description}</p>
-                {reward.detail ? <span className="mt-3 block text-sm text-white/60">{reward.detail}</span> : null}
-              </article>
-            ))}
+                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_42%)] opacity-80" />
+                  <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent)]" />
+
+                  <div className="relative flex h-full flex-col items-center justify-start px-3 py-4 sm:px-4 sm:py-6">
+                    <div
+                      className={`flex h-20 w-20 items-center justify-center rounded-full border text-[2rem] sm:h-24 sm:w-24 sm:text-[2.25rem] ${
+                        reward.featured ? 'scale-110 sm:scale-125' : ''
+                      } ${rewardCardStyles[reward.accent].icon}`}
+                    >
+                      <reward.icon />
+                    </div>
+
+                    <h3
+                      className={`mt-7 font-pricedown text-[1.95rem] uppercase leading-none sm:text-[2.25rem] ${
+                        reward.featured ? 'sm:text-[2.45rem]' : ''
+                      } ${rewardCardStyles[reward.accent].title} ${rewardCardStyles[reward.accent].titleGlow}`}
+                    >
+                      {reward.title}
+                    </h3>
+
+                    <p className={`mt-4 text-base font-medium sm:text-lg ${reward.featured ? 'sm:text-xl' : ''} ${rewardCardStyles[reward.accent].body}`}>{reward.description}</p>
+
+                    {reward.detail ? (
+                      <div
+                        className={`mt-5 inline-flex items-center rounded-full border border-[#ffcc4d]/35 bg-[rgba(255,191,29,0.08)] px-4 py-2 text-sm font-semibold ${rewardCardStyles[reward.accent].detail}`}
+                      >
+                        {reward.detail}
+                      </div>
+                    ) : null}
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </motion.section>
 
-        <motion.section id="queries" className="space-y-10" {...sectionMotion}>
+        <motion.section id="queries" className="space-y-20" {...sectionMotion}>
           <div className="space-y-4 text-center">
             <h2 className="font-pricedown text-3xl text-white sm:text-4xl">INTEL &amp; QUERIES</h2>
             <p className="font-mono text-sm uppercase tracking-[0.2em] text-white/50">[ FAQ.DAT ] - Frequently Asked Questions</p>
