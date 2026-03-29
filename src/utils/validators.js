@@ -3,7 +3,6 @@
  * Robust validators with detailed error messages
  */
 
-import { normalizePhoneNumber } from './formatter';
 import { VALIDATION_RULES } from '../constants/index';
 
 export const validators = {
@@ -66,9 +65,11 @@ export const validators = {
       return { valid: false, error: 'Phone number is required' };
     }
 
-    const normalizedPhone = normalizePhoneNumber(phone);
-    
-    if (!VALIDATION_RULES.phone.pattern.test(normalizedPhone)) {
+    const digitsOnly = phone.replace(/\D/g, '');
+    const isStandardTenDigit = /^[1-9]\d{9}$/.test(digitsOnly);
+    const isElevenDigitWithLeadingZero = /^0\d{10}$/.test(digitsOnly);
+
+    if (!isStandardTenDigit && !isElevenDigitWithLeadingZero) {
       return { valid: false, error: VALIDATION_RULES.phone.message };
     }
 

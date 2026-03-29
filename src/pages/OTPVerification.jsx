@@ -22,6 +22,7 @@ export const OTPVerification = () => {
     otp,
     setOtp,
     isLoading,
+    isCaptchaReady,
     error: otpError,
     isVerified,
     verificationToken,
@@ -55,6 +56,11 @@ export const OTPVerification = () => {
       }
       initializedRef.current = true;
 
+      if (!isCaptchaReady) {
+        initializedRef.current = false;
+        return;
+      }
+
       const result = await sendOTP({
         name: registrationData?.name,
         email,
@@ -76,7 +82,7 @@ export const OTPVerification = () => {
     };
 
     initializeOTP();
-  }, [email, sendOTP, navigate, registrationData, setRegistrationData, isInitializing]);
+  }, [email, sendOTP, navigate, registrationData, setRegistrationData, isInitializing, isCaptchaReady]);
 
   useEffect(() => {
     if (redirectedRef.current) return;

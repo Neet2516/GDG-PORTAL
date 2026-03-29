@@ -3,11 +3,13 @@
  * Manages reCAPTCHA token generation for form submission
  */
 
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export const useRecaptcha = (siteKey) => {
   const scriptLoadedRef = useRef(false);
   const scriptPromiseRef = useRef(null);
+  const [isReady, setIsReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   /**
    * Load reCAPTCHA script dynamically
@@ -18,6 +20,7 @@ export const useRecaptcha = (siteKey) => {
     }
 
     if (scriptLoadedRef.current && window.grecaptcha) {
+      setIsReady(true);
       return Promise.resolve(window.grecaptcha);
     }
 
@@ -25,18 +28,24 @@ export const useRecaptcha = (siteKey) => {
       return scriptPromiseRef.current;
     }
 
+    setIsLoading(true);
+
     scriptPromiseRef.current = new Promise((resolve) => {
       const existingScript = document.querySelector(`script[data-recaptcha-key="${siteKey}"]`);
 
       const onReady = () => {
         if (!window.grecaptcha?.ready) {
           console.error('reCAPTCHA API not available after script load');
+          setIsLoading(false);
+          setIsReady(false);
           resolve(null);
           return;
         }
 
         window.grecaptcha.ready(() => {
           scriptLoadedRef.current = true;
+          setIsReady(true);
+          setIsLoading(false);
           resolve(window.grecaptcha);
         });
       };
@@ -54,6 +63,8 @@ export const useRecaptcha = (siteKey) => {
       script.onload = onReady;
       script.onerror = () => {
         console.error('Failed to load reCAPTCHA script');
+        setIsLoading(false);
+        setIsReady(false);
         resolve(null);
       };
 
@@ -97,12 +108,25 @@ export const useRecaptcha = (siteKey) => {
   const resetRecaptcha = useCallback(() => {
     scriptLoadedRef.current = false;
     scriptPromiseRef.current = null;
+    setIsReady(false);
+    setIsLoading(false);
   }, [siteKey]);
+
+  useEffect(() => {
+    if (!siteKey) {
+      setIsReady(false);
+      setIsLoading(false);
+      return;
+    }
+
+    void loadRecaptchaScript();
+  }, [loadRecaptchaScript, siteKey]);
 
   return {
     executeRecaptcha,
     resetRecaptcha,
-    isReady: scriptLoadedRef.current,
+    isReady,
+    isLoading,
   };
 };
 

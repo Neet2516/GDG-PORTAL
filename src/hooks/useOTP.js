@@ -20,7 +20,9 @@ export const useOTP = () => {
   const [canResend, setCanResend] = useState(true);
   const timerRef = useRef(null);
   const currentEmailRef = useRef(null);
-  const { executeRecaptcha } = useRecaptcha(RECAPTCHA_CONFIG.SITE_KEY);
+  const { executeRecaptcha, isReady: isCaptchaReady, isLoading: isCaptchaLoading } = useRecaptcha(
+    RECAPTCHA_CONFIG.SITE_KEY
+  );
 
   // Timer effect
   useEffect(() => {
@@ -59,6 +61,12 @@ export const useOTP = () => {
         RECAPTCHA_CONFIG.ENABLED && RECAPTCHA_CONFIG.SITE_KEY
           ? await executeRecaptcha('send_otp')
           : null;
+
+      if (RECAPTCHA_CONFIG.ENABLED && RECAPTCHA_CONFIG.SITE_KEY && !captchaToken) {
+        const errorMessage = 'Captcha is still loading. Please try again in a moment.';
+        setError(errorMessage);
+        return { success: false, error: errorMessage };
+      }
 
       const response = await apiService.sendOTP(
         payload.name,
@@ -137,6 +145,8 @@ export const useOTP = () => {
     otp,
     setOtp,
     isLoading,
+    isCaptchaReady,
+    isCaptchaLoading,
     error,
     isVerified,
     verificationToken,

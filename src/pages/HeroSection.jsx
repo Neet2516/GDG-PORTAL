@@ -2,12 +2,13 @@
  * Landing page hero
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiCalendar, FiMapPin, FiShield, FiZap } from 'react-icons/fi';
 
 import { Button } from '../components';
 import backgroundImage from '../assets/images/landingpage-background.jpg';
+import heroVideo from '../assets/Background.mp4';
 
 const buildTargetDate = (year) => new Date(`${year}-04-06T09:00:00+05:30`);
 
@@ -32,6 +33,9 @@ const metaItems = [
 
 export const HeroSection = ({ onCtaClick, onScrollToNext }) => {
   const [countdown, setCountdown] = useState(getCountdownParts);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isVideoReady, setIsVideoReady] = useState(false);
+  const videoRef = useRef(null);
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
@@ -41,16 +45,73 @@ export const HeroSection = ({ onCtaClick, onScrollToNext }) => {
     return () => window.clearInterval(intervalId);
   }, []);
 
+  useEffect(() => {
+    const videoEl = videoRef.current;
+    if (!videoEl) {
+      return undefined;
+    }
+
+    const handleLoadedData = () => {
+      setIsVideoReady(true);
+    };
+
+    const handleCanPlay = async () => {
+      setIsVideoReady(true);
+      try {
+        await videoEl.play();
+      } catch {
+        // Autoplay can still be blocked in some environments; the poster keeps the hero usable.
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    const handlePlaying = () => {
+      setIsLoading(false);
+    };
+
+    const handleError = () => {
+      setIsLoading(false);
+    };
+
+    videoEl.addEventListener('loadeddata', handleLoadedData);
+    videoEl.addEventListener('canplay', handleCanPlay);
+    videoEl.addEventListener('playing', handlePlaying);
+    videoEl.addEventListener('error', handleError);
+
+    return () => {
+      videoEl.removeEventListener('loadeddata', handleLoadedData);
+      videoEl.removeEventListener('canplay', handleCanPlay);
+      videoEl.removeEventListener('playing', handlePlaying);
+      videoEl.removeEventListener('error', handleError);
+    };
+  }, []);
+
   return (
     <section
       id="lore"
       className="relative z-10 min-h-[100svh] overflow-hidden px-4 pb-6 pt-4"
     >
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-[1.02] saturate-110 brightness-[0.72]"
-        style={{ backgroundImage: `url(${backgroundImage})` }}
-        aria-hidden="true"
-      />
+      <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+        <img
+          src={backgroundImage}
+          alt=""
+          className={`hero-intro-image ${isLoading ? 'hero-intro-image--visible' : 'hero-intro-image--hidden'}`}
+        />
+        <video
+          ref={videoRef}
+          className={`hero-background-video ${isVideoReady ? 'hero-background-video--visible' : 'hero-background-video--hidden'}`}
+          autoPlay
+          muted
+          playsInline
+          preload="auto"
+          poster={backgroundImage}
+          onEnded={() => setIsLoading(false)}
+          aria-hidden="true"
+        >
+          <source src={heroVideo} type="video/mp4" />
+        </video>
+      </div>
       <div
         className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,4,11,0.25)_0%,rgba(4,4,11,0.12)_22%,rgba(4,4,11,0.68)_100%),radial-gradient(circle_at_50%_45%,rgba(255,74,149,0.28),transparent_20%),radial-gradient(circle_at_50%_20%,rgba(18,233,255,0.08),transparent_18%)]"
         aria-hidden="true"

@@ -9,6 +9,7 @@ import { useSessionStorage } from '../hooks/useSessionStorage';
 import { useRecaptcha } from '../hooks/useRecaptcha';
 import { RESIDENCE_TYPES, GENDER_OPTIONS, FORM_DEFAULTS, RECAPTCHA_CONFIG, RAZORPAY_CONFIG } from '../constants';
 import { apiService } from '../services/api';
+import { normalizePhoneNumber } from '../utils/formatter';
 
 const loadRazorpayScript = () =>
   new Promise((resolve) => {
@@ -120,13 +121,14 @@ export const RegistrationStep3 = () => {
         prefill: {
           name: sessionData.name || '',
           email: sessionData.email || '',
-          contact: formData.phone || '',
+          contact: normalizePhoneNumber(formData.phone || ''),
         },
         theme: {
           color: '#ff3f86',
         },
       });
 
+      const normalizedPhone = normalizePhoneNumber(formData.phone || '');
       const captchaToken =
         RECAPTCHA_CONFIG.ENABLED && RECAPTCHA_CONFIG.SITE_KEY
           ? await executeRecaptcha('register')
@@ -136,7 +138,7 @@ export const RegistrationStep3 = () => {
         name: sessionData.name,
         email: sessionData.email,
         studentNumber: sessionData.studentNumber,
-        phone: formData.phone,
+        phone: normalizedPhone,
         branch: formData.branch,
         gender: formData.gender,
         residence: formData.residence,
@@ -155,6 +157,7 @@ export const RegistrationStep3 = () => {
       setSessionData({
         ...sessionData,
         ...registerPayload,
+        phone: formData.phone,
         registrationId: registerResult.registrationId,
         completedAt: Date.now(),
       });

@@ -86,9 +86,9 @@ export const VALIDATION_RULES = {
   },
   phone: {
     minLength: 10,
-    maxLength: 10,
-    pattern: /^\d{10}$/,
-    message: 'Phone must be a 10-digit number',
+    maxLength: 11,
+    pattern: /^([1-9]\d{9}|0\d{10})$/,
+    message: 'Phone must be 10 digits, or 11 digits starting with 0',
   },
   studentNumber: {
     pattern: /^25\d{4,7}$/,

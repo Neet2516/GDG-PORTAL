@@ -24,7 +24,7 @@ export const RegistrationStep1 = () => {
 
   const [, setSessionData] = useSessionStorage('registration_flow', null);
   const isSubmittingRef = useRef(false);
-  const { sendOTP } = useOTP();
+  const { sendOTP, isLoading, isCaptchaReady, isCaptchaLoading } = useOTP();
   const requiredFields = ['name', 'email', 'studentNumber', 'branch'];
   const isStepValid = requiredFields.every((field) => formData[field] && !errors[field]);
 
@@ -177,8 +177,8 @@ export const RegistrationStep1 = () => {
           <div className="md:col-span-2">
             <Button
               type="submit"
-              disabled={!isStepValid}
-              isLoading={isSubmittingRef.current}
+              disabled={!isStepValid || isLoading || !isCaptchaReady || isCaptchaLoading}
+              isLoading={isLoading}
               className="w-full justify-between rounded-xl px-6 py-4 text-base"
             >
               <span>Send OTP</span>
