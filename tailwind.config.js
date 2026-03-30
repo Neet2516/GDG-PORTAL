@@ -17,6 +17,8 @@ export default {
         }
       },
       fontFamily: {
+        chalet: ['Chalet', 'sans-serif'],
+        manrope: ['Chalet', 'sans-serif'],
         poppins: ['Poppins', 'sans-serif'],
         inter: ['Inter', 'sans-serif'],
       },

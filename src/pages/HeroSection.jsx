@@ -102,11 +102,11 @@ export const HeroSection = ({ onCtaClick, onScrollToNext }) => {
           ref={videoRef}
           className={`hero-background-video ${isVideoReady ? 'hero-background-video--visible' : 'hero-background-video--hidden'}`}
           autoPlay
+          loop
           muted
           playsInline
           preload="auto"
           poster={backgroundImage}
-          onEnded={() => setIsLoading(false)}
           aria-hidden="true"
         >
           <source src={heroVideo} type="video/mp4" />

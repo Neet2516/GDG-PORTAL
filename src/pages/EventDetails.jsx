@@ -4,7 +4,6 @@ import {
   FiAward,
   FiBookOpen,
   FiGift,
-  FiCpu,
   FiLock,
   FiMinus,
   FiPlus,
@@ -12,8 +11,10 @@ import {
   FiShield,
   FiTarget,
   FiUnlock,
-  FiZap,
+  FiStar,
 } from 'react-icons/fi';
+import { TfiGame } from "react-icons/tfi";
+import { GiCrossMark } from "react-icons/gi";
 import backgroundImage from '../assets/images/landingpage-background.jpg';
 
 const missionSteps = [
@@ -25,33 +26,37 @@ const missionSteps = [
     icon: FiUnlock,
     accent: 'cyan',
     muted: false,
+    stars: 1,
   },
   {
     number: '02',
     title: 'LOGIC FIREWALL',
     subtitle: 'Code Output & Logic Analysis',
-    tag: null,
+    tag: 'LOCKED',
     icon: FiLock,
     accent: 'pink',
     muted: true,
+    stars: 2,
   },
   {
     number: '03',
     title: 'CODE DECRYPTION',
     subtitle: 'Debugging Challenge',
-    tag: null,
+    tag: 'LOCKED',
     icon: FiLock,
     accent: 'pink',
     muted: true,
+    stars: 3,
   },
   {
     number: '04',
     title: 'SYSTEM PATCH',
     subtitle: 'Binary + Encryption + Programming',
-    tag: null,
+    tag: 'LOCKED',
     icon: FiLock,
     accent: 'pink',
     muted: true,
+    stars: 4,
   },
   {
     number: '05',
@@ -61,14 +66,8 @@ const missionSteps = [
     icon: FiShield,
     accent: 'violet',
     muted: false,
+    stars: 5,
   },
-];
-
-const scoringRows = [
-  { label: 'Without clue', points: '+5 PTS', tone: 'success' },
-  { label: 'With 1 clue', points: '+4 PTS', tone: 'success' },
-  { label: 'With 2 clues', points: '+3 PTS', tone: 'success' },
-  { label: 'Not solved', points: '+1 PT', tone: 'danger' },
 ];
 
 const rewards = [
@@ -165,7 +164,7 @@ const dayCards = [
     date: '7TH APRIL',
     title: 'gamified tech challenge',
     time: '2:00 PM ONWARDS',
-    icon: FiCpu,
+    icon: TfiGame,
     tone: 'pink',
     code: '[ EXECUTING ]',
   },
@@ -183,7 +182,7 @@ export const EventDetails = () => {
 
   return (
     <section className="relative bg-[#070814] px-4 py-20 text-white sm:px-6 lg:px-8">
-      <div className="mx-auto flex w-full max-w-[1180px] flex-col gap-16">
+      <div className="mx-auto flex w-full max-w-[1180px] flex-col gap-20">
         <motion.section id="missions" className="space-y-8" {...sectionMotion}>
           <div className="rounded-[1.6rem] border border-[#6b11ff]/60 bg-[linear-gradient(180deg,rgba(16,8,30,0.98),rgba(8,8,20,0.98))] p-6 shadow-[0_0_0_1px_rgba(123,33,255,0.16),0_0_48px_rgba(123,33,255,0.18)] sm:p-8">
             <div className="grid gap-8 lg:grid-cols-[1.25fr_0.72fr] lg:items-center">
@@ -196,14 +195,16 @@ export const EventDetails = () => {
                   <div className="mt-1 flex h-12 w-12 items-center justify-center rounded-full text-[#8f26ff] shadow-[0_0_0_1px_rgba(143,38,255,0.32),0_0_24px_rgba(143,38,255,0.22)]">
                     <FiRadio size={36} />
                   </div>
-                  <h2 className="font-pricedown text-3xl text-white sm:text-4xl">THE HEIST PROTOCOL</h2>
+                  <h2 className="font-pricedown text-3xl sm:text-4xl text-black text-stroke-white">
+                    THE HEIST PROTOCOL
+                  </h2>
                 </div>
 
-                <p className="max-w-3xl text-sm leading-7 text-white/60 sm:text-base">
+                <p className="max-w-3xl text-sm leading-7 text-white sm:text-base text-stroke-black">
                   The city&apos;s central mainframe has been locked down by a rogue security AI. We need the sharpest coders,
                   hackers, and logicians to bypass the firewalls and penetrate the inner core. The tech heist of the decade is
                   about to begin. Assemble your crew, decrypt the algorithms, and secure the loot before the system inevitably
-                  reboots. <span className="font-semibold text-[#ff356d]">Are you in?</span>
+                  reboots. <span className="font-semibold text-[#ff356d] ">Are you in?</span>
                 </p>
               </div>
 
@@ -219,7 +220,7 @@ export const EventDetails = () => {
             </div>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-8 md:grid-cols-2">
             {dayCards.map((card) => {
               const Icon = card.icon;
               const isCyan = card.tone === 'cyan';
@@ -227,30 +228,28 @@ export const EventDetails = () => {
               return (
                 <article
                   key={card.day}
-                  className={`rounded-[1.35rem] border p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.04)] ${
-                    isCyan
-                      ? 'border-[#0ed8ff]/70 bg-[linear-gradient(180deg,rgba(9,18,32,0.95),rgba(8,10,22,0.98))] shadow-[0_0_0_1px_rgba(14,216,255,0.12),0_0_34px_rgba(14,216,255,0.16)]'
-                      : 'border-[#ff2f76]/70 bg-[linear-gradient(180deg,rgba(31,11,24,0.95),rgba(10,8,18,0.98))] shadow-[0_0_0_1px_rgba(255,47,118,0.12),0_0_34px_rgba(255,47,118,0.18)]'
-                  }`}
+                  className={`rounded-[1.35rem] border p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.04)] ${isCyan
+                    ? 'border-[#0ed8ff]/70 bg-[linear-gradient(180deg,rgba(9,18,32,0.95),rgba(8,10,22,0.98))] shadow-[0_0_0_1px_rgba(14,216,255,0.12),0_0_24px_rgba(14,216,255,0.16)]'
+                    : 'border-[#ff2f76]/70 bg-[linear-gradient(180deg,rgba(31,11,24,0.95),rgba(10,8,18,0.98))] shadow-[0_0_0_1px_rgba(255,47,118,0.12),0_0_24px_rgba(255,47,118,0.18)]'
+                    }`}
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="space-y-2">
-                      <p className={`font-pricedown text-3xl ${isCyan ? 'text-[#12e9ff]' : 'text-[#ff2f76]'}`}>{card.day}</p>
-                      <p className="text-sm uppercase tracking-[0.22em] text-white/45">{card.date}</p>
+                      <p className={`font-pricedown text-3xl text-stroke-black ${isCyan ? 'text-[#12e9ff]' : 'text-[#ff2f76]'}`}>{card.day}</p>
+                      <p className="text-sm uppercase text-stroke-black tracking-[0.22em] text-white">{card.date}</p>
                     </div>
 
                     <div
-                      className={`flex h-12 w-12 items-center justify-center rounded-[0.9rem] border ${
-                        isCyan
-                          ? 'border-[#12e9ff]/30 bg-[rgba(16,86,92,0.28)] text-[#12e9ff]'
-                          : 'border-[#ff2f76]/30 bg-[rgba(111,19,58,0.28)] text-[#ff2f76]'
-                      }`}
+                      className={`flex h-12 w-12 items-center justify-center rounded-[0.9rem] border ${isCyan
+                        ? 'border-[#12e9ff]/30 bg-[rgba(16,86,92,0.28)] text-[#12e9ff]'
+                        : 'border-[#ff2f76]/30 bg-[rgba(111,19,58,0.28)] text-[#ff2f76]'
+                        }`}
                     >
                       <Icon size={22} />
                     </div>
                   </div>
 
-                  <h3 className="mt-6 font-pricedown text-2xl text-white sm:text-[2rem]">{card.title}</h3>
+                  <h3 className="mt-6 font-pricedown text-2xl text-white sm:text-[2rem] text-stroke-black-2">{card.title}</h3>
 
                   <div className="mt-6 inline-flex items-center gap-2 rounded-[0.65rem] border border-black/50 bg-black/60 px-4 py-3 text-sm font-semibold tracking-[0.18em] text-white">
                     <span className={isCyan ? 'text-[#12e9ff]' : 'text-[#ff2f76]'}>◔</span>
@@ -266,11 +265,11 @@ export const EventDetails = () => {
           </div>
         </motion.section>
 
-        <motion.section id="directory" className="space-y-10" {...sectionMotion}>
-          <div className="space-y-4 text-center">
-            <h2 className="font-pricedown text-3xl text-white sm:text-4xl">MISSION DIRECTORY</h2>
-            <p className="mx-auto max-w-2xl text-sm leading-7 text-white/60 sm:text-base">
-              Progress through the security mainframe. One wrong move and you&rsquo;re locked out.
+        <motion.section id="directory" className="mt-10 space-y-10" {...sectionMotion}>
+          <div className="space-y-4 text-center flex flex-col items-center gap-2  ">
+            <h2 className="font-pricedown text-3xl text-white sm:text-6xl text-stroke-black-2">MISSION DIRECTORY</h2>
+            <p className="mx-auto  max-w-2xl text-md leading-7 text-white/60 sm:text-red-500 font-chalet">
+              Progress through the security mainframe. <br />One wrong move and you&rsquo;re locked out.
             </p>
           </div>
 
@@ -282,9 +281,8 @@ export const EventDetails = () => {
                   {missionSteps.map((step, index) => (
                     <div
                       key={step.number}
-                      className={`h-4 w-4 rounded-full border-2 ${
-                        index === 0 ? 'border-[#18e9ff] bg-[#18e9ff] shadow-[0_0_0_8px_rgba(24,233,255,0.18)]' : 'border-white/30 bg-[#070814]'
-                      }`}
+                      className={`h-4 w-4 rounded-full border-2 ${index === 0 ? 'border-[#18e9ff] bg-[#18e9ff] shadow-[0_0_0_8px_rgba(24,233,255,0.18)]' : 'border-white/30 bg-[#070814]'
+                        }`}
                     />
                   ))}
                 </div>
@@ -295,19 +293,19 @@ export const EventDetails = () => {
               {missionSteps.map((step) => {
                 const muted = step.muted;
                 const Icon = step.icon;
+                const stars = Array.from({ length: 5 }, (_, index) => index < step.stars);
 
                 return (
                   <article
                     key={step.number}
-                    className={`grid gap-4 rounded-[1.4rem] border px-5 py-5 sm:px-6 sm:py-6 md:grid-cols-[5.5rem_1fr_auto] md:items-center ${
-                      step.accent === 'cyan'
-                        ? 'border-[#18e9ff]/45 bg-[rgba(7,12,24,0.88)] shadow-[0_0_0_1px_rgba(24,233,255,0.12),0_0_34px_rgba(24,233,255,0.14)]'
-                        : step.accent === 'violet'
-                          ? 'border-[#6b11ff]/50 bg-[rgba(20,7,38,0.9)] shadow-[0_0_0_1px_rgba(123,33,255,0.15),0_0_34px_rgba(123,33,255,0.2)]'
-                          : muted
-                            ? 'border-white/5 bg-[rgba(9,10,20,0.7)] opacity-80'
-                            : 'border-[#ff2e7d]/40 bg-[rgba(25,8,18,0.9)]'
-                    }`}
+                    className={`grid gap-4 rounded-[1.4rem] border px-5 py-5 sm:px-6 sm:py-6 md:grid-cols-[5.5rem_1fr_auto] md:items-center ${step.accent === 'cyan'
+                      ? 'border-[#18e9ff]/45 bg-[rgba(7,12,24,0.88)] shadow-[0_0_0_1px_rgba(24,233,255,0.12),0_0_34px_rgba(24,233,255,0.14)]'
+                      : step.accent === 'violet'
+                        ? 'border-[#6b11ff]/50 bg-[rgba(20,7,38,0.9)] shadow-[0_0_0_1px_rgba(123,33,255,0.15),0_0_34px_rgba(123,33,255,0.2)]'
+                        : muted
+                          ? 'border-white/5 bg-[rgba(9,10,20,0.7)] opacity-80'
+                          : 'border-[#ff2e7d]/40 bg-[rgba(25,8,18,0.9)]'
+                      }`}
                   >
                     <div className={`flex items-center justify-center rounded-[1rem] border bg-black/20 py-5 text-3xl font-semibold ${step.accent === 'cyan' ? 'border-[#18e9ff]/30 text-[#18e9ff]' : step.accent === 'violet' ? 'border-[#6b11ff]/30 text-[#9f4dff]' : 'border-white/5 text-white/30'}`}>
                       {step.number}
@@ -318,28 +316,42 @@ export const EventDetails = () => {
                       <p className="text-sm text-white/55 sm:text-base">{step.subtitle}</p>
                     </div>
 
-                    <div className="flex items-center justify-between gap-4 md:justify-end">
-                      {step.tag ? (
-                        <span
-                          className={`rounded-md border px-3 py-1 text-[0.7rem] font-bold uppercase tracking-[0.2em] ${
-                            step.accent === 'violet'
+                    <div className="flex flex-wrap items-center justify-between gap-4 md:justify-end">
+                      <div className="flex items-center gap-3">
+                        {step.tag ? (
+                          <span
+                            className={`rounded-md border px-3 py-1 text-[0.7rem] font-bold uppercase tracking-[0.2em] ${step.accent === 'violet'
                               ? 'border-[#8f3bff]/50 bg-[#7b21ff] text-white'
                               : 'border-[#18e9ff]/30 bg-[#0b2a30] text-[#18e9ff]'
-                          }`}
-                        >
-                          {step.tag}
-                        </span>
-                      ) : (
-                        <div
-                          className={`flex h-12 w-12 items-center justify-center rounded-full border ${
-                            step.accent === 'cyan'
-                              ? 'border-[#18e9ff]/35 bg-[#07242a] text-[#18e9ff]'
-                              : 'border-[#ff2e7d]/35 bg-[#2a0b1a] text-[#ff2e7d]'
-                          }`}
-                        >
-                          <Icon size={20} />
+                              } ${step.tag === 'LOCKED' ? 'text-red-500' : ''}`}
+                          >
+                            {step.tag}
+                          </span>
+                        ) : null}
+
+                        <div className="flex items-center gap-1.5">
+                          {stars.map((isActive, index) => (
+                            <FiStar
+                              key={`${step.number}-star-${index}`}
+                              size={18}
+                              className={`sm:h-5 sm:w-5 ${isActive
+                                ? 'text-white/90 drop-shadow-[0_0_10px_rgba(255,255,255,0.18)]'
+                                : 'text-white/20'
+                                }`}
+                              aria-hidden="true"
+                            />
+                          ))}
                         </div>
-                      )}
+                      </div>
+
+                      <div
+                        className={`flex h-12 w-12 items-center justify-center rounded-full border ${step.accent === 'cyan'
+                          ? 'border-[#18e9ff]/35 bg-[#07242a] text-[#18e9ff]'
+                          : 'border-[#ff2e7d]/35 bg-[#2a0b1a] text-[#ff2e7d]'
+                          }`}
+                      >
+                        <Icon size={20} />
+                      </div>
                     </div>
                   </article>
                 );
@@ -348,73 +360,38 @@ export const EventDetails = () => {
           </div>
         </motion.section>
 
-        <motion.section id="scoring" className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] space-y-20" {...sectionMotion}>
-          <div className="rounded-[1.5rem] border border-white/8 bg-black/70 shadow-[0_20px_80px_-40px_rgba(0,0,0,0.9)]">
-            <div className="h-4 rounded-t-[1.5rem] bg-white/20" />
-            <div className="space-y-5 px-6 py-8 sm:px-8">
-              <p className="font-mono text-[0.85rem] uppercase tracking-[0.18em] text-[#39f22f]">&gt; initializing scoring matrix...</p>
-              <div className="h-px bg-[linear-gradient(90deg,rgba(57,242,47,0.9),rgba(57,242,47,0.05))]" />
-
-              <div className="space-y-4 font-manrope text-white">
-                <div className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.2em]">
-                  <FiZap size={16} className="text-white" />
-                  <span>Time limit: 15 mins / level</span>
+        <motion.section id="scoring" className="space-y-20" {...sectionMotion}>
+          <div className="w-full rounded-[1.5rem] border border-[#ff2d73]/60 bg-[radial-gradient(circle_at_top,rgba(255,73,138,0.28),rgba(16,5,17,0.96))] p-6 shadow-[0_0_0_1px_rgba(255,45,115,0.2),0_0_48px_rgba(255,45,115,0.2)] sm:p-8 flex flex-col items-center justify-center">
+            <p className="font-pricedown text-3xl text-white text-stroke-black-2 flex "><GiCrossMark className="text-[#ff2e7d] text-stroke-black-2" />FINAL ROUND BATTLE</p>
+            <div className="mt-6 w-full">
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-[1rem] border border-white/10 bg-[rgba(255,81,140,0.2)] p-6 text-center">
+                  <strong className="block font-pricedown text-4xl text-[#ff8ab5] text-stroke-black-2">TOP 3</strong>
+                  <span className="mt-2 block text-sm font-semibold uppercase tracking-[0.2em] text-white/85">
+                    Teams advance
+                  </span>
                 </div>
-                <div className="space-y-1 text-[0.82rem] text-[#39f22f]">
-                  <p>&gt; Clue 1 generated at: 07:00</p>
-                  <p>&gt; Clue 2 generated at: 12:00</p>
+
+                <div className="rounded-[1rem] border border-white/8 bg-[rgba(14,10,25,0.8)] p-6 text-center">
+                  <span className="block font-chalet text-[24px] leading-[25.6px] text-center text-white/80 text-stroke-black">
+                    18 Participants
+                  </span>
+                  <span className="mt-4 inline-flex flex-col w-full rounded-md border border-[#18e9ff]/35 bg-[rgba(10,34,40,0.88)] px-4 py-2 font-semibold  text-[#18e9ff]">
+                    <div className="font-pricedown text-stroke-black-2 text-[24px] leading-[25.6px]">Live Leaderboard</div>
+                    <small className="mt-2 block text-xs text-white/50">(Kahoot Style)</small>
+                  </span>
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.22em] text-white">
-                  <FiTarget size={16} />
-                  <span>Scoring protocol</span>
-                </div>
-
-                <div className="divide-y divide-[#39f22f]/30">
-                  {scoringRows.map((row) => (
-                    <div
-                      key={row.label}
-                      className={`flex items-center justify-between py-3 font-mono text-sm ${
-                        row.tone === 'danger' ? 'text-[#ff3b3b]' : 'text-[#39f22f]'
-                      }`}
-                    >
-                      <span>{row.label}</span>
-                      <span>{row.points}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
-          </div>
 
-          <div className="rounded-[1.5rem] border border-[#ff2d73]/60 bg-[radial-gradient(circle_at_top,rgba(255,73,138,0.28),rgba(16,5,17,0.96))] p-6 shadow-[0_0_0_1px_rgba(255,45,115,0.2),0_0_48px_rgba(255,45,115,0.2)] sm:p-8">
-            <p className="font-pricedown text-2xl text-white">FINAL ROUND BATTLE</p>
 
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              <div className="rounded-[1rem] border border-white/10 bg-[rgba(255,81,140,0.2)] p-6 text-center">
-                <strong className="block font-pricedown text-4xl text-[#ff8ab5]">TOP 3</strong>
-                <span className="mt-2 block text-sm font-semibold uppercase tracking-[0.2em] text-white/85">
-                  Teams advance
-                </span>
-              </div>
-
-              <div className="rounded-[1rem] border border-white/8 bg-[rgba(14,10,25,0.8)] p-6 text-center">
-                <span className="block text-base text-white/80">18 Participants</span>
-                <span className="mt-4 inline-flex rounded-md border border-[#18e9ff]/35 bg-[rgba(10,34,40,0.88)] px-4 py-2 text-sm font-semibold text-[#18e9ff]">
-                  Live Leaderboard
-                </span>
-                <small className="mt-2 block text-xs text-white/50">(Kahoot Style)</small>
-              </div>
-            </div>
           </div>
         </motion.section>
 
         <motion.section id="loot" className="space-y-20" {...sectionMotion}>
           <div className="space-y-4 text-center">
-            <p className="font-mono text-[0.7rem] uppercase tracking-[0.38em] text-white/38">[ REWARD_TABLE ]</p>
-            <h2 className="font-pricedown text-3xl text-white sm:text-4xl">THE LOOT</h2>
+            <h2 className="font-pricedown text-3xl text-white sm:text-8xl text-stroke-black-2">THE LOOT</h2>
           </div>
 
           <div className="relative isolate">
@@ -424,26 +401,23 @@ export const EventDetails = () => {
               {rewards.map((reward) => (
                 <article
                   key={reward.title}
-                  className={`group relative overflow-hidden rounded-[1.65rem] border p-6 text-center ${rewardCardStyles[reward.accent].border} ${rewardCardStyles[reward.accent].panel} ${rewardCardStyles[reward.accent].glow} ${
-                    reward.featured ? 'min-h-[28rem] lg:min-h-[31rem]' : 'min-h-[22rem] lg:mt-8 lg:min-h-[25rem]'
-                  } transition-transform duration-300 hover:-translate-y-1`}
+                  className={`group relative overflow-hidden rounded-[1.65rem] border p-6 text-center ${rewardCardStyles[reward.accent].border} ${rewardCardStyles[reward.accent].panel} ${rewardCardStyles[reward.accent].glow} ${reward.featured ? 'min-h-[28rem] lg:min-h-[31rem]' : 'min-h-[22rem] lg:mt-8 lg:min-h-[25rem]'
+                    } transition-transform duration-300 hover:-translate-y-1`}
                 >
                   <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_42%)] opacity-80" />
                   <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent)]" />
 
                   <div className="relative flex h-full flex-col items-center justify-start px-3 py-4 sm:px-4 sm:py-6">
                     <div
-                      className={`flex h-20 w-20 items-center justify-center rounded-full border text-[2rem] sm:h-24 sm:w-24 sm:text-[2.25rem] ${
-                        reward.featured ? 'scale-110 sm:scale-125' : ''
-                      } ${rewardCardStyles[reward.accent].icon}`}
+                      className={`flex h-20 w-20 items-center justify-center rounded-full border text-[2rem] sm:h-24 sm:w-24 sm:text-[2.25rem] ${reward.featured ? 'scale-110 sm:scale-125' : ''
+                        } ${rewardCardStyles[reward.accent].icon}`}
                     >
                       <reward.icon />
                     </div>
 
                     <h3
-                      className={`mt-7 font-pricedown text-[1.95rem] uppercase leading-none sm:text-[2.25rem] ${
-                        reward.featured ? 'sm:text-[2.45rem]' : ''
-                      } ${rewardCardStyles[reward.accent].title} ${rewardCardStyles[reward.accent].titleGlow}`}
+                      className={`mt-7 font-pricedown text-[1.95rem] uppercase leading-none sm:text-[2.25rem] ${reward.featured ? 'sm:text-[2.45rem]' : ''
+                        } ${rewardCardStyles[reward.accent].title} ${rewardCardStyles[reward.accent].titleGlow}`}
                     >
                       {reward.title}
                     </h3>
@@ -477,11 +451,10 @@ export const EventDetails = () => {
               return (
                 <article
                   key={item.question}
-                  className={`overflow-hidden rounded-[1rem] border transition-all duration-300 ${
-                    isOpen
-                      ? 'border-[#18e9ff]/45 bg-[rgba(8,12,26,0.95)] shadow-[0_0_0_1px_rgba(24,233,255,0.12),0_0_30px_rgba(24,233,255,0.08)]'
-                      : 'border-white/5 bg-[rgba(10,11,20,0.8)]'
-                  }`}
+                  className={`overflow-hidden rounded-[1rem] border transition-all duration-300 ${isOpen
+                    ? 'border-[#18e9ff]/45 bg-[rgba(8,12,26,0.95)] shadow-[0_0_0_1px_rgba(24,233,255,0.12),0_0_30px_rgba(24,233,255,0.08)]'
+                    : 'border-white/5 bg-[rgba(10,11,20,0.8)]'
+                    }`}
                 >
                   <button
                     type="button"
