@@ -15,6 +15,7 @@ import {
 } from 'react-icons/fi';
 import { TfiGame } from "react-icons/tfi";
 import { GiCrossMark } from "react-icons/gi";
+import { FaTrophy } from "react-icons/fa";
 import backgroundImage from '../assets/images/landingpage-background.jpg';
 
 const missionSteps = [
@@ -73,15 +74,15 @@ const missionSteps = [
 const rewards = [
   {
     title: 'RUNNER UPS',
-    description: 'Exclusive Stickers',
+    description: 'Keychains+Exclusive Stickers',
     icon: FiAward,
     accent: 'silver',
   },
   {
     title: 'TOP 3 WINNERS',
-    description: 'Direct PI Entry',
-    detail: '+ Cup / Bottle',
-    icon: FiTarget,
+    description: 'Goodies',
+    detail: 'Direct PI Entry',
+    icon: FaTrophy ,
     accent: 'gold',
     featured: true,
   },
@@ -267,7 +268,7 @@ export const EventDetails = () => {
 
         <motion.section id="directory" className="mt-10 space-y-10" {...sectionMotion}>
           <div className="space-y-4 text-center flex flex-col items-center gap-2  ">
-            <h2 className="font-pricedown text-3xl text-white sm:text-6xl text-stroke-black-2">MISSION DIRECTORY</h2>
+            <h2 className="font-pricedown text-3xl text-white sm:text-8xl text-stroke-black-2">MISSION DIRECTORY</h2>
             <p className="mx-auto  max-w-2xl text-md leading-7 text-white/60 sm:text-red-500 font-chalet">
               Progress through the security mainframe. <br />One wrong move and you&rsquo;re locked out.
             </p>
@@ -397,17 +398,19 @@ export const EventDetails = () => {
           <div className="relative isolate">
             <div className="pointer-events-none absolute inset-x-0 top-10 -z-10 mx-auto h-[26rem] max-w-5xl rounded-full bg-[radial-gradient(circle_at_center,rgba(255,191,29,0.18),rgba(255,191,29,0.06)_35%,transparent_72%)] blur-3xl" />
 
-            <div className="grid gap-6 lg:grid-cols-3 lg:items-start">
+            <div className="flex flex-col items-center gap-6 lg:flex-row lg:items-end lg:justify-center">
               {rewards.map((reward) => (
                 <article
                   key={reward.title}
-                  className={`group relative overflow-hidden rounded-[1.65rem] border p-6 text-center ${rewardCardStyles[reward.accent].border} ${rewardCardStyles[reward.accent].panel} ${rewardCardStyles[reward.accent].glow} ${reward.featured ? 'min-h-[28rem] lg:min-h-[31rem]' : 'min-h-[22rem] lg:mt-8 lg:min-h-[25rem]'
+                  className={`group relative w-full overflow-hidden rounded-[1.65rem] border p-6 text-center ${rewardCardStyles[reward.accent].border} ${rewardCardStyles[reward.accent].panel} ${rewardCardStyles[reward.accent].glow} ${reward.featured
+                    ? 'max-w-[30rem] min-h-[28rem] lg:w-[34%] lg:max-w-none lg:min-h-[31rem]'
+                    : 'max-w-[27rem] min-h-[22rem] lg:w-[28%] lg:max-w-none lg:min-h-[25rem]'
                     } transition-transform duration-300 hover:-translate-y-1`}
                 >
                   <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_42%)] opacity-80" />
                   <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent)]" />
 
-                  <div className="relative flex h-full flex-col items-center justify-start px-3 py-4 sm:px-4 sm:py-6">
+                  <div className="relative flex h-full flex-col items-center justify-center gap-5  px-3 py-4 sm:px-4 sm:py-6">
                     <div
                       className={`flex h-20 w-20 items-center justify-center rounded-full border text-[2rem] sm:h-24 sm:w-24 sm:text-[2.25rem] ${reward.featured ? 'scale-110 sm:scale-125' : ''
                         } ${rewardCardStyles[reward.accent].icon}`}
@@ -421,16 +424,17 @@ export const EventDetails = () => {
                     >
                       {reward.title}
                     </h3>
-
-                    <p className={`mt-4 text-base font-medium sm:text-lg ${reward.featured ? 'sm:text-xl' : ''} ${rewardCardStyles[reward.accent].body}`}>{reward.description}</p>
-
                     {reward.detail ? (
                       <div
-                        className={`mt-5 inline-flex items-center rounded-full border border-[#ffcc4d]/35 bg-[rgba(255,191,29,0.08)] px-4 py-2 text-sm font-semibold ${rewardCardStyles[reward.accent].detail}`}
+                        className={`mt-5 inline-flex items-center rounded-full border border-[#ffcc4d]/35 bg-[rgba(255,191,29,0.08)] px-4 py-2 text-2xl font-semibold ${rewardCardStyles[reward.accent].detail} text-white`}
                       >
                         {reward.detail}
                       </div>
                     ) : null}
+
+                    <p className={`mt-4 text-base font-medium sm:text-lg  ${reward.featured ? 'sm:text-xl' : ''} ${rewardCardStyles[reward.accent].body}    !text-green-500`}>{reward.description}</p>
+
+
                   </div>
                 </article>
               ))}
@@ -440,8 +444,7 @@ export const EventDetails = () => {
 
         <motion.section id="queries" className="space-y-20" {...sectionMotion}>
           <div className="space-y-4 text-center">
-            <h2 className="font-pricedown text-3xl text-white sm:text-4xl">INTEL &amp; QUERIES</h2>
-            <p className="font-mono text-sm uppercase tracking-[0.2em] text-white/50">[ FAQ.DAT ] - Frequently Asked Questions</p>
+            <h2 className="font-pricedown text-3xl text-white sm:text-8xl">INTEL &amp; QUERIES</h2>
           </div>
 
           <div className="mx-auto max-w-4xl space-y-4">
@@ -461,7 +464,7 @@ export const EventDetails = () => {
                     className="flex w-full items-center justify-between gap-4 px-5 py-5 text-left"
                     onClick={() => setOpenFaq((current) => (current === index ? -1 : index))}
                   >
-                    <span className="text-sm font-semibold uppercase tracking-[0.14em] text-white sm:text-base">
+                    <span className="text-sm font-semibold uppercase tracking-[0.14em] text-red-600 sm:text-base">
                       {item.question}
                     </span>
                     {isOpen ? <FiMinus size={22} className="text-[#18e9ff]" /> : <FiPlus size={22} className="text-white/55" />}

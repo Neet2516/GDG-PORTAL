@@ -3,12 +3,12 @@
  * App routing and layout
  */
 
-import { useEffect, useRef } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Lenis from 'lenis';
 
-import { Navbar, Footer, RegistrationLayout } from './components';
+import { Navbar, Footer, RegistrationLayout, LoadingScreen } from './components';
 import {
   HeroSection,
   EventDetails,
@@ -21,7 +21,34 @@ import {
 
 export const App = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const lenisRef = useRef(null);
+  
+  const [isAppLoading, setIsAppLoading] = useState(true);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+
+  useEffect(() => {
+    document.fonts.ready.then(() => {
+      setFontsLoaded(true);
+    });
+
+    // Fallback timer to ensure app loads even if video/fonts fail or take too long
+    const timer = setTimeout(() => {
+      setIsAppLoading(false);
+    }, 4500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const isHomePage = location.pathname === '/';
+    if (fontsLoaded && (!isHomePage || videoLoaded)) {
+      // Small artificial delay so the loading screen feels intentional
+      const timer = setTimeout(() => setIsAppLoading(false), 800);
+      return () => clearTimeout(timer);
+    }
+  }, [fontsLoaded, videoLoaded, location.pathname]);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -69,6 +96,7 @@ export const App = () => {
 
   return (
     <div className="min-h-screen bg-[#02040b] text-white">
+      <LoadingScreen isLoading={isAppLoading} />
       <Routes>
         <Route
           path="/"
@@ -76,7 +104,7 @@ export const App = () => {
             <div className="relative min-h-screen overflow-x-hidden bg-[#02040b]">
               <Navbar onRegisterClick={handleRegisterClick} onNavigateTo={handleScrollTo} />
               <main className="relative z-10 overflow-x-hidden">
-                <HeroSection onCtaClick={handleRegisterClick} onScrollToNext={() => handleScrollTo('#missions')} />
+                <HeroSection onCtaClick={handleRegisterClick} onScrollToNext={() => handleScrollTo('#missions')} onVideoReady={() => setVideoLoaded(true)} />
                 <EventDetails />
                 <Footer />
               </main>

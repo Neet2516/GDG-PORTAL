@@ -12,3 +12,4 @@ export { Footer } from './Footer.jsx';
 export { FlowProgress } from './FlowProgress.jsx';
 export { CodeChip } from './CodeChip.jsx';
 export { RegistrationLayout } from './RegistrationLayout.jsx';
+export { LoadingScreen } from './LoadingScreen.jsx';

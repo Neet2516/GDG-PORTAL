@@ -31,7 +31,7 @@ const metaItems = [
   { icon: FiShield, label: 'SECURE BUILD ZONE' },
 ];
 
-export const HeroSection = ({ onCtaClick, onScrollToNext }) => {
+export const HeroSection = ({ onCtaClick, onScrollToNext, onVideoReady }) => {
   const [countdown, setCountdown] = useState(getCountdownParts);
   const [isLoading, setIsLoading] = useState(true);
   const [isVideoReady, setIsVideoReady] = useState(false);
@@ -53,10 +53,12 @@ export const HeroSection = ({ onCtaClick, onScrollToNext }) => {
 
     const handleLoadedData = () => {
       setIsVideoReady(true);
+      onVideoReady?.();
     };
 
     const handleCanPlay = async () => {
       setIsVideoReady(true);
+      onVideoReady?.();
       try {
         await videoEl.play();
       } catch {
