@@ -7,8 +7,7 @@
 // BACKEND API CONFIGURATION
 // ========================================
 export const API_CONFIG = {
-  // UPDATE THIS WITH YOUR BACKEND URL
-  BASE_URL: import.meta.env.VITE_API_BASE_URL ,
+  BASE_URL: '/api',
   TIMEOUT: 15000,
   RETRIES: 3,
 };
@@ -117,10 +116,10 @@ export const REQUEST_TIMEOUTS = {
 // REGISTRATION FLOW STAGES
 // ========================================
 export const REGISTRATION_FLOW = {
-  FORM: 'form',           // Step 1: Fill registration form
-  OTP_SEND: 'otp_send',   // Step 1.5: Send OTP
+  FORM: 'form', // Step 1: Fill registration form
+  OTP_SEND: 'otp_send', // Step 1.5: Send OTP
   OTP_VERIFY: 'otp_verify', // Step 2: Verify OTP
-  PAYMENT: 'payment',      // Step 3: Complete payment
-  REGISTER: 'register',    // Step 4: Submit registration
-  SUCCESS: 'success',      // Success
+  PAYMENT: 'payment', // Step 3: Complete payment
+  REGISTER: 'register', // Step 4: Submit registration
+  SUCCESS: 'success', // Success
 };

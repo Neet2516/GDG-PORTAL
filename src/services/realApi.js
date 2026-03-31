@@ -1,23 +1,15 @@
 /**
  * Real backend API service.
- * Uses only public config from Vite env and never stores backend secrets.
+ *
+ * The axios client targets '/api' so requests stay same-origin in the browser.
  */
 
 import axios from 'axios';
 
-const rawBaseUrl = (import.meta.env.VITE_API_BASE_URL || '').trim();
-const API_BASE_URL =
-  rawBaseUrl && rawBaseUrl !== 'undefined' && rawBaseUrl !== 'null'
-    ? rawBaseUrl.replace(/\/+$/, '')
-    : 'http://localhost:5000';
-const API_PREFIX = (import.meta.env.VITE_API_PREFIX || '/api/v1').startsWith('/')
-  ? import.meta.env.VITE_API_PREFIX || '/api/v1'
-  : `/${import.meta.env.VITE_API_PREFIX}`;
 const API_TIMEOUT = Number(import.meta.env.VITE_API_TIMEOUT || 60000);
-const ORDER_ENDPOINT = (import.meta.env.VITE_CREATE_ORDER_PATH || '/create-order').trim();
 
 const apiClient = axios.create({
-  baseURL: `${API_BASE_URL}${API_PREFIX}`,
+  baseURL: '/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -71,32 +63,6 @@ const postWithRetry = async (url, body, retries = 1) => {
   }
 };
 
-const postToEndpointCandidates = async (paths, body) => {
-  let lastError = null;
-
-  for (const path of paths) {
-    try {
-      if (/^https?:\/\//i.test(path)) {
-        return await axios.post(path, body, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          timeout: API_TIMEOUT,
-        });
-      }
-
-      return await apiClient.post(path, body);
-    } catch (error) {
-      lastError = error;
-      if (error?.response?.status !== 404) {
-        throw error;
-      }
-    }
-  }
-
-  throw lastError;
-};
-
 const normalizeRegistrationPayload = (formData) => {
   const gender = GENDER_MAP[formData.gender] || formData.gender;
   if (!gender || !['Male', 'Female'].includes(gender)) {
@@ -122,7 +88,6 @@ class RealApiService {
       return errorResponse(error, 'Health check failed');
     }
   }
-
 
   async sendOTP(nameOrPayload, emailArg, studentNumberArg, captchaTokenArg) {
     try {
@@ -171,12 +136,7 @@ class RealApiService {
 
   async createOrder(payload = {}) {
     try {
-      const endpointCandidates = [
-        ORDER_ENDPOINT.startsWith('/') ? ORDER_ENDPOINT : `/${ORDER_ENDPOINT}`,
-        `${API_BASE_URL}/create-order`,
-      ];
-
-      const { data } = await postToEndpointCandidates(endpointCandidates, payload);
+      const { data } = await apiClient.post('/create-order', payload);
       return {
         success: true,
         message: data?.message || 'Order created',
@@ -187,7 +147,7 @@ class RealApiService {
       if (error?.response?.status === 404) {
         return {
           success: false,
-          message: `Payment order endpoint was not found on the deployed backend. Tried: ${ORDER_ENDPOINT} and /create-order`,
+          message: 'Payment order endpoint was not found on the deployed backend.',
           statusCode: 404,
           data: error?.response?.data,
         };
