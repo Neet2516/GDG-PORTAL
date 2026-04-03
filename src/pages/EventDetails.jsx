@@ -127,7 +127,7 @@ const rewardCardStyles = {
   },
 };
 
-const useScrollStop = (delay = 150) => {
+const useScrollStop = (delay = 40) => {
   const [isScrolling, setIsScrolling] = useState(false);
   const timeoutRef = useRef(null);
 
@@ -189,7 +189,7 @@ const RewardRevealCard = ({ reward, index, isScrolling }) => {
         }
         transition={{
           duration: prefersReducedMotion ? 0.15 : 0.65,
-          delay: index * 0.1,
+          delay: index * 0.01,
           ease: [0.22, 1, 0.36, 1],
         }}
         style={{

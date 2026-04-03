@@ -3,14 +3,14 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { FiCalendar, FiMapPin, FiShield, FiZap } from 'react-icons/fi';
-import { FaRocket } from "react-icons/fa";
+import { IoMdRocket } from "react-icons/io";
 import { Button } from '../components';
 import backgroundImage from '../assets/images/landingpage-background.jpg';
 import heroVideo from '../assets/Background.mp4';
 
-const buildTargetDate = (year) => new Date(`${year}-04-06T09:00:00+05:30`);
+const buildTargetDate = (year) => new Date(`${year}-04-08T09:00:00+05:30`);
 
 const getCountdownParts = () => {
   const now = new Date();
@@ -26,7 +26,7 @@ const getCountdownParts = () => {
 };
 
 const metaItems = [
-  { icon: FiCalendar, label: '6TH - 7TH APRIL' },
+  { icon: FiCalendar, label: '8TH - 9TH APRIL' },
   { icon: FiMapPin, label: 'AKGEC CAMPUS' },
   { icon: FiShield, label: 'SECURE BUILD ZONE' },
 ];
@@ -35,7 +35,10 @@ export const HeroSection = ({ onCtaClick, onScrollToNext, onVideoReady }) => {
   const [countdown, setCountdown] = useState(getCountdownParts);
   const [isLoading, setIsLoading] = useState(true);
   const [isVideoReady, setIsVideoReady] = useState(false);
+  const [isRocketLaunching, setIsRocketLaunching] = useState(false);
   const videoRef = useRef(null);
+  const launchTimeoutRef = useRef(null);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
@@ -87,6 +90,31 @@ export const HeroSection = ({ onCtaClick, onScrollToNext, onVideoReady }) => {
       videoEl.removeEventListener('error', handleError);
     };
   }, []);
+
+  useEffect(() => {
+    return () => {
+      if (launchTimeoutRef.current) {
+        window.clearTimeout(launchTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleRegisterLaunch = () => {
+    if (isRocketLaunching) {
+      return;
+    }
+
+    setIsRocketLaunching(true);
+
+    if (launchTimeoutRef.current) {
+      window.clearTimeout(launchTimeoutRef.current);
+    }
+
+    launchTimeoutRef.current = window.setTimeout(() => {
+      onCtaClick?.();
+      setIsRocketLaunching(false);
+    }, prefersReducedMotion ? 80 : 520);
+  };
 
   return (
     <section
@@ -154,19 +182,57 @@ export const HeroSection = ({ onCtaClick, onScrollToNext, onVideoReady }) => {
             <Button
               variant="neon"
               size="xl"
-              onClick={onCtaClick}
+              onClick={handleRegisterLaunch}
+              disabled={isRocketLaunching}
               className="min-w-[min(100%,18.5rem)] justify-center rounded-[1rem] border border-white/18 bg-[linear-gradient(180deg,rgba(25,33,97,0.98),rgba(18,25,86,0.98))] tracking-[0.08em]"
             >
-              <FaRocket size={18} />
+              <motion.span
+                className="relative inline-flex h-7 w-7 items-center justify-center"
+                animate={
+                  isRocketLaunching
+                    ? {
+                        y: [0, -8, -26, -40],
+                        x: [0, 2, 7, 12],
+                        rotate: [0, 12, 24, 36],
+                        scale: [1, 1.06, 1.12, 0.8],
+                        opacity: [1, 1, 0.95, 0],
+                      }
+                    : {
+                        y: 0,
+                        x: 0,
+                        rotate: 0,
+                        scale: 1,
+                        opacity: 1,
+                      }
+                }
+                transition={{
+                  duration: prefersReducedMotion ? 0.16 : 0.52,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                <motion.span
+                  aria-hidden="true"
+                  className="absolute left-1/2 top-1/2 h-6 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(120,235,255,0.85),rgba(120,235,255,0.2)_55%,transparent_72%)] blur-[1px]"
+                  animate={
+                    isRocketLaunching
+                      ? {
+                          y: [6, 14, 26, 38],
+                          opacity: [0, 1, 1, 0],
+                          scaleY: [0.5, 1.2, 1.8, 2.2],
+                        }
+                      : { opacity: 0, scaleY: 0.5, y: 6 }
+                  }
+                  transition={{
+                    duration: prefersReducedMotion ? 0.12 : 0.42,
+                    ease: 'easeOut',
+                  }}
+                />
+                <IoMdRocket size={26} />
+              </motion.span>
               <span>REGISTER NOW</span>
             </Button>
 
-            <div className="flex min-w-[min(100%,14rem)] flex-col justify-center gap-1 rounded-[1rem] border border-white/8 bg-white/8 px-5 py-4 text-left backdrop-blur-[14px]">
-              <span className="text-[0.7rem] uppercase tracking-[0.24em] text-white/58">EVENT DATES</span>
-              <strong className="text-[clamp(1.25rem,2vw,1.55rem)] font-semibold tracking-[0.03em] text-[#f8f8fb]">
-                6TH - 7TH APRIL
-              </strong>
-            </div>
+            
           </div>
 
           <div className="mt-5 flex flex-wrap justify-center gap-3">
@@ -182,7 +248,7 @@ export const HeroSection = ({ onCtaClick, onScrollToNext, onVideoReady }) => {
           </div>
 
           <div className="mt-12 rounded-[1rem] border border-white/8 bg-[rgba(6,6,12,0.9)] px-7 py-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_24px_80px_-48px_rgba(0,0,0,0.9)]">
-            <span className="block text-[0.78rem] font-bold uppercase tracking-[0.26em] text-[#1deeff]">
+            <span className="block text-[1.78rem] font-forresten font-bold uppercase tracking-[0.26em] text-[#1deeff]">
               COUNTDOWN
             </span>
             <div className="mt-3 flex justify-center gap-4">
