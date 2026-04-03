@@ -282,6 +282,7 @@ const sectionMotion = {
 export const EventDetails = () => {
   const [openFaq, setOpenFaq] = useState(0);
   const isScrolling = useScrollStop(150);
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <section className="relative bg-[#070814] px-4 py-20 text-white sm:px-6 lg:px-8">
@@ -290,7 +291,7 @@ export const EventDetails = () => {
           <div className="rounded-[1.6rem] border border-[#6b11ff]/60 bg-[linear-gradient(180deg,rgba(16,8,30,0.98),rgba(8,8,20,0.98))] p-6 shadow-[0_0_0_1px_rgba(123,33,255,0.16),0_0_48px_rgba(123,33,255,0.18)] sm:p-8">
             <div className="grid gap-8 lg:grid-cols-[1.25fr_0.72fr] lg:items-center">
               <div className="space-y-5">
-                <p className="font-mono text-[0.68rem] uppercase tracking-[0.34em] text-[#9f4dff]">
+                <p className="font-mono text-[0.68rem] uppercase tracking-[0.34em] text-[#9f4dff] hidden md:block">
                   &gt;&gt; decrypting file: lore.txt
                 </p>
 
@@ -303,7 +304,7 @@ export const EventDetails = () => {
                   </h2>
                 </div>
 
-                <p className="max-w-3xl text-[2.5rem] leading-7 text-white sm:text-base font-chalet">
+                <p className="max-w-3xl  text-md md:text-[1.5rem] leading-7 text-white sm:text-base font-chalet">
                   The city&apos;s central mainframe has been locked down by a rogue security AI. We need the sharpest coders,
                   hackers, and logicians to bypass the firewalls and penetrate the inner core. The tech heist of the decade is
                   about to begin. Assemble your crew, decrypt the algorithms, and secure the loot before the system inevitably
@@ -368,9 +369,9 @@ export const EventDetails = () => {
           </div>
         </motion.section>
 
-        <motion.section id="directory" className="mt-10 space-y-10" {...sectionMotion}>
+        <motion.section id="directory" className="mt-5 space-y-10" {...sectionMotion}>
           <div className="space-y-4 text-center flex flex-col items-center gap-2  ">
-            <h2 className="font-pricedown text-3xl text-white sm:text-8xl text-stroke-black-2">MISSION DIRECTORY</h2>
+            <h2 className="font-pricedown text-5xl text-white sm:text-8xl text-stroke-black-2">MISSION DIRECTORY</h2>
             <p className="mx-auto  max-w-2xl text-md leading-7 text-white/60 sm:text-red-500 font-forresten">
               Progress through the security mainframe. <br />One wrong move and you&rsquo;re locked out.
             </p>
@@ -513,33 +514,61 @@ export const EventDetails = () => {
           </div>
         </motion.section>
 
-        <motion.section id="queries" className="space-y-20" {...sectionMotion}>
+        <motion.section
+          id="queries"
+          className="space-y-20"
+        >
           <div className="space-y-4 text-center">
-            <h2 className="font-pricedown text-3xl text-white sm:text-8xl">INTEL &amp; QUERIES</h2>
+            <h2 className="font-pricedown text-5xl text-white sm:text-8xl">INTEL &amp; QUERIES</h2>
           </div>
 
-          <div className="mx-auto max-w-4xl space-y-4">
+          <motion.div
+            className="mx-auto max-w-4xl space-y-4"
+            initial={{ opacity: 0, y: 80 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+          >
             {faqItems.map((item, index) => {
               const isOpen = openFaq === index;
+              const slideFromLeft = index % 2 === 0;
 
               return (
-                <article
+                <motion.article
                   key={item.question}
+                  initial={
+                    prefersReducedMotion
+                      ? { opacity: 0 }
+                      : { opacity: 0, x: slideFromLeft ? -100 : 100, scale: 0.95 }
+                  }
+                  whileInView={
+                    prefersReducedMotion
+                      ? { opacity: 1 }
+                      : { opacity: 1, x: 0, scale: 1 }
+                  }
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{
+                    duration: prefersReducedMotion ? 0.18 : 0.6,
+                    delay: index * 0.08,
+                    ease: 'easeOut',
+                  }}
                   className={`overflow-hidden rounded-[1rem] border transition-all duration-300 ${isOpen
                     ? 'border-[#18e9ff]/45 bg-[rgba(8,12,26,0.95)] shadow-[0_0_0_1px_rgba(24,233,255,0.12),0_0_30px_rgba(24,233,255,0.08)]'
                     : 'border-white/5 bg-[rgba(10,11,20,0.8)]'
                     }`}
                 >
-                  <button
+                  <motion.button
                     type="button"
                     className="flex w-full items-center justify-between gap-4 px-5 py-5 text-left"
+                    animate={isOpen ? { x: 14 } : { x: 0 }}
+                    transition={{ duration: 0.28, ease: 'easeOut' }}
                     onClick={() => setOpenFaq((current) => (current === index ? -1 : index))}
                   >
                     <span className="text-sm font-semibold uppercase tracking-[0.14em] text-red-600 text-forresten sm:text-base">
                       {item.question}
                     </span>
                     {isOpen ? <FiMinus size={22} className="text-[#18e9ff]" /> : <FiPlus size={22} className="text-white/55" />}
-                  </button>
+                  </motion.button>
 
                   <AnimatePresence initial={false}>
                     {isOpen ? (
@@ -555,10 +584,10 @@ export const EventDetails = () => {
                       </motion.div>
                     ) : null}
                   </AnimatePresence>
-                </article>
+                </motion.article>
               );
             })}
-          </div>
+          </motion.div>
         </motion.section>
       </div>
     </section>

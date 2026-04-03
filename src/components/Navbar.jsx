@@ -58,12 +58,12 @@ export const Navbar = ({ onRegisterClick, onNavigateTo }) => {
           whileHover={{ x: 2 }}
           transition={{ duration: 0.2 }}
         >
-          <img className="h-9 w-9 flex-none object-contain" src={gdgLogo} alt="" aria-hidden="true" />
+          <img className="h-9 w-9  hidden  md:block  flex-none object-contain" src={gdgLogo} alt="" aria-hidden="true" />
           <span className="grid gap-0.5">
-            <span className="text-[0.82rem] font-extrabold uppercase tracking-[0.16em] text-white">
+            <span className="text-[0.82rem] font-extrabold uppercase tracking-[0.16em] text-white font-forresten">
               Google Developer Groups
             </span>
-            <span className="text-[0.7rem] uppercase tracking-[0.1em] text-white/60">
+            <span className="text-[0.7rem] hidden md:block uppercase tracking-[0.1em] text-white/60">
               on campus Ajay Kumar Garg Engineering College
             </span>
           </span>
