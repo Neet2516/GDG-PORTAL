@@ -5,7 +5,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiCalendar, FiMapPin, FiShield, FiZap } from 'react-icons/fi';
-
+import { FaRocket } from "react-icons/fa";
 import { Button } from '../components';
 import backgroundImage from '../assets/images/landingpage-background.jpg';
 import heroVideo from '../assets/Background.mp4';
@@ -62,7 +62,6 @@ export const HeroSection = ({ onCtaClick, onScrollToNext, onVideoReady }) => {
       try {
         await videoEl.play();
       } catch {
-        // Autoplay can still be blocked in some environments; the poster keeps the hero usable.
       } finally {
         setIsLoading(false);
       }
@@ -158,7 +157,7 @@ export const HeroSection = ({ onCtaClick, onScrollToNext, onVideoReady }) => {
               onClick={onCtaClick}
               className="min-w-[min(100%,18.5rem)] justify-center rounded-[1rem] border border-white/18 bg-[linear-gradient(180deg,rgba(25,33,97,0.98),rgba(18,25,86,0.98))] tracking-[0.08em]"
             >
-              <FiZap size={18} />
+              <FaRocket size={18} />
               <span>REGISTER NOW</span>
             </Button>
 
@@ -184,7 +183,7 @@ export const HeroSection = ({ onCtaClick, onScrollToNext, onVideoReady }) => {
 
           <div className="mt-12 rounded-[1rem] border border-white/8 bg-[rgba(6,6,12,0.9)] px-7 py-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_24px_80px_-48px_rgba(0,0,0,0.9)]">
             <span className="block text-[0.78rem] font-bold uppercase tracking-[0.26em] text-[#1deeff]">
-              SYSTEM UPTIME // COUNTDOWN
+              COUNTDOWN
             </span>
             <div className="mt-3 flex justify-center gap-4">
               <span className="text-[clamp(2rem,4vw,3rem)] font-medium tracking-[0.02em] text-white">
@@ -201,17 +200,6 @@ export const HeroSection = ({ onCtaClick, onScrollToNext, onVideoReady }) => {
               </span>
             </div>
           </div>
-
-          <button
-            type="button"
-            className="mt-8 inline-flex flex-col items-center gap-3 border-0 bg-transparent text-[0.7rem] uppercase tracking-[0.28em] text-white/60"
-            onClick={() => onScrollToNext?.()}
-          >
-            <span>SCROLL TO ACCESS</span>
-            <span className="inline-flex h-[2.65rem] w-[1.5rem] justify-center rounded-full border-2 border-white/72 pt-1.5">
-              <span className="h-[0.66rem] w-[0.34rem] animate-[landing-scroll_1.6s_infinite] rounded-full bg-white" />
-            </span>
-          </button>
         </motion.div>
       </div>
     </section>

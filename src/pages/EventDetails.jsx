@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import {
   FiAward,
   FiBookOpen,
@@ -82,7 +82,7 @@ const rewards = [
     title: 'TOP 3 WINNERS',
     description: 'Goodies',
     detail: 'Direct PI Entry',
-    icon: FaTrophy ,
+    icon: FaTrophy,
     accent: 'gold',
     featured: true,
   },
@@ -125,6 +125,107 @@ const rewardCardStyles = {
     body: 'text-white/74',
     detail: 'text-white/55',
   },
+};
+
+const useScrollStop = (delay = 150) => {
+  const [isScrolling, setIsScrolling] = useState(false);
+  const timeoutRef = useRef(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolling(true);
+
+      if (timeoutRef.current) {
+        window.clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = window.setTimeout(() => {
+        setIsScrolling(false);
+      }, delay);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('wheel', handleScroll, { passive: true });
+    window.addEventListener('touchmove', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('wheel', handleScroll);
+      window.removeEventListener('touchmove', handleScroll);
+
+      if (timeoutRef.current) {
+        window.clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [delay]);
+
+  return isScrolling;
+};
+
+const RewardRevealCard = ({ reward, index, isScrolling }) => {
+  const prefersReducedMotion = useReducedMotion();
+  const rewardStyle = rewardCardStyles[reward.accent];
+  const showContent = !isScrolling || prefersReducedMotion;
+
+  return (
+    <article
+      key={reward.title}
+      className={`group relative w-full overflow-hidden rounded-[1.65rem] border p-6 text-center ${rewardStyle.border} ${rewardStyle.panel} ${rewardStyle.glow} ${reward.featured
+        ? 'max-w-[30rem] min-h-[28rem] lg:w-[34%] lg:max-w-none lg:min-h-[31rem]'
+        : 'max-w-[27rem] min-h-[22rem] lg:w-[28%] lg:max-w-none lg:min-h-[25rem]'
+        } transition-transform duration-300 hover:-translate-y-1`}
+      style={{ perspective: '1200px' }}
+    >
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_42%)] opacity-80" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent)]" />
+
+      <motion.div
+        className="relative flex h-full flex-col items-center justify-center gap-5 px-3 py-4 sm:px-4 sm:py-6"
+        initial={false}
+        animate={
+          showContent
+            ? { rotateY: 0, opacity: 1, scale: 1, y: 0 }
+            : { rotateY: 90, opacity: 0.15, scale: 0.96, y: 4 }
+        }
+        transition={{
+          duration: prefersReducedMotion ? 0.15 : 0.65,
+          delay: index * 0.1,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+        style={{
+          transformStyle: 'preserve-3d',
+          willChange: 'transform, opacity',
+        }}
+      >
+        <div
+          className={`flex h-20 w-20 items-center justify-center rounded-full border text-[2rem] sm:h-24 sm:w-24 sm:text-[2.25rem] ${reward.featured ? 'scale-110 sm:scale-125' : ''
+            } ${rewardStyle.icon}`}
+        >
+          <reward.icon />
+        </div>
+
+        <h3
+          className={`mt-7 font-pricedown text-[1.95rem] uppercase leading-none sm:text-[2.25rem] !tracking-wider ${reward.featured ? 'sm:text-[2.45rem]' : ''
+            } ${rewardStyle.title} ${rewardStyle.titleGlow}`}
+        >
+          {reward.title}
+        </h3>
+        {reward.detail ? (
+          <div
+            className={`mt-5 inline-flex items-center rounded-full border border-[#ffcc4d]/35 bg-[rgba(255,191,29,0.08)] px-4 py-2 font-forresten text-2xl font-semibold !tracking-wider ${rewardStyle.detail} text-white`}
+          >
+            {reward.detail}
+          </div>
+        ) : null}
+
+        <p
+          className={`mt-4 font-forresten text-base font-medium sm:text-lg ${reward.featured ? 'sm:text-xl' : ''} ${rewardStyle.body} !text-green-500`}
+        >
+          {reward.description}
+        </p>
+      </motion.div>
+    </article>
+  );
 };
 
 const faqItems = [
@@ -180,6 +281,7 @@ const sectionMotion = {
 
 export const EventDetails = () => {
   const [openFaq, setOpenFaq] = useState(0);
+  const isScrolling = useScrollStop(150);
 
   return (
     <section className="relative bg-[#070814] px-4 py-20 text-white sm:px-6 lg:px-8">
@@ -201,7 +303,7 @@ export const EventDetails = () => {
                   </h2>
                 </div>
 
-                <p className="max-w-3xl text-sm leading-7 text-white sm:text-base text-stroke-black">
+                <p className="max-w-3xl text-[2.5rem] leading-7 text-white sm:text-base font-chalet">
                   The city&apos;s central mainframe has been locked down by a rogue security AI. We need the sharpest coders,
                   hackers, and logicians to bypass the firewalls and penetrate the inner core. The tech heist of the decade is
                   about to begin. Assemble your crew, decrypt the algorithms, and secure the loot before the system inevitably
@@ -269,7 +371,7 @@ export const EventDetails = () => {
         <motion.section id="directory" className="mt-10 space-y-10" {...sectionMotion}>
           <div className="space-y-4 text-center flex flex-col items-center gap-2  ">
             <h2 className="font-pricedown text-3xl text-white sm:text-8xl text-stroke-black-2">MISSION DIRECTORY</h2>
-            <p className="mx-auto  max-w-2xl text-md leading-7 text-white/60 sm:text-red-500 font-chalet">
+            <p className="mx-auto  max-w-2xl text-md leading-7 text-white/60 sm:text-red-500 font-forresten">
               Progress through the security mainframe. <br />One wrong move and you&rsquo;re locked out.
             </p>
           </div>
@@ -313,8 +415,8 @@ export const EventDetails = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <h3 className="font-pricedown text-xl text-white sm:text-2xl">{step.title}</h3>
-                      <p className="text-sm text-white/55 sm:text-base">{step.subtitle}</p>
+                      <h3 className="font-pricedown leading-[1.1em] text-xl text-white sm:text-2xl !tracking-[0.1em]">{step.title}</h3>
+                      <p className="text-sm font-forresten text-white/55 sm:text-base">{step.subtitle}</p>
                     </div>
 
                     <div className="flex flex-wrap items-center justify-between gap-4 md:justify-end">
@@ -336,7 +438,7 @@ export const EventDetails = () => {
                               key={`${step.number}-star-${index}`}
                               size={18}
                               className={`sm:h-5 sm:w-5 ${isActive
-                                ? 'text-white/90 drop-shadow-[0_0_10px_rgba(255,255,255,0.18)]'
+                                ? 'text-white/90 fill-yellow-600 drop-shadow-[0_0_10px_rgba(255,255,255,0.18)]'
                                 : 'text-white/20'
                                 }`}
                               aria-hidden="true"
@@ -368,14 +470,14 @@ export const EventDetails = () => {
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <div className="rounded-[1rem] border border-white/10 bg-[rgba(255,81,140,0.2)] p-6 text-center">
                   <strong className="block font-pricedown text-4xl text-[#ff8ab5] text-stroke-black-2">TOP 3</strong>
-                  <span className="mt-2 block text-sm font-semibold uppercase tracking-[0.2em] text-white/85">
+                  <span className="mt-2 block text-md font-semibold uppercase tracking-[0.2em] font-forresten text-white/85">
                     Teams advance
                   </span>
                 </div>
 
                 <div className="rounded-[1rem] border border-white/8 bg-[rgba(14,10,25,0.8)] p-6 text-center">
                   <span className="block font-chalet text-[24px] leading-[25.6px] text-center text-white/80 text-stroke-black">
-                    18 Participants
+                    18 <span className="font-forresten text-stroke-black-2">Participants</span>
                   </span>
                   <span className="mt-4 inline-flex flex-col w-full rounded-md border border-[#18e9ff]/35 bg-[rgba(10,34,40,0.88)] px-4 py-2 font-semibold  text-[#18e9ff]">
                     <div className="font-pricedown text-stroke-black-2 text-[24px] leading-[25.6px]">Live Leaderboard</div>
@@ -399,44 +501,13 @@ export const EventDetails = () => {
             <div className="pointer-events-none absolute inset-x-0 top-10 -z-10 mx-auto h-[26rem] max-w-5xl rounded-full bg-[radial-gradient(circle_at_center,rgba(255,191,29,0.18),rgba(255,191,29,0.06)_35%,transparent_72%)] blur-3xl" />
 
             <div className="flex flex-col items-center gap-6 lg:flex-row lg:items-end lg:justify-center">
-              {rewards.map((reward) => (
-                <article
+              {rewards.map((reward, index) => (
+                <RewardRevealCard
                   key={reward.title}
-                  className={`group relative w-full overflow-hidden rounded-[1.65rem] border p-6 text-center ${rewardCardStyles[reward.accent].border} ${rewardCardStyles[reward.accent].panel} ${rewardCardStyles[reward.accent].glow} ${reward.featured
-                    ? 'max-w-[30rem] min-h-[28rem] lg:w-[34%] lg:max-w-none lg:min-h-[31rem]'
-                    : 'max-w-[27rem] min-h-[22rem] lg:w-[28%] lg:max-w-none lg:min-h-[25rem]'
-                    } transition-transform duration-300 hover:-translate-y-1`}
-                >
-                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_42%)] opacity-80" />
-                  <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent)]" />
-
-                  <div className="relative flex h-full flex-col items-center justify-center gap-5  px-3 py-4 sm:px-4 sm:py-6">
-                    <div
-                      className={`flex h-20 w-20 items-center justify-center rounded-full border text-[2rem] sm:h-24 sm:w-24 sm:text-[2.25rem] ${reward.featured ? 'scale-110 sm:scale-125' : ''
-                        } ${rewardCardStyles[reward.accent].icon}`}
-                    >
-                      <reward.icon />
-                    </div>
-
-                    <h3
-                      className={`mt-7 font-pricedown text-[1.95rem] uppercase leading-none sm:text-[2.25rem] ${reward.featured ? 'sm:text-[2.45rem]' : ''
-                        } ${rewardCardStyles[reward.accent].title} ${rewardCardStyles[reward.accent].titleGlow}`}
-                    >
-                      {reward.title}
-                    </h3>
-                    {reward.detail ? (
-                      <div
-                        className={`mt-5 inline-flex items-center rounded-full border border-[#ffcc4d]/35 bg-[rgba(255,191,29,0.08)] px-4 py-2 text-2xl font-semibold ${rewardCardStyles[reward.accent].detail} text-white`}
-                      >
-                        {reward.detail}
-                      </div>
-                    ) : null}
-
-                    <p className={`mt-4 text-base font-medium sm:text-lg  ${reward.featured ? 'sm:text-xl' : ''} ${rewardCardStyles[reward.accent].body}    !text-green-500`}>{reward.description}</p>
-
-
-                  </div>
-                </article>
+                  reward={reward}
+                  index={index}
+                  isScrolling={isScrolling}
+                />
               ))}
             </div>
           </div>
@@ -464,7 +535,7 @@ export const EventDetails = () => {
                     className="flex w-full items-center justify-between gap-4 px-5 py-5 text-left"
                     onClick={() => setOpenFaq((current) => (current === index ? -1 : index))}
                   >
-                    <span className="text-sm font-semibold uppercase tracking-[0.14em] text-red-600 sm:text-base">
+                    <span className="text-sm font-semibold uppercase tracking-[0.14em] text-red-600 text-forresten sm:text-base">
                       {item.question}
                     </span>
                     {isOpen ? <FiMinus size={22} className="text-[#18e9ff]" /> : <FiPlus size={22} className="text-white/55" />}

@@ -3,13 +3,13 @@
  */
 
 import { motion } from 'framer-motion';
-import { FaGithub, FaInstagram, FaTwitter } from 'react-icons/fa';
+import { FaGithub, FaInstagram, FaFirefoxBrowser  } from 'react-icons/fa';
 import gdgLogo from '../assets/images/gdg-logo.png';
 
 const socialLinks = [
-  { icon: FaInstagram, href: '#', label: 'Instagram' },
-  { icon: FaTwitter, href: '#', label: 'Twitter' },
-  { icon: FaGithub, href: '#', label: 'GitHub' },
+  { icon: FaInstagram, href: 'https://www.instagram.com/gdg_akgec/', label: 'Instagram' },
+  { icon: FaFirefoxBrowser , href: 'https://gdgakgec.org/', label: 'Twitter' },
+  { icon: FaGithub, href: 'https://github.com/dsc-akgec/', label: 'GitHub' },
 ];
 
 export const Footer = () => {
@@ -21,7 +21,7 @@ export const Footer = () => {
           <h2 className="text-[clamp(1.45rem,2.2vw,2.05rem)] font-manrope font-bold tracking-[-0.04em]">
             Google Developer Groups
           </h2>
-          <p className="text-[clamp(0.95rem,1.5vw,1.1rem)] leading-[1.6] text-white/80">
+          <p className="text-[clamp(0.95rem,1.5vw,1.1rem)] leading-[1.6] text-white/80 font-forresten">
             on campus Ajay Kumar Garg Engineering College
           </p>
 
