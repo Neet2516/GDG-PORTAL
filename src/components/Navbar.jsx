@@ -9,10 +9,10 @@ import { FiMenu, FiX } from 'react-icons/fi';
 import gdgLogo from '../assets/images/gdg-logo.png';
 
 const navItems = [
-  { label: 'Lore', href: '#lore' },
-  { label: 'Missions', href: '#missions' },
-  { label: 'Briefing', href: '#scoring' },
-  { label: 'Loot', href: '#loot' },
+  { label: 'About', href: '#about' },
+  { label: 'Program', href: '#program' },
+  { label: 'Details', href: '#details' },
+  { label: 'Benefits', href: '#benefits' },
   { label: 'Register', href: '/register', accent: true },
 ];
 
@@ -36,7 +36,7 @@ export const Navbar = ({ onRegisterClick, onNavigateTo }) => {
 
   const handleBrandClick = () => {
     if (location.pathname === '/') {
-      onNavigateTo?.('#lore');
+      onNavigateTo?.('#about');
       return;
     }
 
@@ -152,7 +152,7 @@ export const Navbar = ({ onRegisterClick, onNavigateTo }) => {
               onRegisterClick();
             }}
           >
-            Open Registration
+            Register Now
           </button>
         </motion.div>
       )}

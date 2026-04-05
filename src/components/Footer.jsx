@@ -8,7 +8,7 @@ import gdgLogo from '../assets/images/gdg-logo.png';
 
 const socialLinks = [
   { icon: FaInstagram, href: 'https://www.instagram.com/gdg_akgec/', label: 'Instagram' },
-  { icon: FaFirefoxBrowser , href: 'https://gdgakgec.org/', label: 'Twitter' },
+  { icon: FaFirefoxBrowser , href: 'https://gdgakgec.org/', label: 'Website' },
   { icon: FaGithub, href: 'https://github.com/dsc-akgec/', label: 'GitHub' },
 ];
 
@@ -42,26 +42,40 @@ export const Footer = () => {
         </div>
 
         <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 pt-4">
-          <a href="/#lore" className="text-[0.82rem] font-medium uppercase tracking-[0.2em] text-white/50">
-            Lore
+          <a href="/#about" className="text-[0.82rem] font-medium uppercase tracking-[0.2em] text-white/50 transition hover:text-white">
+            About
           </a>
-          <a href="/#missions" className="text-[0.82rem] font-medium uppercase tracking-[0.2em] text-white/50">
-            Missions
+          <a href="/#program" className="text-[0.82rem] font-medium uppercase tracking-[0.2em] text-white/50 transition hover:text-white">
+            Program
           </a>
-          <a href="/#scoring" className="text-[0.82rem] font-medium uppercase tracking-[0.2em] text-white/50">
-            Briefing
+          <a href="/#details" className="text-[0.82rem] font-medium uppercase tracking-[0.2em] text-white/50 transition hover:text-white">
+            Details
           </a>
-          <a href="/#loot" className="text-[0.82rem] font-medium uppercase tracking-[0.2em] text-white/50">
-            Loot
+          <a href="/#benefits" className="text-[0.82rem] font-medium uppercase tracking-[0.2em] text-white/50 transition hover:text-white">
+            Benefits
           </a>
-          <a href="/#queries" className="text-[0.82rem] font-medium uppercase tracking-[0.2em] text-white/50">
+          <a href="/#queries" className="text-[0.82rem] font-medium uppercase tracking-[0.2em] text-white/50 transition hover:text-white">
             Queries
+          </a>
+        </div>
+
+        <div className="flex flex-wrap justify-center gap-x-6 gap-y-3 border-t border-white/10 pt-6">
+          <a href="/#privacy" className="text-[0.75rem] uppercase tracking-[0.18em] text-white/35 transition hover:text-white/70">
+            Privacy Policy
+          </a>
+          <span className="text-white/15">|</span>
+          <a href="/#terms" className="text-[0.75rem] uppercase tracking-[0.18em] text-white/35 transition hover:text-white/70">
+            Terms &amp; Conditions
+          </a>
+          <span className="text-white/15">|</span>
+          <a href="/#refund" className="text-[0.75rem] uppercase tracking-[0.18em] text-white/35 transition hover:text-white/70">
+            Refund Policy
           </a>
         </div>
       </div>
 
       <div className="mx-auto mt-8 flex w-full max-w-[1200px] flex-wrap justify-center gap-x-8 gap-y-3 border-t border-white/10 pt-6 text-center text-[0.78rem] uppercase tracking-[0.12em] text-white/28 sm:justify-between">
-        <span>© 2026 TECH HEIST PROTOCOL. ALL RIGHTS RESERVED.</span>
+        <span>© 2026 STUDENT PROGRAM PORTAL. ALL RIGHTS RESERVED.</span>
         <span>GOOGLE DEVELOPER GROUPS ON CAMPUS AKGEC</span>
       </div>
     </footer>

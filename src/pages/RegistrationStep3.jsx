@@ -90,7 +90,7 @@ export const RegistrationStep3 = () => {
     try {
       const scriptLoaded = await loadRazorpayScript();
       if (!scriptLoaded) {
-        throw new Error('Unable to load Razorpay checkout');
+        throw new Error('Unable to load payment checkout');
       }
 
       const orderResult = await apiService.createOrder({
@@ -108,7 +108,7 @@ export const RegistrationStep3 = () => {
 
       const razorpayKey = RAZORPAY_CONFIG.KEY_ID;
       if (!razorpayKey) {
-        throw new Error('Razorpay key is missing in environment');
+        throw new Error('Payment key is missing in environment');
       }
 
       const paymentResponse = await openRazorpayCheckout({
@@ -116,8 +116,8 @@ export const RegistrationStep3 = () => {
         order_id: order.id,
         amount: order.amount,
         currency: order.currency || 'INR',
-        name: 'GDG Registration',
-        description: 'Event registration payment',
+        name: 'GDG Program Registration',
+        description: 'Program registration fee',
         prefill: {
           name: sessionData.name || '',
           email: sessionData.email || '',
@@ -186,9 +186,9 @@ export const RegistrationStep3 = () => {
     <div className="mx-auto max-w-2xl space-y-8">
       <div className="rounded-[1.5rem] border border-[#18e9ff]/20 bg-[rgba(5,16,18,0.96)] p-6 shadow-[0_24px_70px_-42px_rgba(0,0,0,0.9)] sm:p-8">
         <div className="space-y-3">
-          <p className="font-manrope text-[0.72rem] font-bold uppercase tracking-[0.3em] text-[#18e9ff]">Registration</p>
+          <p className="font-manrope text-[0.72rem] font-bold uppercase tracking-[0.3em] text-[#18e9ff]">Student Program Registration</p>
           <h1 className="font-pricedown text-3xl text-white sm:text-4xl">COMPLETE REGISTRATION</h1>
-          <p className="max-w-2xl text-sm leading-7 text-white/60">Add your final details and finish the secure payment checkout.</p>
+          <p className="max-w-2xl text-sm leading-7 text-white/60">Provide your details and pay the program registration fee to confirm your participation.</p>
         </div>
 
         <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
@@ -202,6 +202,43 @@ export const RegistrationStep3 = () => {
         </div>
       </div>
 
+      {/* ── Program Registration Fee Card ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
+        className="rounded-[1.5rem] border border-[#ff3f86]/30 bg-[linear-gradient(135deg,rgba(20,6,14,0.97),rgba(8,10,22,0.98))] p-6 shadow-[0_0_0_1px_rgba(255,63,134,0.1),0_24px_60px_-36px_rgba(255,63,134,0.2)] sm:p-8"
+      >
+        <div className="flex flex-col gap-5">
+          <div>
+            <p className="font-manrope text-[0.68rem] font-bold uppercase tracking-[0.36em] text-[#ff3f86]">Payment Summary</p>
+            <h2 className="mt-1 font-pricedown text-2xl text-white sm:text-3xl">Program Registration Fee</h2>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-white/55">
+              This fee is collected for participation in a structured student program conducted within an institutional setting at Ajay Kumar Garg Engineering College.
+              Payments are managed securely and used solely to cover program logistics and participation costs.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-[1rem] border border-white/10 bg-[rgba(255,255,255,0.03)] px-5 py-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/45">Total Registration Fee</p>
+              <p className="mt-1 font-pricedown text-3xl text-white">₹ <span className="text-[#18e9ff]">As applicable</span></p>
+            </div>
+            <div className="rounded-[0.75rem] border border-[#18e9ff]/25 bg-[rgba(24,233,255,0.05)] px-4 py-2 text-center">
+              <p className="text-[0.68rem] font-bold uppercase tracking-[0.24em] text-[#18e9ff]/70">Non-Refundable</p>
+              <p className="text-[0.68rem] text-white/40">Once registration is confirmed</p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-3 text-[0.7rem] text-white/35 font-forresten">
+            <span className="flex items-center gap-1.5"><span className="text-green-400">✓</span> Secured via Razorpay</span>
+            <span className="flex items-center gap-1.5"><span className="text-green-400">✓</span> Internal institutional program</span>
+            <span className="flex items-center gap-1.5"><span className="text-green-400">✓</span> Google Developer Groups on Campus AKGEC</span>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ── Details Form ── */}
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
@@ -209,7 +246,7 @@ export const RegistrationStep3 = () => {
         className="rounded-[1.5rem] border border-[#18e9ff]/18 bg-[linear-gradient(180deg,rgba(6,22,24,0.96),rgba(5,13,16,0.98))] p-6 shadow-[0_24px_70px_-42px_rgba(0,0,0,0.9)] sm:p-8"
       >
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="flex flex-col justify-center items-center ">
+          <div className="flex flex-col justify-center items-center">
             <Input
               label="Phone Number"
               name="phone"
@@ -265,7 +302,7 @@ export const RegistrationStep3 = () => {
               Back
             </Button>
             <Button type="submit" disabled={!isStepValid || isSubmitting} isLoading={isSubmitting} className="w-full flex-1 rounded-xl text-base">
-              Pay &amp; Register
+              Pay Registration Fee
             </Button>
           </div>
         </form>

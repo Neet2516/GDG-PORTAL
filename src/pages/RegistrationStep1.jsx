@@ -98,7 +98,7 @@ export const RegistrationStep1 = () => {
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="font-manrope text-[0.72rem] font-bold uppercase tracking-[0.3em] text-[#18e9ff]">Registration</p>
-            <h1 className="mt-2 font-pricedown text-3xl text-white sm:text-4xl">ACCESS TERMINAL</h1>
+            <h1 className="mt-2 font-pricedown text-3xl text-white sm:text-4xl">PARTICIPANT DETAILS</h1>
           </div>
 
           <div className="space-y-2 sm:text-right">

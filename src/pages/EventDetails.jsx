@@ -4,7 +4,6 @@ import {
   FiAward,
   FiBookOpen,
   FiGift,
-  FiLock,
   FiMinus,
   FiPlus,
   FiRadio,
@@ -12,18 +11,20 @@ import {
   FiTarget,
   FiUnlock,
   FiStar,
+  FiCheckCircle,
+  FiUsers,
+  FiClock,
 } from 'react-icons/fi';
 import { TfiGame } from "react-icons/tfi";
-import { GiCrossMark } from "react-icons/gi";
 import { FaTrophy } from "react-icons/fa";
 import backgroundImage from '../assets/images/landingpage-background.jpg';
 
-const missionSteps = [
+const programModules = [
   {
     number: '01',
-    title: 'ACCESS CODE BREAK',
-    subtitle: 'Aptitude & Pattern Puzzle',
-    tag: 'UNLOCKED',
+    title: 'ORIENTATION & SETUP',
+    subtitle: 'Introduction & Environment Setup',
+    tag: 'OPEN',
     icon: FiUnlock,
     accent: 'cyan',
     muted: false,
@@ -31,39 +32,39 @@ const missionSteps = [
   },
   {
     number: '02',
-    title: 'LOGIC FIREWALL',
-    subtitle: 'Code Output & Logic Analysis',
-    tag: 'LOCKED',
-    icon: FiLock,
+    title: 'TECHNICAL SESSION',
+    subtitle: 'Core Concepts & Hands-on Learning',
+    tag: 'SCHEDULED',
+    icon: FiBookOpen,
     accent: 'pink',
     muted: true,
     stars: 2,
   },
   {
     number: '03',
-    title: 'CODE DECRYPTION',
-    subtitle: 'Debugging Challenge',
-    tag: 'LOCKED',
-    icon: FiLock,
+    title: 'PRACTICAL WORKSHOP',
+    subtitle: 'Guided Implementation Activity',
+    tag: 'SCHEDULED',
+    icon: FiTarget,
     accent: 'pink',
     muted: true,
     stars: 3,
   },
   {
     number: '04',
-    title: 'SYSTEM PATCH',
-    subtitle: 'Binary + Encryption + Programming',
-    tag: 'LOCKED',
-    icon: FiLock,
+    title: 'COLLABORATIVE BUILD',
+    subtitle: 'Group Problem Solving & Collaboration',
+    tag: 'SCHEDULED',
+    icon: FiUsers,
     accent: 'pink',
     muted: true,
     stars: 4,
   },
   {
     number: '05',
-    title: 'FINAL SECURITY TEST',
-    subtitle: 'Multiple Choice Questions',
-    tag: 'TOP 3 TEAMS ONLY',
+    title: 'FINAL ASSESSMENT',
+    subtitle: 'Program Completion & Recognition',
+    tag: 'TOP PARTICIPANTS',
     icon: FiShield,
     accent: 'violet',
     muted: false,
@@ -71,30 +72,30 @@ const missionSteps = [
   },
 ];
 
-const rewards = [
+const benefits = [
   {
-    title: 'RUNNER UPS',
-    description: 'Keychains+Exclusive Stickers',
-    icon: FiAward,
-    accent: 'silver',
+    title: 'ALL PARTICIPANTS',
+    description: 'Keychains + Exclusive Stickers',
+    icon: FiGift,
+    accent: 'amber',
   },
   {
-    title: 'TOP 3 WINNERS',
-    description: 'Goodies',
-    detail: 'Direct PI Entry',
+    title: 'TOP PERFORMERS',
+    description: 'Goodies + Recognition',
+    detail: 'Priority Access',
     icon: FaTrophy,
     accent: 'gold',
     featured: true,
   },
   {
-    title: 'PARTICIPANTS',
-    description: 'Key Chains',
-    icon: FiGift,
-    accent: 'amber',
+    title: 'CERTIFICATE',
+    description: 'Participation Certificate',
+    icon: FiAward,
+    accent: 'silver',
   },
 ];
 
-const rewardCardStyles = {
+const benefitCardStyles = {
   silver: {
     border: 'border-white/45',
     glow: 'shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_18px_50px_-28px_rgba(255,255,255,0.35)]',
@@ -162,15 +163,15 @@ const useScrollStop = (delay = 40) => {
   return isScrolling;
 };
 
-const RewardRevealCard = ({ reward, index, isScrolling }) => {
+const BenefitRevealCard = ({ benefit, index, isScrolling }) => {
   const prefersReducedMotion = useReducedMotion();
-  const rewardStyle = rewardCardStyles[reward.accent];
+  const benefitStyle = benefitCardStyles[benefit.accent];
   const showContent = !isScrolling || prefersReducedMotion;
 
   return (
     <article
-      key={reward.title}
-      className={`group relative w-full overflow-hidden rounded-[1.65rem] border p-6 text-center ${rewardStyle.border} ${rewardStyle.panel} ${rewardStyle.glow} ${reward.featured
+      key={benefit.title}
+      className={`group relative w-full overflow-hidden rounded-[1.65rem] border p-6 text-center ${benefitStyle.border} ${benefitStyle.panel} ${benefitStyle.glow} ${benefit.featured
         ? 'max-w-[30rem] min-h-[28rem] lg:w-[34%] lg:max-w-none lg:min-h-[31rem]'
         : 'max-w-[27rem] min-h-[22rem] lg:w-[28%] lg:max-w-none lg:min-h-[25rem]'
         } transition-transform duration-300 hover:-translate-y-1`}
@@ -198,30 +199,30 @@ const RewardRevealCard = ({ reward, index, isScrolling }) => {
         }}
       >
         <div
-          className={`flex h-20 w-20 items-center justify-center rounded-full border text-[2rem] sm:h-24 sm:w-24 sm:text-[2.25rem] ${reward.featured ? 'scale-110 sm:scale-125' : ''
-            } ${rewardStyle.icon}`}
+          className={`flex h-20 w-20 items-center justify-center rounded-full border text-[2rem] sm:h-24 sm:w-24 sm:text-[2.25rem] ${benefit.featured ? 'scale-110 sm:scale-125' : ''
+            } ${benefitStyle.icon}`}
         >
-          <reward.icon />
+          <benefit.icon />
         </div>
 
         <h3
-          className={`mt-7 font-pricedown text-[1.95rem] uppercase leading-none sm:text-[2.25rem] !tracking-wider ${reward.featured ? 'sm:text-[2.45rem]' : ''
-            } ${rewardStyle.title} ${rewardStyle.titleGlow}`}
+          className={`mt-7 font-pricedown text-[1.95rem] uppercase leading-none sm:text-[2.25rem] !tracking-wider ${benefit.featured ? 'sm:text-[2.45rem]' : ''
+            } ${benefitStyle.title} ${benefitStyle.titleGlow}`}
         >
-          {reward.title}
+          {benefit.title}
         </h3>
-        {reward.detail ? (
+        {benefit.detail ? (
           <div
-            className={`mt-5 inline-flex items-center rounded-full border border-[#ffcc4d]/35 bg-[rgba(255,191,29,0.08)] px-4 py-2 font-forresten text-2xl font-semibold !tracking-wider ${rewardStyle.detail} text-white`}
+            className={`mt-5 inline-flex items-center rounded-full border border-[#ffcc4d]/35 bg-[rgba(255,191,29,0.08)] px-4 py-2 font-forresten text-2xl font-semibold !tracking-wider ${benefitStyle.detail} text-white`}
           >
-            {reward.detail}
+            {benefit.detail}
           </div>
         ) : null}
 
         <p
-          className={`mt-4 font-forresten text-base font-medium sm:text-lg ${reward.featured ? 'sm:text-xl' : ''} ${rewardStyle.body} !text-green-500`}
+          className={`mt-4 font-forresten text-base font-medium sm:text-lg ${benefit.featured ? 'sm:text-xl' : ''} ${benefitStyle.body} !text-green-500`}
         >
-          {reward.description}
+          {benefit.description}
         </p>
       </motion.div>
     </article>
@@ -230,24 +231,24 @@ const RewardRevealCard = ({ reward, index, isScrolling }) => {
 
 const faqItems = [
   {
-    question: 'DO I NEED ADVANCED HACKING SKILLS?',
+    question: 'WHO IS ELIGIBLE TO PARTICIPATE?',
     answer:
-      'Basic to intermediate coding logic is enough. The event focuses on problem-solving, aptitude, and clean technical thinking rather than raw security hacking.',
+      'This program is open exclusively to registered students of Ajay Kumar Garg Engineering College. Participation is limited to enrolled students and subject to eligibility criteria defined by the organizers.',
   },
   {
-    question: 'CAN I FORM MY OWN 6-MEMBER TEAM?',
+    question: 'IS THE REGISTRATION FEE REFUNDABLE?',
     answer:
-      'Yes. Teams can be self-formed as long as they respect the participation rules and registration requirements shared by the organizers.',
+      'All payments made are final and non-refundable. Refunds will only be issued if the program is cancelled by the organizers. Please ensure your participation before completing payment.',
   },
   {
-    question: 'WHAT HAPPENS IF WE FAIL TO DECRYPT A LEVEL?',
+    question: 'WHAT INFORMATION IS COLLECTED DURING REGISTRATION?',
     answer:
-      'You can still progress with partial scoring on some rounds. The scoring matrix rewards attempts, clue usage, and time management.',
+      'We collect basic information such as your name, student number, email address, and contact details solely for the purpose of program registration and communication. This data is not shared with any third parties.',
   },
   {
-    question: 'ARE THE FINAL SECURITY TEST QUESTIONS THEORETICAL?',
+    question: 'HOW WILL I RECEIVE PROGRAM UPDATES?',
     answer:
-      'The final round mixes concept checks, pattern recognition, and practical reasoning. The intent is to test team coordination under pressure.',
+      'All confirmations and updates will be sent to your registered college email address. Please keep a record of your payment confirmation for reference during the program.',
   },
 ];
 
@@ -255,7 +256,7 @@ const dayCards = [
   {
     day: 'DAY 01',
     date: '6TH APRIL',
-    title: 'technical learning session',
+    title: 'Technical Learning Session',
     time: '2:00 PM - 5:00 PM',
     icon: FiBookOpen,
     tone: 'cyan',
@@ -264,7 +265,7 @@ const dayCards = [
   {
     day: 'DAY 02',
     date: '7TH APRIL',
-    title: 'gamified tech challenge',
+    title: 'Hands-On Activity',
     time: '2:00 PM ONWARDS',
     icon: TfiGame,
     tone: 'pink',
@@ -287,12 +288,42 @@ export const EventDetails = () => {
   return (
     <section className="relative bg-[#070814] px-4 py-20 text-white sm:px-6 lg:px-8">
       <div className="mx-auto flex w-full max-w-[1180px] flex-col gap-20">
-        <motion.section id="missions" className="space-y-8" {...sectionMotion}>
+        {/* ── INSTITUTIONAL TRUST SIGNAL ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="rounded-[1.4rem] border border-[#18e9ff]/20 bg-[linear-gradient(135deg,rgba(4,14,22,0.98),rgba(6,10,20,0.98))] p-6 sm:p-8"
+        >
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
+            <div className="flex-1 space-y-2">
+              <p className="font-mono text-[0.65rem] uppercase tracking-[0.36em] text-[#18e9ff]/60">Institutional Notice</p>
+              <p className="text-[0.97rem] leading-[1.75] text-white/72 font-chalet">
+                This platform is operated to facilitate student registrations for academic and co-curricular programs
+                conducted within an institutional environment at{' '}
+                <span className="font-semibold text-white/90">Ajay Kumar Garg Engineering College</span>.
+                It is a non-commercial, student-led initiative managed by{' '}
+                <span className="font-semibold text-[#18e9ff]">Google Developer Groups on Campus AKGEC</span>.
+              </p>
+            </div>
+            <div className="flex flex-col items-start gap-2 sm:items-end shrink-0">
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#18e9ff]/30 bg-[rgba(24,233,255,0.06)] px-4 py-1.5 text-[0.68rem] font-bold uppercase tracking-[0.28em] text-[#18e9ff]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#18e9ff]" /> Official Portal
+              </span>
+              <span className="text-[0.7rem] text-white/35 uppercase tracking-[0.2em]">AKGEC · GDG on Campus</span>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* ABOUT / Program Overview */}
+        <motion.section id="program" className="space-y-8" {...sectionMotion}>
+
           <div className="rounded-[1.6rem] border border-[#6b11ff]/60 bg-[linear-gradient(180deg,rgba(16,8,30,0.98),rgba(8,8,20,0.98))] p-6 shadow-[0_0_0_1px_rgba(123,33,255,0.16),0_0_48px_rgba(123,33,255,0.18)] sm:p-8">
             <div className="grid gap-8 lg:grid-cols-[1.25fr_0.72fr] lg:items-center">
               <div className="space-y-5">
                 <p className="font-mono text-[0.68rem] uppercase tracking-[0.34em] text-[#9f4dff] hidden md:block">
-                  &gt;&gt; decrypting file: lore.txt
+                  &gt;&gt; program.info
                 </p>
 
                 <div className="flex items-start gap-3">
@@ -300,15 +331,15 @@ export const EventDetails = () => {
                     <FiRadio size={36} />
                   </div>
                   <h2 className="font-pricedown text-3xl sm:text-4xl text-black text-stroke-white">
-                    THE HEIST PROTOCOL
+                    ABOUT THE PROGRAM
                   </h2>
                 </div>
 
-                <p className="max-w-3xl  text-md md:text-[1.5rem] leading-7 text-white sm:text-base font-chalet">
-                  The city&apos;s central mainframe has been locked down by a rogue security AI. We need the sharpest coders,
-                  hackers, and logicians to bypass the firewalls and penetrate the inner core. The tech heist of the decade is
-                  about to begin. Assemble your crew, decrypt the algorithms, and secure the loot before the system inevitably
-                  reboots. <span className="font-semibold text-[#ff356d] ">Are you in?</span>
+                <p className="max-w-3xl text-md md:text-[1.5rem] leading-7 text-white sm:text-base font-chalet">
+                  This platform is used to manage registrations for student programs, workshops, and technical
+                  activities conducted within Ajay Kumar Garg Engineering College. Participants can submit their
+                  details and complete registration by paying a participation fee for the selected program.{' '}
+                  <span className="font-semibold text-[#ff356d]">Seats are limited — register now.</span>
                 </p>
               </div>
 
@@ -324,6 +355,7 @@ export const EventDetails = () => {
             </div>
           </div>
 
+          {/* Day Cards */}
           <div className="grid gap-8 md:grid-cols-2">
             {dayCards.map((card) => {
               const Icon = card.icon;
@@ -369,11 +401,12 @@ export const EventDetails = () => {
           </div>
         </motion.section>
 
-        <motion.section id="directory" className="mt-5 space-y-10" {...sectionMotion}>
-          <div className="space-y-4 text-center flex flex-col items-center gap-2  ">
-            <h2 className="font-pricedown text-5xl text-white sm:text-8xl text-stroke-black-2">MISSION DIRECTORY</h2>
-            <p className="mx-auto  max-w-2xl text-md leading-7 text-white/60 sm:text-red-500 font-forresten">
-              Progress through the security mainframe. <br />One wrong move and you&rsquo;re locked out.
+        {/* PROGRAM MODULES */}
+        <motion.section id="details" className="mt-5 space-y-10" {...sectionMotion}>
+          <div className="space-y-4 text-center flex flex-col items-center gap-2">
+            <h2 className="font-pricedown text-5xl text-white sm:text-8xl text-stroke-black-2">PROGRAM MODULES</h2>
+            <p className="mx-auto max-w-2xl text-md leading-7 text-white/60 sm:text-red-500 font-forresten">
+              A structured two-day learning program. <br />Progress through each session at your own pace.
             </p>
           </div>
 
@@ -382,7 +415,7 @@ export const EventDetails = () => {
               <div className="relative flex h-full flex-col items-center">
                 <div className="absolute left-1/2 top-0 h-[82%] w-0.5 -translate-x-1/2 bg-[linear-gradient(180deg,rgba(24,233,255,0.95),rgba(24,233,255,0.1))] blur-[1px]" />
                 <div className="relative flex h-full flex-col justify-between py-2">
-                  {missionSteps.map((step, index) => (
+                  {programModules.map((step, index) => (
                     <div
                       key={step.number}
                       className={`h-4 w-4 rounded-full border-2 ${index === 0 ? 'border-[#18e9ff] bg-[#18e9ff] shadow-[0_0_0_8px_rgba(24,233,255,0.18)]' : 'border-white/30 bg-[#070814]'
@@ -394,7 +427,7 @@ export const EventDetails = () => {
             </div>
 
             <div className="space-y-5">
-              {missionSteps.map((step) => {
+              {programModules.map((step) => {
                 const muted = step.muted;
                 const Icon = step.icon;
                 const stars = Array.from({ length: 5 }, (_, index) => index < step.stars);
@@ -427,7 +460,7 @@ export const EventDetails = () => {
                             className={`rounded-md border px-3 py-1 text-[0.7rem] font-bold uppercase tracking-[0.2em] ${step.accent === 'violet'
                               ? 'border-[#8f3bff]/50 bg-[#7b21ff] text-white'
                               : 'border-[#18e9ff]/30 bg-[#0b2a30] text-[#18e9ff]'
-                              } ${step.tag === 'LOCKED' ? 'text-red-500' : ''}`}
+                              } ${step.tag === 'SCHEDULED' ? 'text-red-500' : ''}`}
                           >
                             {step.tag}
                           </span>
@@ -464,48 +497,54 @@ export const EventDetails = () => {
           </div>
         </motion.section>
 
-        <motion.section id="scoring" className="space-y-20" {...sectionMotion}>
+        {/* PROGRAM DETAILS (Duration, Mode, Eligibility) */}
+        <motion.section id="program-info" className="space-y-20" {...sectionMotion}>
           <div className="w-full rounded-[1.5rem] border border-[#ff2d73]/60 bg-[radial-gradient(circle_at_top,rgba(255,73,138,0.28),rgba(16,5,17,0.96))] p-6 shadow-[0_0_0_1px_rgba(255,45,115,0.2),0_0_48px_rgba(255,45,115,0.2)] sm:p-8 flex flex-col items-center justify-center">
-            <p className="font-pricedown text-3xl text-white text-stroke-black-2 flex "><GiCrossMark className="text-[#ff2e7d] text-stroke-black-2" />FINAL ROUND BATTLE</p>
+            <p className="font-pricedown text-3xl text-white text-stroke-black-2 flex items-center gap-2">
+              <FiCheckCircle className="text-[#ff2e7d]" /> PROGRAM DETAILS
+            </p>
             <div className="mt-6 w-full">
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              <div className="mt-6 grid gap-4 sm:grid-cols-3">
                 <div className="rounded-[1rem] border border-white/10 bg-[rgba(255,81,140,0.2)] p-6 text-center">
-                  <strong className="block font-pricedown text-4xl text-[#ff8ab5] text-stroke-black-2">TOP 3</strong>
+                  <strong className="block font-pricedown text-4xl text-[#ff8ab5] text-stroke-black-2">2 DAYS</strong>
                   <span className="mt-2 block text-md font-semibold uppercase tracking-[0.2em] font-forresten text-white/85">
-                    Teams advance
+                    Duration
                   </span>
                 </div>
 
                 <div className="rounded-[1rem] border border-white/8 bg-[rgba(14,10,25,0.8)] p-6 text-center">
-                  <span className="block font-chalet text-[24px] leading-[25.6px] text-center text-white/80 text-stroke-black">
-                    18 <span className="font-forresten text-stroke-black-2">Participants</span>
-                  </span>
-                  <span className="mt-4 inline-flex flex-col w-full rounded-md border border-[#18e9ff]/35 bg-[rgba(10,34,40,0.88)] px-4 py-2 font-semibold  text-[#18e9ff]">
-                    <div className="font-pricedown text-stroke-black-2 text-[24px] leading-[25.6px]">Live Leaderboard</div>
-                    <small className="mt-2 block text-xs text-white/50">(Kahoot Style)</small>
+                  <strong className="block font-pricedown text-4xl text-[#18e9ff] text-stroke-black-2">ON-CAMPUS</strong>
+                  <span className="mt-2 block text-md font-semibold uppercase tracking-[0.2em] font-forresten text-white/85">
+                    Mode
                   </span>
                 </div>
+
+                <div className="rounded-[1rem] border border-white/8 bg-[rgba(14,10,25,0.8)] p-6 text-center">
+                  <strong className="block font-pricedown text-3xl text-[#ff8ab5] text-stroke-black-2">AKGEC</strong>
+                  <span className="mt-2 block text-md font-semibold uppercase tracking-[0.2em] font-forresten text-white/85">
+                    Eligibility
+                  </span>
+                  <span className="mt-1 block text-xs text-white/50 font-forresten">Students of AKGEC only</span>
+                </div>
               </div>
-
             </div>
-
-
           </div>
         </motion.section>
 
-        <motion.section id="loot" className="space-y-20" {...sectionMotion}>
+        {/* PROGRAM BENEFITS */}
+        <motion.section id="benefits" className="space-y-20" {...sectionMotion}>
           <div className="space-y-4 text-center">
-            <h2 className="font-pricedown text-3xl text-white sm:text-8xl text-stroke-black-2">THE LOOT</h2>
+            <h2 className="font-pricedown text-3xl text-white sm:text-8xl text-stroke-black-2">PROGRAM BENEFITS</h2>
           </div>
 
           <div className="relative isolate">
             <div className="pointer-events-none absolute inset-x-0 top-10 -z-10 mx-auto h-[26rem] max-w-5xl rounded-full bg-[radial-gradient(circle_at_center,rgba(255,191,29,0.18),rgba(255,191,29,0.06)_35%,transparent_72%)] blur-3xl" />
 
             <div className="flex flex-col items-center gap-6 lg:flex-row lg:items-end lg:justify-center">
-              {rewards.map((reward, index) => (
-                <RewardRevealCard
-                  key={reward.title}
-                  reward={reward}
+              {benefits.map((benefit, index) => (
+                <BenefitRevealCard
+                  key={benefit.title}
+                  benefit={benefit}
                   index={index}
                   isScrolling={isScrolling}
                 />
@@ -514,12 +553,13 @@ export const EventDetails = () => {
           </div>
         </motion.section>
 
+        {/* FAQ / QUERIES */}
         <motion.section
           id="queries"
           className="space-y-20"
         >
           <div className="space-y-4 text-center">
-            <h2 className="font-pricedown text-5xl text-white sm:text-8xl">INTEL &amp; QUERIES</h2>
+            <h2 className="font-pricedown text-5xl text-white sm:text-8xl">FREQUENTLY ASKED</h2>
           </div>
 
           <motion.div
@@ -588,6 +628,50 @@ export const EventDetails = () => {
               );
             })}
           </motion.div>
+
+          {/* Contact / Policy Section */}
+          <div className="mx-auto max-w-4xl grid gap-6 md:grid-cols-3">
+            {/* Contact */}
+            <div id="contact" className="rounded-[1.25rem] border border-white/10 bg-[rgba(8,10,22,0.88)] p-6 space-y-3">
+              <p className="font-pricedown text-lg text-[#18e9ff] tracking-widest">CONTACT US</p>
+              <p className="text-sm text-white/60 leading-6 font-forresten">
+                For any queries, please reach out:
+              </p>
+              <a href="mailto:gdg@akgec.ac.in" className="block text-sm text-[#18e9ff] hover:underline break-all">
+                gdg@akgec.ac.in
+              </a>
+              <p className="text-xs text-white/40 font-forresten">
+                Google Developer Groups on Campus, AKGEC
+              </p>
+            </div>
+
+            {/* Privacy */}
+            <div id="privacy" className="rounded-[1.25rem] border border-white/10 bg-[rgba(8,10,22,0.88)] p-6 space-y-3">
+              <p className="font-pricedown text-lg text-[#ff8ab5] tracking-widest">PRIVACY POLICY</p>
+              <p className="text-sm text-white/60 leading-6 font-forresten">
+                We collect basic information (name, email, contact) solely for program registration. This data is not sold or shared with third parties.
+              </p>
+            </div>
+
+            {/* Refund */}
+            <div id="refund" className="rounded-[1.25rem] border border-white/10 bg-[rgba(8,10,22,0.88)] p-6 space-y-3">
+              <p className="font-pricedown text-lg text-[#ffc629] tracking-widest">REFUND POLICY</p>
+              <p className="text-sm text-white/60 leading-6 font-forresten">
+                All payments are final and non-refundable. Refunds will only be issued if the program is cancelled by the organizers.
+              </p>
+            </div>
+          </div>
+
+          {/* Terms */}
+          <div id="terms" className="mx-auto max-w-4xl rounded-[1.25rem] border border-white/8 bg-[rgba(8,10,22,0.7)] p-6">
+            <p className="font-pricedown text-lg text-white/70 mb-3">TERMS &amp; CONDITIONS</p>
+            <ul className="space-y-2 text-sm text-white/50 font-forresten leading-6 list-disc list-inside">
+              <li>By registering, you agree to provide accurate personal information.</li>
+              <li>This platform is intended for student registrations for programs conducted within AKGEC.</li>
+              <li>Participation is subject to eligibility criteria defined by the organizers.</li>
+              <li>The organizers reserve the right to disqualify any participant found violating program guidelines.</li>
+            </ul>
+          </div>
         </motion.section>
       </div>
     </section>
