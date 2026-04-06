@@ -34,7 +34,7 @@ export const EVENT_CONFIG = {
   eventDate: '2025-04-15',
   eventTime: '09:00 AM - 05:00 PM',
   eventLocation: 'AKGEC Campus',
-  registrationFee: 0, // Free registration
+  registrationFee: 1, // Introductory registration amount
   description: 'Join us for an immersive learning experience with industry experts and community leaders.',
 };
 

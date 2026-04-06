@@ -7,7 +7,7 @@ import { Input, RadioGroup, Button } from '../components';
 import { useFormState } from '../hooks/useFormState';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { useRecaptcha } from '../hooks/useRecaptcha';
-import { RESIDENCE_TYPES, GENDER_OPTIONS, FORM_DEFAULTS, RECAPTCHA_CONFIG, RAZORPAY_CONFIG } from '../constants';
+import { EVENT_CONFIG, RESIDENCE_TYPES, GENDER_OPTIONS, FORM_DEFAULTS, RECAPTCHA_CONFIG, RAZORPAY_CONFIG } from '../constants';
 import { apiService } from '../services/api';
 import { normalizePhoneNumber } from '../utils/formatter';
 
@@ -96,6 +96,7 @@ export const RegistrationStep3 = () => {
       const orderResult = await apiService.createOrder({
         email: sessionData.email,
         studentNumber: sessionData.studentNumber,
+        amount: EVENT_CONFIG.registrationFee,
       });
       if (!orderResult?.success) {
         throw new Error(orderResult?.message || 'Unable to create payment order');
@@ -188,7 +189,7 @@ export const RegistrationStep3 = () => {
         <div className="space-y-3">
           <p className="font-manrope text-[0.72rem] font-bold uppercase tracking-[0.3em] text-[#18e9ff]">Registration</p>
           <h1 className="font-pricedown text-3xl text-white sm:text-4xl">COMPLETE REGISTRATION</h1>
-          <p className="max-w-2xl text-sm leading-7 text-white/60">Add your final details and finish the secure payment checkout.</p>
+          <p className="max-w-2xl text-sm leading-7 text-white/60">Add your final details and finish the secure payment checkout for Rs. {EVENT_CONFIG.registrationFee}.</p>
         </div>
 
         <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
