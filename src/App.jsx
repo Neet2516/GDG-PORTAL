@@ -104,7 +104,7 @@ export const App = () => {
             <div className="relative min-h-screen overflow-x-hidden bg-[#02040b]">
               <Navbar onRegisterClick={handleRegisterClick} onNavigateTo={handleScrollTo} />
               <main className="relative z-10 overflow-x-hidden">
-                <HeroSection onCtaClick={handleRegisterClick} onScrollToNext={() => handleScrollTo('#program')} onVideoReady={() => setVideoLoaded(true)} />
+                <HeroSection onCtaClick={handleRegisterClick} onScrollToNext={() => handleScrollTo('#missions')} onVideoReady={() => setVideoLoaded(true)} />
                 <EventDetails />
                 <Footer />
               </main>

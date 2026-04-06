@@ -4,7 +4,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { FiCalendar, FiMapPin, FiUsers, FiZap } from 'react-icons/fi';
+import { FiCalendar, FiMapPin, FiShield, FiZap } from 'react-icons/fi';
 import { IoMdRocket } from "react-icons/io";
 import { Button } from '../components';
 import backgroundImage from '../assets/images/landingpage-background.jpg';
@@ -26,9 +26,9 @@ const getCountdownParts = () => {
 };
 
 const metaItems = [
-  { icon: FiCalendar, label: '6TH - 7TH APRIL' },
+  { icon: FiCalendar, label: '8TH - 9TH APRIL' },
   { icon: FiMapPin, label: 'AKGEC CAMPUS' },
-  { icon: FiUsers, label: 'ON-CAMPUS PROGRAM' },
+  { icon: FiShield, label: 'SECURE BUILD ZONE' },
 ];
 
 export const HeroSection = ({ onCtaClick, onScrollToNext, onVideoReady }) => {
@@ -118,7 +118,7 @@ export const HeroSection = ({ onCtaClick, onScrollToNext, onVideoReady }) => {
 
   return (
     <section
-      id="about"
+      id="lore"
       className="relative z-10 min-h-[100svh] overflow-hidden px-4 pb-6 pt-4"
     >
       <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
@@ -162,24 +162,21 @@ export const HeroSection = ({ onCtaClick, onScrollToNext, onVideoReady }) => {
           transition={{ duration: 0.8 }}
         >
 
-          {/* Official Portal Trust Badge */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#18e9ff]/30 bg-[rgba(9,20,30,0.7)] px-5 py-2 text-[0.72rem] font-bold uppercase tracking-[0.32em] text-[#18e9ff]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#18e9ff] animate-pulse" />
-            Official Student Portal — GDG on Campus AKGEC
-          </div>
-
-          {/* Main Heading */}
-          <h1 className="mt-4 font-pricedown text-[clamp(2.2rem,5.5vw,5rem)] leading-[1.05] uppercase text-white [text-shadow:3px_3px_0_rgba(24,15,48,0.95),0_0_24px_rgba(255,255,255,0.08)] tracking-wide">
-            Student Program
-            <span className="block text-[#15e8f2] [text-shadow:3px_3px_0_rgba(9,28,33,0.95),0_0_22px_rgba(21,232,242,0.3)]">
-              Registration Portal
+          <h1 className="mt-5 flex flex-wrap items-baseline justify-center gap-x-4 gap-y-2 text-[clamp(4rem,8vw,8.5rem)] leading-[0.86] uppercase text-white [text-shadow:4px_4px_0_rgba(24,15,48,0.95),0_0_24px_rgba(255,255,255,0.08)]">
+            <span className="font-pricedown">CODE THEFT</span>
+            <span className="font-pricedown text-[#15e8f2] [text-shadow:4px_4px_0_rgba(9,28,33,0.95),0_0_22px_rgba(21,232,242,0.3)]">
+              AUTO
             </span>
           </h1>
 
-          {/* Institutional Subtext */}
-          <p className="mt-3 max-w-[36rem] text-center text-[0.95rem] leading-[1.7] text-white/70 font-chalet">
-            Register for structured academic and co-curricular programs conducted within an institutional environment.
-          </p>
+          <div className="mt-5 inline-flex flex-col items-center gap-0.5 rounded-[0.9rem] border border-white/16 bg-[rgba(18,16,30,0.4)] px-6 py-3 shadow-[inset_0_0_24px_rgba(255,255,255,0.03),0_0_28px_rgba(0,0,0,0.2)]">
+            <span className="font-forresten text-[clamp(1rem,2vw,1.5rem)] uppercase tracking-[0.38em] text-[#1deeff]">
+              HACK THE SYSTEM
+            </span>
+            <span className="font-forresten text-[clamp(1rem,2vw,1.5rem)] uppercase tracking-[0.38em] text-[#1deeff]">
+              OWN THE GAME
+            </span>
+          </div>
 
           <div className="mt-6 flex flex-wrap items-stretch justify-center gap-4">
             <Button
@@ -252,7 +249,7 @@ export const HeroSection = ({ onCtaClick, onScrollToNext, onVideoReady }) => {
 
           <div className="mt-12 rounded-[1rem] border border-white/8 bg-[rgba(6,6,12,0.9)] px-7 py-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_24px_80px_-48px_rgba(0,0,0,0.9)]">
             <span className="block text-[1.78rem] font-forresten font-bold uppercase tracking-[0.26em] text-[#1deeff]">
-              REGISTRATION CLOSES IN
+              COUNTDOWN
             </span>
             <div className="mt-3 flex justify-center gap-4">
               <span className="text-[clamp(2rem,4vw,3rem)] font-medium tracking-[0.02em] text-white">

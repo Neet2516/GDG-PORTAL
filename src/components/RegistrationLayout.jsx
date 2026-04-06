@@ -41,9 +41,12 @@ export const RegistrationLayout = () => {
                 </Link>
               </nav>
 
-              <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/60">
-                Student Registration
-              </div>
+              <Link
+                to="/login"
+                className="rounded-full border border-[#18e9ff]/30 bg-[rgba(9,20,24,0.92)] px-4 py-2 text-sm font-semibold tracking-[0.18em] text-[#d9fbff] transition hover:border-[#18e9ff]/50 hover:bg-[rgba(12,30,34,0.96)]"
+              >
+                Sign In
+              </Link>
             </>
           ) : (
             <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/60">
@@ -63,18 +66,21 @@ export const RegistrationLayout = () => {
             <span className="font-manrope text-sm font-semibold uppercase tracking-[0.24em] text-white/80">
               GDG Portal
             </span>
-            <span className="font-manrope text-xs text-white/40">© 2026 Google Developer Groups on Campus AKGEC</span>
+            <span className="font-manrope text-xs text-white/40">© 2026 Google Developer Groups</span>
           </div>
 
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 uppercase tracking-[0.22em] text-white/45">
-            <a href="/#privacy" className="transition hover:text-white">
+            <a href="#" className="transition hover:text-white">
+              Resources
+            </a>
+            <a href="#" className="transition hover:text-white">
+              Guidelines
+            </a>
+            <a href="#" className="transition hover:text-white">
               Privacy
             </a>
-            <a href="/#terms" className="transition hover:text-white">
+            <a href="#" className="transition hover:text-white">
               Terms
-            </a>
-            <a href="/#refund" className="transition hover:text-white">
-              Refund Policy
             </a>
           </div>
         </div>
