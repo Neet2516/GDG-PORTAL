@@ -266,7 +266,7 @@ const dayCards = [
     day: 'DAY 02',
     date: '11TH APRIL',
     title: 'gamified tech challenge',
-    time: '3:15 PM - 5:15 PM',
+    time: '1:00 PM - 3:00 PM',
     venue: 'MAIN SEMINAR HALL',
     icon: TfiGame,
     tone: 'pink',
