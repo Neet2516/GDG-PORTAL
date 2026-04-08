@@ -77,7 +77,12 @@ export const App = () => {
   }, []);
 
   const handleRegisterClick = () => {
-    navigate('/register');
+    if (location.pathname === '/') {
+      handleScrollTo('#register');
+      return;
+    }
+
+    navigate('/#register');
   };
 
   const handleScrollTo = (target) => {
@@ -94,6 +99,18 @@ export const App = () => {
     element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  useEffect(() => {
+    if (location.pathname !== '/' || !location.hash) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => {
+      handleScrollTo(location.hash);
+    }, 120);
+
+    return () => window.clearTimeout(timeout);
+  }, [location.pathname, location.hash]);
+
   return (
     <div className="min-h-screen bg-[#02040b] text-white">
       <LoadingScreen isLoading={isAppLoading} />
@@ -106,6 +123,14 @@ export const App = () => {
               <main className="relative z-10 overflow-x-hidden">
                 <HeroSection onCtaClick={handleRegisterClick} onScrollToNext={() => handleScrollTo('#missions')} onVideoReady={() => setVideoLoaded(true)} />
                 <EventDetails />
+                <section
+                  id="register"
+                  className="relative scroll-mt-24 px-4 py-16 sm:py-20"
+                >
+                  <div className="mx-auto max-w-[1180px]">
+                    <RegistrationStep1 />
+                  </div>
+                </section>
                 <Footer />
               </main>
             </div>

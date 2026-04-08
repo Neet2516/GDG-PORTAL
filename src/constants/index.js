@@ -29,11 +29,13 @@ export const RAZORPAY_CONFIG = {
 // ========================================
 export const EVENT_CONFIG = {
   name: 'GDG Event Portal',
-  year: 2025,
+  year: 2026,
   eventName: 'Google Developer Groups Summit',
-  eventDate: '2025-04-15',
-  eventTime: '09:00 AM - 05:00 PM',
-  eventLocation: 'AKGEC Campus',
+  eventDate: '2026-04-10',
+  eventEndDate: '2026-04-11',
+  eventStartDateTime: '2026-04-10T15:15:00+05:30',
+  eventTime: '03:15 PM - 05:15 PM',
+  eventLocation: 'Main Seminar Hall',
   registrationFee: 1, // Introductory registration amount
   description: 'Join us for an immersive learning experience with industry experts and community leaders.',
 };

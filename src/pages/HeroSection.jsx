@@ -7,15 +7,15 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { FiCalendar, FiMapPin, FiShield, FiZap } from 'react-icons/fi';
 import { IoMdRocket } from "react-icons/io";
 import { Button } from '../components';
+import { EVENT_CONFIG } from '../constants';
 import backgroundImage from '../assets/images/landingpage-background.jpg';
 import heroVideo from '../assets/Background.mp4';
 
-const buildTargetDate = (year) => new Date(`${year}-04-08T09:00:00+05:30`);
+const buildTargetDate = () => new Date(EVENT_CONFIG.eventStartDateTime);
 
 const getCountdownParts = () => {
   const now = new Date();
-  const currentYearTarget = buildTargetDate(now.getFullYear());
-  const target = now < currentYearTarget ? currentYearTarget : buildTargetDate(now.getFullYear() + 1);
+  const target = buildTargetDate();
   const remaining = Math.max(target.getTime() - now.getTime(), 0);
 
   return {
@@ -26,9 +26,9 @@ const getCountdownParts = () => {
 };
 
 const metaItems = [
-  { icon: FiCalendar, label: '8TH - 9TH APRIL' },
-  { icon: FiMapPin, label: 'AKGEC CAMPUS' },
-  { icon: FiShield, label: 'SECURE BUILD ZONE' },
+  { icon: FiCalendar, label: '10TH - 11TH APRIL' },
+  { icon: FiMapPin, label: 'MAIN SEMINAR HALL' },
+  { icon: FiShield, label: '3:15 PM - 5:15 PM' },
 ];
 
 export const HeroSection = ({ onCtaClick, onScrollToNext, onVideoReady }) => {

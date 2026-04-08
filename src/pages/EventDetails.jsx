@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import {
   FiAward,
@@ -74,13 +74,13 @@ const missionSteps = [
 const rewards = [
   {
     title: 'RUNNER UPS',
-    description: 'Keychains+Exclusive Stickers',
+    description: ['Certificates', '& Goodies'],
     icon: FiAward,
     accent: 'silver',
   },
   {
     title: 'TOP 3 WINNERS',
-    description: 'Goodies',
+    description: ['Special Goodies', '& Certificates'],
     detail: 'Direct PI Entry',
     icon: FaTrophy,
     accent: 'gold',
@@ -88,7 +88,7 @@ const rewards = [
   },
   {
     title: 'PARTICIPANTS',
-    description: 'Key Chains',
+    description: ['Certificates', '& Goodies'],
     icon: FiGift,
     accent: 'amber',
   },
@@ -127,82 +127,78 @@ const rewardCardStyles = {
   },
 };
 
-const useScrollStop = (delay = 40) => {
-  const [isScrolling, setIsScrolling] = useState(false);
-  const timeoutRef = useRef(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolling(true);
-
-      if (timeoutRef.current) {
-        window.clearTimeout(timeoutRef.current);
-      }
-
-      timeoutRef.current = window.setTimeout(() => {
-        setIsScrolling(false);
-      }, delay);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('wheel', handleScroll, { passive: true });
-    window.addEventListener('touchmove', handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('wheel', handleScroll);
-      window.removeEventListener('touchmove', handleScroll);
-
-      if (timeoutRef.current) {
-        window.clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [delay]);
-
-  return isScrolling;
-};
-
-const RewardRevealCard = ({ reward, index, isScrolling }) => {
+const RewardRevealCard = ({ reward, index }) => {
   const prefersReducedMotion = useReducedMotion();
   const rewardStyle = rewardCardStyles[reward.accent];
-  const showContent = !isScrolling || prefersReducedMotion;
+  const floatDuration = 3.4 + index * 0.45;
+  const floatOffset = reward.featured ? 14 : 9;
 
   return (
-    <article
+    <motion.article
       key={reward.title}
       className={`group relative w-full overflow-hidden rounded-[1.65rem] border p-6 text-center ${rewardStyle.border} ${rewardStyle.panel} ${rewardStyle.glow} ${reward.featured
         ? 'max-w-[30rem] min-h-[28rem] lg:w-[34%] lg:max-w-none lg:min-h-[31rem]'
         : 'max-w-[27rem] min-h-[22rem] lg:w-[28%] lg:max-w-none lg:min-h-[25rem]'
         } transition-transform duration-300 hover:-translate-y-1`}
-      style={{ perspective: '1200px' }}
+      initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 70, scale: 0.88, rotate: index % 2 === 0 ? -3 : 3 }}
+      whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1, rotate: 0 }}
+      viewport={{ once: true, amount: 0.35 }}
+      transition={{
+        duration: prefersReducedMotion ? 0.18 : 0.7,
+        delay: index * 0.12,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      whileHover={prefersReducedMotion ? undefined : { y: reward.featured ? -14 : -10, scale: reward.featured ? 1.02 : 1.015 }}
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_42%)] opacity-80" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent)]" />
+      <motion.div
+        aria-hidden="true"
+        className={`pointer-events-none absolute left-1/2 top-0 h-32 w-32 -translate-x-1/2 rounded-full blur-3xl ${reward.featured ? 'bg-[#ffc629]/18' : 'bg-white/8'}`}
+        animate={
+          prefersReducedMotion
+            ? undefined
+            : { opacity: [0.25, 0.5, 0.25], scale: [0.92, 1.08, 0.92], y: [0, 12, 0] }
+        }
+        transition={{
+          duration: floatDuration,
+          delay: index * 0.2,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+      />
 
       <motion.div
         className="relative flex h-full flex-col items-center justify-center gap-5 px-3 py-4 sm:px-4 sm:py-6"
-        initial={false}
         animate={
-          showContent
-            ? { rotateY: 0, opacity: 1, scale: 1, y: 0 }
-            : { rotateY: 90, opacity: 0.15, scale: 0.96, y: 4 }
+          prefersReducedMotion
+            ? undefined
+            : { y: [0, -floatOffset, 0], rotateZ: [0, reward.featured ? 0.6 : 0.4, 0] }
         }
         transition={{
-          duration: prefersReducedMotion ? 0.15 : 0.65,
-          delay: index * 0.01,
-          ease: [0.22, 1, 0.36, 1],
-        }}
-        style={{
-          transformStyle: 'preserve-3d',
-          willChange: 'transform, opacity',
+          duration: floatDuration,
+          delay: index * 0.25,
+          repeat: Infinity,
+          ease: 'easeInOut',
         }}
       >
-        <div
+        <motion.div
           className={`flex h-20 w-20 items-center justify-center rounded-full border text-[2rem] sm:h-24 sm:w-24 sm:text-[2.25rem] ${reward.featured ? 'scale-110 sm:scale-125' : ''
             } ${rewardStyle.icon}`}
+          animate={
+            prefersReducedMotion
+              ? undefined
+              : { rotate: reward.featured ? [0, -5, 5, 0] : [0, -3, 3, 0], scale: [1, 1.06, 1] }
+          }
+          transition={{
+            duration: reward.featured ? 4.2 : 3.6,
+            delay: index * 0.18,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
         >
           <reward.icon />
-        </div>
+        </motion.div>
 
         <h3
           className={`mt-7 font-pricedown text-[1.95rem] uppercase leading-none sm:text-[2.25rem] !tracking-wider ${reward.featured ? 'sm:text-[2.45rem]' : ''
@@ -221,10 +217,14 @@ const RewardRevealCard = ({ reward, index, isScrolling }) => {
         <p
           className={`mt-4 font-forresten text-base font-medium sm:text-lg ${reward.featured ? 'sm:text-xl' : ''} ${rewardStyle.body} !text-green-500`}
         >
-          {reward.description}
+          {reward.description.map((line) => (
+            <span key={line} className="block">
+              {line}
+            </span>
+          ))}
         </p>
       </motion.div>
-    </article>
+    </motion.article>
   );
 };
 
@@ -254,18 +254,20 @@ const faqItems = [
 const dayCards = [
   {
     day: 'DAY 01',
-    date: '6TH APRIL',
+    date: '10TH APRIL',
     title: 'technical learning session',
-    time: '2:00 PM - 5:00 PM',
+    time: '3:15 PM - 5:15 PM',
+    venue: 'MAIN SEMINAR HALL',
     icon: FiBookOpen,
     tone: 'cyan',
     code: '[ SYS.OK ]',
   },
   {
     day: 'DAY 02',
-    date: '7TH APRIL',
+    date: '11TH APRIL',
     title: 'gamified tech challenge',
-    time: '2:00 PM ONWARDS',
+    time: '3:15 PM - 5:15 PM',
+    venue: 'MAIN SEMINAR HALL',
     icon: TfiGame,
     tone: 'pink',
     code: '[ EXECUTING ]',
@@ -281,7 +283,6 @@ const sectionMotion = {
 
 export const EventDetails = () => {
   const [openFaq, setOpenFaq] = useState(0);
-  const isScrolling = useScrollStop(150);
   const prefersReducedMotion = useReducedMotion();
 
   return (
@@ -360,7 +361,11 @@ export const EventDetails = () => {
                     <span>{card.time}</span>
                   </div>
 
-                  <p className={`mt-4 text-right font-mono text-[0.68rem] uppercase tracking-[0.32em] ${isCyan ? 'text-[#12e9ff]/35' : 'text-[#ff2f76]/35'}`}>
+                  <p className="mt-4 text-sm font-semibold uppercase tracking-[0.18em] text-white/72">
+                    {card.venue}
+                  </p>
+
+                  <p className={`mt-3 text-right font-mono text-[0.68rem] uppercase tracking-[0.32em] ${isCyan ? 'text-[#12e9ff]/35' : 'text-[#ff2f76]/35'}`}>
                     {card.code}
                   </p>
                 </article>
@@ -507,7 +512,6 @@ export const EventDetails = () => {
                   key={reward.title}
                   reward={reward}
                   index={index}
-                  isScrolling={isScrolling}
                 />
               ))}
             </div>
