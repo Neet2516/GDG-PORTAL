@@ -12,7 +12,6 @@ A modern, production-ready event registration portal for Google Developer Groups
 - 🔌 Real backend API support + mock API for development
 - 🏗️ Scalable, feature-based architecture
 - 🎨 Beautiful component library with variants
-- 📱 Mobile-first responsive design
 - ⚡ Lightning-fast performance with Vite
 - 🔒 Robust input validation with cross-field checks
 - 🎭 Smooth animations with Framer Motion
